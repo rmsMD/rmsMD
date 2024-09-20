@@ -13,6 +13,7 @@
 #' summarymodel_ols_test("eg")
 
 
+
 summarymodel_ols_test <- function(arg) {
   print(paste(arg,"Hello, world!"))
 }
