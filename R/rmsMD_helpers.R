@@ -6,6 +6,7 @@
 #'
 #' @return two vectors: coef and se
 #' @keywords internal
+#' @noRd
 rmsMD_extract_coef_and_se <- function(modelfit) {
   # Extract the coefficients from the model fit object
   coef_values <- coef(modelfit)
@@ -29,6 +30,7 @@ rmsMD_extract_coef_and_se <- function(modelfit) {
 #'
 #' @return A list containing two vectors: `variables` (RCS variable names) and `knots` (number of knots).
 #' @keywords internal
+#' @noRd
 rmsMD_extract_rcs_variables <- function(modelfit) {
   # Extract the terms from the model fit object as a list of strings
   formula_str <- labels(terms(modelfit))
@@ -60,6 +62,7 @@ rmsMD_extract_rcs_variables <- function(modelfit) {
 #'
 #' @return A list containing filtered `coef` and `se` vectors with RCS-related terms removed.
 #' @keywords internal
+#' @noRd
 rmsMD_remove_rcs_coefficients <- function(coef_values, se_values, rcs_variables, num_knots) {
   # Initialize the list of coefficients to remove with the RCS variable names
   coef_to_remove <- rcs_variables
@@ -94,6 +97,7 @@ rmsMD_remove_rcs_coefficients <- function(coef_values, se_values, rcs_variables,
 #'
 #' @return A data frame with variables: `variable`, `coef`, and `SE`.
 #' @keywords internal
+#' @noRd
 rmsMD_prepare_output_dataframe <- function(coef_values, se_values) {
   # Create a data frame containing variable names, coefficients, standard errors, and raw p-values
   output_df <- data.frame(
@@ -115,6 +119,7 @@ rmsMD_prepare_output_dataframe <- function(coef_values, se_values) {
 #'
 #' @return A data frame with an additional `p_values_raw` column containing raw p-values.
 #' @keywords internal
+#' @noRd
 rmsMD_calculate_raw_p_values <- function(output_df) {
   # Calculate raw p-values: 2 * (1 - CDF of the normal distribution) using the absolute value of the z-statistic (coef / SE)
   output_df$p_values_raw <- 2 * (1 - pnorm(abs(output_df$coef / output_df$SE)))
@@ -129,6 +134,7 @@ rmsMD_calculate_raw_p_values <- function(output_df) {
 #'
 #' @return A data frame with additional `coef_lower95` and `coef_upper95` columns.
 #' @keywords internal
+#' @noRd
 rmsMD_calculate_coef_confidence_intervals <- function(output_df) {
   # Calculate the lower 95% confidence interval: coefficient + z-score at 2.5% * standard error
   output_df$coef_lower95 <- output_df$coef + qnorm(0.025) * output_df$SE
@@ -154,6 +160,7 @@ rmsMD_calculate_coef_confidence_intervals <- function(output_df) {
 #' @import rms
 #'
 #' @keywords internal
+#' @noRd
 rmsMD_add_anova_results <- function(output_df, modelfit, rcs_variables) {
   # Retrieve the ANOVA results as a matrix from the model fit object
   anova_result <- as.matrix(anova(modelfit))
@@ -201,6 +208,7 @@ rmsMD_add_anova_results <- function(output_df, modelfit, rcs_variables) {
 #'
 #' @return A data frame with the specified columns formatted.
 #' @keywords internal
+#' @noRd
 rmsMD_format_column_output <- function(output_df, vars = c(), round_dp_coef){
   spr_text_coef <- paste0("%.", round_dp_coef, "f")
   for(var in vars){
@@ -220,6 +228,7 @@ rmsMD_format_column_output <- function(output_df, vars = c(), round_dp_coef){
 #'
 #' @return A data frame with a new column containing combined confidence intervals.
 #' @keywords internal
+#' @noRd
 rmsMD_combine_CI_for_output <- function(output_df, key_vars){
 
   effect_est <- key_vars[1]
@@ -249,6 +258,7 @@ rmsMD_combine_CI_for_output <- function(output_df, key_vars){
 #'
 #' @return A formatted data frame for final output.
 #' @keywords internal
+#' @noRd
 rmsMD_format_final_output <- function(output_df, fullmodel, combine_ci,exp_coef,key_vars) {
   # If fullmodel is TRUE, return all variables
   if (fullmodel) {
