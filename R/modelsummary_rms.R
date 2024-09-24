@@ -1,8 +1,7 @@
-#'
 #' @title Create model summary for rms models
 #'
 #' @description Takes an rms model object and outputs the results in a dataframe.
-#' The results outputted are those commonly presented in medical journals.
+#' Outputs results in a format for publication in medical journals.
 #'
 #' @param modelfit The output from an rms model.
 #' @param combine_ci TRUE to combine the effect estimates and 95% confidence intervals into a single column.
@@ -13,9 +12,11 @@
 #' @param exp_coef Set TRUE to output exp(coef) as the effect estimate (only for model types other than ols, lrm or cph)
 #' @param fullmodel Set to TRUE to see all of the intermediate steps and check against standard model outputs.
 #'
-#' @return dataframe of results
+#' @return Returns a dataframe of results. This can easily be outputted to word using
+#' packages such as flextable and officer.
 #'
 #' @import rms
+#' @importFrom stats anova coef pnorm qnorm terms vcov
 #' @export
 #'
 #'

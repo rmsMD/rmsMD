@@ -33,9 +33,10 @@ modelsummary_rms(
 \item{fullmodel}{Set to TRUE to see all of the intermediate steps and check against standard model outputs.}
 }
 \value{
-dataframe of results
+Returns a dataframe of results. This can easily be outputted to word using
+packages such as flextable and officer.
 }
 \description{
 Takes an rms model object and outputs the results in a dataframe.
-The results outputted are those commonly presented in medical journals.
+Outputs results in a format for publication in medical journals.
 }

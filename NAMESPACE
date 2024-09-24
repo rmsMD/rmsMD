@@ -2,3 +2,9 @@
 
 export(modelsummary_rms)
 import(rms)
+importFrom(stats,anova)
+importFrom(stats,coef)
+importFrom(stats,pnorm)
+importFrom(stats,qnorm)
+importFrom(stats,terms)
+importFrom(stats,vcov)
