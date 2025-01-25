@@ -1,16 +1,16 @@
 #' @title Create model summary for rms models
 #'
-#' @description Takes an rms model object and outputs the results in a dataframe.
-#' Outputs results in a format for publication in medical journals.
+#' @description The `modelsummary_rms` function processes the output from models fitted using the **rms** package and generates a summarized dataframe of the results.
+#' This summary is tailored for publication in medical journals, presenting effect estimates, confidence intervals, and p-values.
 #'
 #' @param modelfit The output from an rms model.
-#' @param combine_ci TRUE to combine the effect estimates and 95% confidence intervals into a single column.
-#' @param round_dp_coef Specify the number of decimal places to show for the effect estimates.
-#' @param round_dp_p Specify the number of decimal places to show for P values.
-#' @param rcs_overallp Set TRUE to give an overall P value for RCS terms (taken from anova(modelfit))
-#' @param hide_rcs_coef Set TRUE to hide the individual coefficients for RCS variables.
-#' @param exp_coef Set TRUE to output exp(coef) as the effect estimate (only for model types other than ols, lrm or cph)
-#' @param fullmodel Set to TRUE to see all of the intermediate steps and check against standard model outputs.
+#' @param combine_ci If `TRUE`, combines the effect estimates and 95% confidence intervals into a single column. Default is `TRUE`.
+#' @param round_dp_coef Specifies the number of decimal places to display for the effect estimates. Default is `3`.
+#' @param round_dp_p Specifies the number of decimal places to display for P values. Default is `3`.
+#' @param rcs_overallp If `TRUE`, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from `anova(modelfit)`. Default is `FALSE`.
+#' @param hide_rcs_coef If `TRUE`, hides the individual coefficients for Restricted Cubic Spline (RCS) variables. Default is `FALSE`.
+#' @param exp_coef If `TRUE`, outputs the exponentiated coefficients (`exp(coef)`) as the effect estimates. Applicable only for model types other than `ols`, `lrm`, or `cph`. If `NULL`, no exponentiation is performed. Default is `NULL`.
+#' @param fullmodel If `TRUE`, includes all intermediate steps in the summary, allowing users to verify and compare with standard model outputs. Default is `FALSE`.
 #'
 #' @return Returns a dataframe of results. This can easily be outputted to word using
 #' packages such as flextable and officer.
