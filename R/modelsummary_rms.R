@@ -36,7 +36,7 @@ modelsummary_rms <- function(modelfit,
 
   # warning if modelfit isn't an rms object
   if (!inherits(modelfit, "rms")) {
-    warning("The model fit does not belong to the 'rms' class.")
+    stop("The model fit does not belong to the 'rms' class.")
   }
 
   ########## defining arguments based on model class ##########
