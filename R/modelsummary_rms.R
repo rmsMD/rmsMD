@@ -36,7 +36,7 @@ modelsummary_rms <- function(modelfit,
 
   # warning if modelfit isn't an rms object
   if (!inherits(modelfit, "rms")) {
-    stop("The model fit does not belong to the 'rms' class.")
+    warning("The model fit does not belong to the 'rms' class. You must specify exp_coef argument to determine table output.")
   }
 
   ########## defining arguments based on model class ##########
@@ -50,7 +50,7 @@ modelsummary_rms <- function(modelfit,
     exp_coef = TRUE
     exp_coef_name <- "HR"
   } else if(is.null(exp_coef)){
-    stop("If using a model which is not ols, lrm or cph model provide exp_coef argument")
+    stop("Model not ols, lrm or cph. You must specify exp_coef argument to determine table output.")
   }
 
   # Ensure rcs_overallp is TRUE if hide_rcs_coef is TRUE
