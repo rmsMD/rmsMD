@@ -6,3 +6,6 @@
 .httr-oauth
 .DS_Store
 .quarto
+
+# Ignore the testEnv folder (for testing locally)
+testEnv/
