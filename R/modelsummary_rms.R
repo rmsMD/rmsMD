@@ -65,24 +65,35 @@ modelsummary_rms <- function(modelfit,
 
   ########## Handle RCS terms (if applicable) ##########
   if (rcs_overallp) {
-    # Extract RCS variable names and number of knots using helper
-    rcs_data <- rmsMD_extract_rcs_variables(modelfit)
-    rcs_variables <- rcs_data$variables
-    num_knots <- rcs_data$knots
+    # Extract indices and terms associated with RCS from the model design
+    nonlinear_res <- modelfit$Design$nonlinear
 
-    if (length(rcs_variables)== 0) {
+    # Check if there are any RCS terms
+    if (is.null(nonlinear_res) || all(!sapply(nonlinear_res, any))) {
       stop("rcs_overallp set to TRUE but no RCS terms found in the model fit.")
     }
 
+    # Identify terms with nonlinear components
+    int_spline_indices <- sapply(nonlinear_res, any)
+    any_rcs_coef_index <- unlist(modelfit$assign[int_spline_indices])  # Indices of coefficients with spline components
+
+    # Get the names of terms with nonlinear components
+    rcs_terms_incl_interaction <- modelfit$Design$name[int_spline_indices]
+
     # Remove RCS coefficients if hide_rcs_coef is TRUE
     if (hide_rcs_coef) {
-      # Call the new helper function to remove RCS coefficients
-      rcs_filtered <- rmsMD_remove_rcs_coefficients(
-        coef_values, se_values, rcs_variables, num_knots)
+      coef_values <- coef_values[-any_rcs_coef_index]
+      se_values <- se_values[-any_rcs_coef_index]
+    }
 
-      # Update coef_values and se_values with the filtered results
-      coef_values <- rcs_filtered$coef
-      se_values <- rcs_filtered$se
+    # Generate anova results for RCS terms if needed
+    if (rcs_overallp) {
+      anova_result <- do.call(anova, c(
+        list(modelfit),
+        as.list(rcs_terms_incl_interaction),
+        list(india = FALSE, indnl = FALSE)
+      ))
+      rownames(anova_result)  # Print or process the ANOVA results if necessary
     }
   }
 
@@ -113,8 +124,36 @@ modelsummary_rms <- function(modelfit,
 
   ########## Add in ANOVA results for RCS terms (if applicable) ##########
   if (rcs_overallp) {
-    output_df <- rmsMD_add_anova_results(output_df, modelfit, rcs_variables)
+    # Generate anova results for RCS terms
+    anova_result <- do.call(anova, c(
+      list(modelfit),
+      as.list(rcs_terms_incl_interaction),
+      list(india = FALSE, indnl = FALSE)
+    ))
+
+    # Filter out rows with "TOTAL", "ERROR", or similar terms
+    keep_rows <- !grepl("TOTAL|ERROR|REGRESSION", rownames(anova_result), ignore.case = TRUE)
+    filtered_anova_result <- anova_result[keep_rows, , drop = FALSE]
+
+    # Extract the relevant rows and p-values for RCS terms
+    anova_df <- data.frame(
+      variable = paste0("RCSoverallP:", rownames(filtered_anova_result)),
+      p_values_raw = filtered_anova_result[, "P"],
+      stringsAsFactors = FALSE
+    )
+
+    # Add missing columns to match `output_df` structure
+    output_columns <- colnames(output_df)
+    for (col in output_columns) {
+      if (!col %in% colnames(anova_df)) {
+        anova_df[[col]] <- NA
+      }
+    }
+
+    # Merge the filtered ANOVA results with the main output
+    output_df <- rbind(output_df, anova_df[, output_columns])
   }
+
 
   ########## Format p-values ##########
   threshold <- 10^(-round_dp_p)
