@@ -131,13 +131,25 @@ modelsummary_rms <- function(modelfit,
       list(india = FALSE, indnl = FALSE)
     ))
 
-    # Filter out rows with "TOTAL", "ERROR", or similar terms
-    keep_rows <- !grepl("TOTAL|ERROR|REGRESSION", rownames(anova_result), ignore.case = TRUE)
+    # Get list of variable names from the model
+    model_vars <- modelfit$Design$name
+
+    # Get all row names from anova result
+    anova_rows <- rownames(anova_result)
+
+    # Identify rows that have 'TOTAL', 'ERROR' or 'REGRESSION' in their names
+    suspicious_rows <- anova_rows[grepl("TOTAL|ERROR|REGRESSION", anova_rows, ignore.case = TRUE)]
+
+    # Remove any that are actually model variables
+    rows_to_remove <- setdiff(suspicious_rows, model_vars)
+
+    # Keep only rows that are not in the final removal list
+    keep_rows <- !(anova_rows %in% rows_to_remove)
     filtered_anova_result <- anova_result[keep_rows, , drop = FALSE]
 
     # Extract the relevant rows and p-values for RCS terms
     anova_df <- data.frame(
-      variable = paste0("RCSoverallP:", rownames(filtered_anova_result)),
+      variable = paste0("RCSoverallP: ", rownames(filtered_anova_result)),
       p_values_raw = filtered_anova_result[, "P"],
       stringsAsFactors = FALSE
     )
