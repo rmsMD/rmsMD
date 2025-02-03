@@ -54,8 +54,8 @@ modelsummary_rms <- function(modelfit,
   }
 
   # Ensure rcs_overallp is TRUE if hide_rcs_coef is TRUE
-  if (hide_rcs_coef & rcs_overallp == FALSE) {
-    stop("Both hide_rcs_coef & rcs_overallp cannot be set to FALSE.\nMust have rcs_overallp as TRUE if hide_rcs_coef is FALSE")
+  if (hide_rcs_coef && !rcs_overallp) {
+    stop("When hiding RCS coefficients (hide_rcs_coef = TRUE),\nthe overall RCS p-value must be provided (rcs_overallp = TRUE).\nMust have rcs_overallp as TRUE if hide_rcs_coef is TRUE")
   }
 
   ########## Extract coefficients and standard errors ##########
