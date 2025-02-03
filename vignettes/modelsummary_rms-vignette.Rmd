@@ -1,0 +1,230 @@
+---
+title: "modelsummary_rms vignettes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{modelsummary_rms-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Introduction
+
+The **modelsummary_rms** function is designed to process output from models fitted using the **rms** package and generate a summarised dataframe of the results. 
+This vignette will guide you through the basic usage of the function and then move on to more advanced examples.
+The goal is to produce publication-ready summaries of the models.
+
+## Installation and Setup
+
+Make sure you have the required packages installed. 
+You can install the package (if available on CRAN or GitHub) along with its dependencies:
+
+Note that you may also need to install other packages (such as flextable and officer) if you plan to convert the output dataframe into publication-ready tables.
+```{r}
+# Install the package if you haven't already
+# install.packages("rmsMD")
+# or for GitHub:
+# devtools::install_github("https://github.com/sjtingle/rmsMD")
+
+library(rms)
+library(rmsMD)
+```
+
+# Basic Usage
+
+Here is a simple example using an ordinary least squares (OLS) model with the built-in survey dataset from the MASS package:
+```{r}
+# Using the built-in dataset from the MASS package
+data("survey", package = "MASS")
+
+# Fit an OLS model using the rms package
+fit_ols <- ols(Wr.Hnd ~ Age + Exer + Sex, data = survey)
+
+# Generate a model summary
+summary_df <- modelsummary_rms(fit_ols)
+knitr::kable(summary_df)
+```
+The output dataframe contains the estimated coefficients, their 95% confidence intervals, and the associated p-values.
+
+## Customising the Output
+
+By default, the function uses the following stylistic settings:
+
+- **combine_ci = TRUE:** Combines the effect estimate and the 95% confidence interval into a single column.
+- **round_dp_coef = 3:** Rounds the effect estimates to three decimal places.
+- **round_dp_p = 3:** Rounds the p-values to three decimal places.
+
+You can modify these defaults to adjust the appearance of the output.
+```{r}
+# Generate a model summary with custom styling options
+summary_custom <- modelsummary_rms(fit_ols, 
+                                   combine_ci = FALSE, 
+                                   round_dp_coef = 2, 
+                                   round_dp_p = 5)
+knitr::kable(summary_custom)
+```
+## Full Model Output
+
+By default, **modelsummary_rms** returns only the final formatted summary (i.e. `fullmodel = FALSE`). 
+This output made to be concise and show the key results.
+
+If all information is required, you can set `fullmodel = TRUE`. 
+This option returns additional results.
+
+```{r}
+# Generate a model summary with custom styling options
+summary_fullmodel <- modelsummary_rms(fit_ols, 
+                                   combine_ci = FALSE, 
+                                   round_dp_coef = 2, 
+                                   round_dp_p = 5,
+                                   fullmodel = TRUE)
+knitr::kable(summary_fullmodel)
+```
+
+## Exponential Coefficients
+
+Exponentiating the coefficients of certain models makes the interpretation more intuitive (e.g. as odds ratios in logistic regression and hazard ratios in Cox models). 
+The **rmsMD** package is able to automatically set the appropriate value for `exp_coef` for RMS models such as `ols`, `lrm`, and `cph`. 
+
+Below is an example using an RMS OLS model and an RMS logistic regression model that both work with the default settings for `exp_coef`:
+```{r}
+# Example using an RMS OLS model
+data("survey", package = "MASS")
+fit_ols <- ols(Wr.Hnd ~ Age + Exer + Sex, data = survey)
+summary_ols <- modelsummary_rms(fit_ols)
+knitr::kable(summary_ols)
+```
+
+```{r}
+# Example using an RMS logistic regression model
+# Note: For demonstration, we create a binary outcome using the survey dataset.
+survey$BinaryOutcome <- ifelse(survey$Wr.Hnd > median(survey$Wr.Hnd, na.rm = TRUE), 1, 0)
+fit_lrm <- lrm(BinaryOutcome ~ Age + Exer + Sex, data = survey)
+summary_lrm <- modelsummary_rms(fit_lrm)
+knitr::kable(summary_lrm)
+```
+
+
+# Non rms Models
+
+The **rmsMD** package is also capable of working with non-RMS models, such as those fitted using base R functions like lm(). 
+However, in these cases the package cannot automatically determine the appropriate value for exp_coef, so you must manually set it. 
+For example, when using a linear model (where exponentiation is not required), you should explicitly set exp_coef = FALSE.
+```{r}
+# Fit a simple linear model using lm() from base R (non-RMS model)
+fit_lm <- lm(Wr.Hnd ~ Age + Exer + Sex, data = survey)
+
+# Generate a model summary for the non-RMS model by explicitly setting exp_coef = FALSE
+summary_lm <- modelsummary_rms(fit_lm, 
+                               exp_coef = FALSE)
+knitr::kable(summary_lm)
+```
+
+# Restricted Cubic Splines
+
+Restricted Cubic Splines (RCS) are a flexible modelling tool used to capture non-linear relationships between predictors and outcomes. 
+In medicine, many continuous variables (e.g. age, blood pressure, or biomarker levels) do not have a strictly linear association with the outcome of interest. 
+RCS analysis allows for this to be modelled non-linearly, making it a particularly useful tool in clinical research.
+
+The **rmsMD** package is designed to report and summarise models that include RCS terms. 
+It extracts the effect estimates and confidence intervals for the RCS components and also provides options to:
+
+- **Display an overall p-value for the spline terms using the `rcs_overallp` option.**  
+  When this option is set to `TRUE`, the function computes a single p-value that tests the overall significance of the spline terms. 
+  This overall p-value provides insight into whether the relationship between the predictor and the dependent variable is significant and whether it deviates from a simple linear relationship. 
+  In other words, a significant overall p-value suggests that the non-linear terms add meaningful information beyond a linear effect.
+
+- **Hide the individual spline coefficients using the `hide_rcs_coef` option.**  
+  Hiding the detailed spline coefficients can be advantageous because these individual parameters often lack straightforward clinical interpretation. 
+  Instead, the focus is on the overall association captured by the spline. The overall p-value (when `rcs_overallp` is `TRUE`) summarises the significance of the non-linear relationship, allowing you to conclude whether the predictor’s effect is simply linear or if a non-linear relationship is present and significant. 
+  This helps simplify the output by emphasizing the broader pattern rather than the intricate details of the spline transformation.
+
+## Basic RCS Model without Hiding Coefficients
+
+In this example, we fit an OLS model that includes an RCS term for Age. 
+The default setting shows all coefficients including those for the spline terms.
+```{r}
+# Using the built-in dataset from the MASS package
+data("survey", package = "MASS")
+
+# Fit an OLS model including a restricted cubic spline for Age (with 4 knots)
+fit_spline <- ols(Wr.Hnd ~ rcs(Age, 4) + Exer + Sex, data = survey)
+
+# Generate a model summary without modifying RCS settings (default: rcs_overallp = FALSE, hide_rcs_coef = FALSE)
+summary_spline <- modelsummary_rms(fit_spline)
+knitr::kable(summary_spline)
+```
+
+## RCS Model with Overall p-value and Hiding Individual Coefficients
+
+This is particularly useful when you want to focus on the significance of the non-linear relationship.
+```{r}
+# Fit an OLS model including a restricted cubic spline for Age (with 4 knots)
+fit_spline_hide <- ols(Wr.Hnd ~ rcs(Age, 4) + Exer + Sex, data = survey)
+
+# Generate a model summary with rcs_overallp set to TRUE and hide_rcs_coef set to TRUE
+summary_spline_hide <- modelsummary_rms(fit_spline_hide, 
+                                        rcs_overallp = TRUE, 
+                                        hide_rcs_coef = TRUE)
+knitr::kable(summary_spline_hide)
+```
+
+## RCS Model with Overall p-value and Individual Coefficients
+
+```{r}
+# Fit an OLS model including a restricted cubic spline for Age (with 4 knots)
+fit_spline_hide <- ols(Wr.Hnd ~ rcs(Age, 4) + Exer + Sex, data = survey)
+
+# Generate a model summary with rcs_overallp set to TRUE and hide_rcs_coef set to TRUE
+summary_spline_hide <- modelsummary_rms(fit_spline_hide, 
+                                        rcs_overallp = TRUE, 
+                                        hide_rcs_coef = FALSE)
+knitr::kable(summary_spline_hide)
+```
+
+# Models with Interactions
+
+Interactions occur when the effect of one predictor on the dependent variable depends on the level of another predictor. 
+Including interaction terms in your model allows you to explore these combined effects and understand more complex relationships between variables. 
+In medical research, interactions can be critical, as the impact of a treatment or risk factor might differ across subgroups (for example, by age or sex).
+
+Below is an example of an OLS model fitted using the **rms** package that includes an interaction between Age and Exer. 
+This model tests whether the effect of Age on the outcome differs by levels of exercise
+
+```{r}
+# Using the built-in dataset from the MASS package
+data("survey", package = "MASS")
+
+# Fit an OLS model using the rms package with an interaction between Age and Exer.
+fit_interact <- ols(Wr.Hnd ~ Age * Exer + Sex, data = survey)
+
+# Generate a model summary that includes the interaction term
+summary_interact <- modelsummary_rms(fit_interact)
+knitr::kable(summary_interact)
+```
+
+# Models with Interactions and RCS
+
+```{r}
+# Using the built-in dataset from the MASS package
+data("survey", package = "MASS")
+
+# Fit an OLS model with a restricted cubic spline for Age and an interaction between Age and Exer.
+fit_spline_interact <- ols(Wr.Hnd ~ rcs(Age, 4) * Exer + Sex, data = survey)
+
+# Generate a model summary with default RCS output
+summary_spline_interact <- modelsummary_rms(fit_spline_interact,
+                                            combine_ci = FALSE,
+                                            hide_rcs_coef = TRUE,
+                                            rcs_overallp = TRUE
+                                            )
+
+# Format the output as a nice table
+knitr::kable(summary_spline_interact)
+```
+
+
