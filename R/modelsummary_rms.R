@@ -58,6 +58,12 @@ modelsummary_rms <- function(modelfit,
     stop("When hiding RCS coefficients (hide_rcs_coef = TRUE),\nthe overall RCS p-value must be provided (rcs_overallp = TRUE).\nMust have rcs_overallp as TRUE if hide_rcs_coef is TRUE")
   }
 
+  # # Ensure rcs_overallp is TRUE if hide_rcs_coef is TRUE; if not, override it
+  # if (hide_rcs_coef && !rcs_overallp) {
+  #   warning("hide_rcs_coef is TRUE but rcs_overallp is FALSE. Automatically setting rcs_overallp to TRUE for proper functioning.")
+  #   rcs_overallp <- TRUE
+  # }
+
   ########## Extract coefficients and standard errors ##########
   coef_se_list <- rmsMD_extract_coef_and_se(modelfit) # Helper function to extract coefficients and SE
   coef_values <- coef_se_list$coef               # Extracted coefficients
