@@ -47,10 +47,21 @@ modelsummary_rms <- function(modelfit,
     exp_coef <- TRUE
     exp_coef_name <- "OR"
   } else if (inherits(modelfit, "cph")) {
-    exp_coef = TRUE
+    exp_coef <- TRUE
     exp_coef_name <- "HR"
   } else if(is.null(exp_coef)){
     stop("Model not ols, lrm or cph. You must specify exp_coef argument to determine table output.")
+  }
+
+  if (!inherits(modelfit, "rms")) {
+    rcs_overallp <- FALSE
+    hide_rcs_coef <- FALSE
+  } else {
+    no_rcs <- is.null(modelfit$Design$nonlinear)
+    if (no_rcs) {
+      rcs_overallp <- FALSE
+      hide_rcs_coef <- FALSE
+    }
   }
 
   # Ensure rcs_overallp is TRUE if hide_rcs_coef is TRUE
