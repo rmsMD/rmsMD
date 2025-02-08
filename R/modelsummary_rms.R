@@ -57,7 +57,7 @@ modelsummary_rms <- function(modelfit,
     rcs_overallp <- FALSE
     hide_rcs_coef <- FALSE
   } else {
-    no_rcs <- is.null(modelfit$Design$nonlinear)
+    no_rcs <- all(unlist(modelfit$Design$nonlinear) == FALSE)
     if (no_rcs) {
       rcs_overallp <- FALSE
       hide_rcs_coef <- FALSE
@@ -211,10 +211,6 @@ modelsummary_rms <- function(modelfit,
                                              key_vars)
   }
 
-
-  ########## Reset row names to numeric indices ##########
-  rownames(output_df) <- NULL
-
   ########## Return final output ##########
   # Use the new helper function to format the final output
   ## will need to change quite a bit with exp_coef stuff
@@ -225,6 +221,8 @@ modelsummary_rms <- function(modelfit,
     colnames(final_output) <- gsub("exp_coef", exp_coef_name, colnames(final_output))
   }
 
+  # ensure no rownames
+  rownames(final_output) <- NULL
 
   # Return the formatted output
   return(final_output)
