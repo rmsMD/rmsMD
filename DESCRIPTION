@@ -23,5 +23,9 @@ Imports: rms
 Suggests: 
     knitr,
     rmarkdown,
-    devtools
+    devtools,
+    officer,
+    flextable,
+    dplyr,
+    MASS
 VignetteBuilder: knitr
