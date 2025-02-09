@@ -9,8 +9,8 @@ modelsummary_rms(
   combine_ci = TRUE,
   round_dp_coef = 3,
   round_dp_p = 3,
-  rcs_overallp = FALSE,
-  hide_rcs_coef = FALSE,
+  rcs_overallp = TRUE,
+  hide_rcs_coef = TRUE,
   exp_coef = NULL,
   fullmodel = FALSE
 )
@@ -18,25 +18,25 @@ modelsummary_rms(
 \arguments{
 \item{modelfit}{The output from an rms model.}
 
-\item{combine_ci}{TRUE to combine the effect estimates and 95\% confidence intervals into a single column.}
+\item{combine_ci}{If \code{TRUE}, combines the effect estimates and 95\% confidence intervals into a single column. Default is \code{TRUE}.}
 
-\item{round_dp_coef}{Specify the number of decimal places to show for the effect estimates.}
+\item{round_dp_coef}{Specifies the number of decimal places to display for the effect estimates. Default is \code{3}.}
 
-\item{round_dp_p}{Specify the number of decimal places to show for P values.}
+\item{round_dp_p}{Specifies the number of decimal places to display for P values. Default is \code{3}.}
 
-\item{rcs_overallp}{Set TRUE to give an overall P value for RCS terms (taken from anova(modelfit))}
+\item{rcs_overallp}{If \code{TRUE}, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from \code{anova(modelfit)}. Default is \code{FALSE}.}
 
-\item{hide_rcs_coef}{Set TRUE to hide the individual coefficients for RCS variables.}
+\item{hide_rcs_coef}{If \code{TRUE}, hides the individual coefficients for Restricted Cubic Spline (RCS) variables. Default is \code{FALSE}.}
 
-\item{exp_coef}{Set TRUE to output exp(coef) as the effect estimate (only for model types other than ols, lrm or cph)}
+\item{exp_coef}{If \code{TRUE}, outputs the exponentiated coefficients (\code{exp(coef)}) as the effect estimates. Applicable only for model types other than \code{ols}, \code{lrm}, or \code{cph}. If \code{NULL}, no exponentiation is performed. Default is \code{NULL}.}
 
-\item{fullmodel}{Set to TRUE to see all of the intermediate steps and check against standard model outputs.}
+\item{fullmodel}{If \code{TRUE}, includes all intermediate steps in the summary, allowing users to verify and compare with standard model outputs. Default is \code{FALSE}.}
 }
 \value{
 Returns a dataframe of results. This can easily be outputted to word using
 packages such as flextable and officer.
 }
 \description{
-Takes an rms model object and outputs the results in a dataframe.
-Outputs results in a format for publication in medical journals.
+The \code{modelsummary_rms} function processes the output from models fitted using the \strong{rms} package and generates a summarized dataframe of the results.
+This summary is tailored for publication in medical journals, presenting effect estimates, confidence intervals, and p-values.
 }
