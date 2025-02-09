@@ -10,6 +10,7 @@ vignette: >
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+
 ```
 
 
@@ -38,7 +39,8 @@ Make sure you have the required packages installed from CRAN or GitHub. Note, if
 # devtools::install_github("https://github.com/sjtingle/rmsMD")
 
 library(rms)
-# library(rmsMD)
+library(rmsMD)
+library(MASS)
 ```
 
 # Basic Usage
@@ -231,4 +233,29 @@ summary_spline_interact <- modelsummary_rms(fit_spline_interact)
 knitr::kable(summary_spline_interact)
 ```
 
+# Exporting to Microsoft Word
+
+The output of **modelsummary_rms** is a dataframe, as this is easy to work with and further process if required. This dataframe output can easily be exported to a word document using **flextable** and **officer** packages.
+
+```{r}
+library(officer)
+library(flextable)
+library(dplyr)
+
+# converting modelsummary_rms dataframe generated above into a flextable
+rmsMD_as_table <- flextable(rmsMD_summary)
+
+# use officer to create a 
+doc <- read_docx() %>% 
+  body_add_flextable(rmsMD_as_table) %>%
+  body_add_par("Model summary from rmsMD", style = "heading 2")
+
+# generating a temporary output path for demonstration. This would be replaced by the file path where the word document will be generated
+output_path <- file.path(tempdir(), "example_output.docx")
+
+# generating the word document
+print(doc, target = output_path)
+
+print(doc, target = "temp.docx")
+```
 
