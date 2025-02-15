@@ -53,12 +53,18 @@ modelsummary_rms <- function(modelfit,
     stop("Model not ols, lrm or cph. You must specify exp_coef argument to determine table output.")
   }
 
+  # this checks if rcs_overallp is set to TRUE by default or if the user specifically set it to TRUE
+  user_set_rcs <- "rcs_overallp" %in% names(match.call())
+
   if (!inherits(modelfit, "rms")) {
     rcs_overallp <- FALSE
     hide_rcs_coef <- FALSE
   } else {
     no_rcs <- all(unlist(modelfit$Design$nonlinear) == FALSE)
     if (no_rcs) {
+      if (user_set_rcs && rcs_overallp) {
+        warning("rcs_overallp was set to TRUE by the user but no RCS terms were found in the model fit. Setting rcs_overallp to FALSE.")
+      }
       rcs_overallp <- FALSE
       hide_rcs_coef <- FALSE
     }
