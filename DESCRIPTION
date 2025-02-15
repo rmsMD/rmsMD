@@ -27,5 +27,7 @@ Suggests:
     officer,
     flextable,
     dplyr,
-    MASS
+    MASS,
+    testthat (>= 3.0.0)
 VignetteBuilder: knitr
+Config/testthat/edition: 3
