@@ -7,16 +7,17 @@ library(MASS)
 library(rms)
 library(survival)
 
+
 ### Test for warning if modelfit isn't an rms object
 test_that("Warning for model not inheriting from 'rms'", {
   # Use the Boston dataset from MASS
   data("Boston", package = "MASS")
   # Fit a linear model (which does not inherit from "rms")
   modelfit <- lm(medv ~ lstat, data = Boston)
-  # Expect a warning when calling modelsummary_rms on a non-rms model
-  expect_warning(
-    modelsummary_rms(modelfit, exp_coef = FALSE),
-    "The model fit does not belong to the 'rms' class"
+  # Expect a warning when calling modelsummary_rms on a non-rms model without specifying the exp_coef
+  expect_error(
+    modelsummary_rms(modelfit),
+    "The model fit does not belong to the 'rms' class. You must specify exp_coef argument to determine table output."
   )
 })
 
@@ -35,6 +36,7 @@ test_that("Error when exp_coef is missing for non-standard rms model", {
     "Model not ols, lrm or cph. You must specify exp_coef argument to determine table output."
   )
 })
+
 
 ### Test for Model-specific behaviour for ols
 test_that("Model-specific behaviour for ols", {
@@ -89,6 +91,7 @@ test_that("Model-specific behaviour for lrm", {
   expect_true(any(grepl("OR", colnames(output_lrm))))
 })
 
+
 ### Test for Model-specific behaviour for cph using the lung dataset
 test_that("Model-specific behaviour for cph using the lung dataset", {
   # Load the lung dataset directly from the survival package
@@ -105,6 +108,7 @@ test_that("Model-specific behaviour for cph using the lung dataset", {
   output_cph <- modelsummary_rms(modelfit_cph, exp_coef = TRUE)
   expect_true(any(grepl("HR", colnames(output_cph))))
 })
+
 
 ### Test for RCS handling: error when no RCS terms found
 test_that("RCS handling: warning when no RCS terms found", {
@@ -124,3 +128,44 @@ test_that("RCS handling: warning when no RCS terms found", {
     "rcs_overallp was set to TRUE by the user but no RCS terms were found in the model fit. Setting rcs_overallp to FALSE."
   )
 })
+
+
+### Test that final output formatting works with RCS terms
+test_that("Final output formatting works with RCS terms", {
+  # Use the Boston dataset from MASS
+  data("Boston", package = "MASS")
+  # Assign dd to the global environment so that rms functions can access it.
+  assign("dd", datadist(Boston), envir = .GlobalEnv)
+  options(datadist = "dd")
+
+  # Fit an ols model that includes an RCS term (for 'lstat') and another linear term ('crim')
+  modelfit <- ols(medv ~ rcs(lstat, 4) + crim, data = Boston)
+
+  # Run modelsummary_rms with fullmodel = FALSE.
+  # With fullmodel = FALSE, the intercept row should be removed,
+  # and additional rows for RCS overall p-values should be appended.
+  final_output <- modelsummary_rms(modelfit, exp_coef = FALSE, fullmodel = FALSE, rcs_overallp = TRUE)
+
+  # Verify that the intercept row is removed.
+  expect_false("Intercept" %in% final_output$variable)
+
+  # Check that the final output contains exactly the expected columns.
+  # When exp_coef is FALSE and combine_ci is TRUE, we expect "variable", "coef_95CI", and "Pvalue".
+  expect_equal(colnames(final_output), c("variable", "coef_95CI", "Pvalue"))
+
+  # Check rownames: they should either be NULL or the default sequential rownames.
+  current_rownames <- rownames(final_output)
+  acceptable_rownames <- is.null(current_rownames) || identical(current_rownames, as.character(seq_len(nrow(final_output))))
+  expect_true(acceptable_rownames)
+
+  # Additionally, check that at least one row corresponds to an overall RCS p-value.
+  # Such rows have variable names starting with "RCSoverallP:".
+  rcs_rows <- grep("^RCSoverallP:", final_output$variable, value = TRUE)
+  expect_true(length(rcs_rows) >= 1)
+
+  # When fullmodel is TRUE, all rows (including the intercept) should be returned.
+  full_output <- modelsummary_rms(modelfit, exp_coef = FALSE, fullmodel = TRUE, rcs_overallp = TRUE)
+  expect_true("Intercept" %in% full_output$variable)
+})
+
+
