@@ -34,9 +34,13 @@ modelsummary_rms <- function(modelfit,
   ######### and also sets exp_coef to true or false, or it is isn't ols cph or lrm
   ######### gives an error message saying exp_coef must be specified
 
-  # warning if modelfit isn't an rms object
+  # Warning if modelfit isn't an rms object
   if (!inherits(modelfit, "rms")) {
-    warning("The model fit does not belong to the 'rms' class. You must specify exp_coef argument to determine table output.")
+    # Check if the user explicitly provided an exp_coef argument
+    user_set_exp_coef <- "exp_coef" %in% names(match.call())
+    if (!user_set_exp_coef) {
+      stop("The model fit does not belong to the 'rms' class. You must specify exp_coef argument to determine table output.")
+    }
   }
 
   ########## defining arguments based on model class ##########
