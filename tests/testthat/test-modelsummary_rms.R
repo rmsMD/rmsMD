@@ -144,7 +144,7 @@ test_that("Final output formatting works with RCS terms", {
   # Run modelsummary_rms with fullmodel = FALSE.
   # With fullmodel = FALSE, the intercept row should be removed,
   # and additional rows for RCS overall p-values should be appended.
-  final_output <- modelsummary_rms(modelfit, exp_coef = FALSE, fullmodel = FALSE, rcs_overallp = TRUE)
+  final_output <- modelsummary_rms(modelfit, rcs_overallp = TRUE)
 
   # Verify that the intercept row is removed.
   expect_false("Intercept" %in% final_output$variable)
@@ -164,8 +164,26 @@ test_that("Final output formatting works with RCS terms", {
   expect_true(length(rcs_rows) >= 1)
 
   # When fullmodel is TRUE, all rows (including the intercept) should be returned.
-  full_output <- modelsummary_rms(modelfit, exp_coef = FALSE, fullmodel = TRUE, rcs_overallp = TRUE)
+  full_output <- modelsummary_rms(modelfit, fullmodel = TRUE, rcs_overallp = TRUE)
   expect_true("Intercept" %in% full_output$variable)
 })
 
 
+### Test that final output formatting works with RCS terms
+test_that("Final output formatting works with RCS and interaction terms", {
+  # Use the Boston dataset from MASS
+  data("Boston", package = "MASS")
+  # Assign dd to the global environment so that rms functions can access it.
+  assign("dd", datadist(Boston), envir = .GlobalEnv)
+  options(datadist = "dd")
+
+  # Fit an ols model that includes an RCS term (for 'lstat') and another linear term ('crim')
+  modelfit <- ols(medv ~ rcs(lstat, 4) * crim, data = Boston)
+
+  # Run modelsummary_rms with fullmodel = FALSE.
+  # With fullmodel = FALSE, the intercept row should be removed,
+  # and additional rows for RCS overall p-values should be appended.
+  final_output <- modelsummary_rms(modelfit, rcs_overallp = TRUE, hide_rcs_coef = TRUE)
+
+  expect_equal(nrow(final_output), 3)
+})
