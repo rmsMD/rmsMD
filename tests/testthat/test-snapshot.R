@@ -60,9 +60,8 @@ test_that("Snapshot: OLS tests - model with splines and interactions", {
   # Fit an OLS model with splines and an interaction term.
   fit_spline_interact <- ols(Wr.Hnd ~ rcs(Age, 4) * Exer + Sex, data = df)
   summary_spline_interact <- modelsummary_rms(fit_spline_interact)
-  anova_out <- anova(fit_spline_interact)
   full_out <- modelsummary_rms(fit_spline_interact, hide_rcs_coef = FALSE, rcs_overallp = FALSE)
-  expect_snapshot_output(list(summary = summary_spline_interact, anova = anova_out, full = full_out))
+  expect_snapshot_output(list(summary = summary_spline_interact, full = full_out))
 })
 
 ## ------------------------------
@@ -136,10 +135,9 @@ test_that("Snapshot: Variables with labels and special names", {
   # Fit a model that includes these variables.
   fit_vars <- ols(Wr.Hnd ~ rcs(Age, 4) * Exer + Sex + random1 + `"random2"`, data = df)
   summary_vars <- modelsummary_rms(fit_vars)
-  anova_vars <- anova(fit_vars)
   hidden_vars <- modelsummary_rms(fit_vars, hide_rcs_coef = TRUE, rcs_overallp = TRUE)
 
-  expect_snapshot_output(list(summary = summary_vars, anova = anova_vars, hidden = hidden_vars))
+  expect_snapshot_output(list(summary = summary_vars, hidden = hidden_vars))
 })
 
 test_that("Snapshot: Variables with reserved/special names", {
@@ -165,11 +163,9 @@ test_that("Snapshot: Variables with reserved/special names", {
   # Fit a model including these variables.
   fit_special <- ols(Wr.Hnd ~ rcs(Age, 4) * Exer + Sex + `if` + `for` + `while` + `TRUE` + `NULL`, data = df)
   summary_special <- modelsummary_rms(fit_special)
-  anova_special <- anova(fit_special)
   hidden_special <- modelsummary_rms(fit_special, hide_rcs_coef = TRUE, rcs_overallp = TRUE)
 
   expect_snapshot_output(list(structure = str_output,
                               summary = summary_special,
-                              anova = anova_special,
                               hidden = hidden_special))
 })

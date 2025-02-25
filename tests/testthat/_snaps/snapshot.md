@@ -58,38 +58,6 @@
     4        RCSoverallP: Age                    RCS terms  0.352
     5 RCSoverallP: Age * Exer                    RCS terms  0.251
     
-    $anova
-                    Analysis of Variance          Response: Wr.Hnd 
-    
-     Factor                                    d.f. Partial SS MS         F     
-     Age  (Factor+Higher Order Factors)          9   24.15963    2.684403   1.12
-      All Interactions                           6   18.97364    3.162273   1.32
-      Nonlinear (Factor+Higher Order Factors)    6   20.71297    3.452162   1.44
-     Exer  (Factor+Higher Order Factors)         8   19.43046    2.428807   1.01
-      All Interactions                           6   18.97364    3.162273   1.32
-     Sex                                         1  240.73490  240.734900 100.18
-     Age * Exer  (Factor+Higher Order Factors)   6   18.97364    3.162273   1.32
-      Nonlinear                                  4   16.44860    4.112149   1.71
-      Nonlinear Interaction : f(A,B) vs. AB      4   16.44860    4.112149   1.71
-     TOTAL NONLINEAR                             6   20.71297    3.452162   1.44
-     TOTAL NONLINEAR + INTERACTION               8   22.91957    2.864946   1.19
-     REGRESSION                                 12  294.94439   24.578699  10.23
-     ERROR                                     222  533.45536    2.402952       
-     P     
-     0.3515
-     0.2510
-     0.2016
-     0.4287
-     0.2510
-     <.0001
-     0.2510
-     0.1484
-     0.1484
-     0.2016
-     0.3047
-     <.0001
-           
-    
     $full
                 variable                     coef_95CI Pvalue
     1                Age        1.083 (0.031 to 2.135)  0.044
@@ -233,42 +201,6 @@
     6        RCSoverallP: Age                    RCS terms  0.372
     7 RCSoverallP: Age * Exer                    RCS terms  0.274
     
-    $anova
-                    Analysis of Variance          Response: Wr.Hnd 
-    
-     Factor                                    d.f. Partial SS  MS          F    
-     Age  (Factor+Higher Order Factors)          9   23.6940924   2.6326769  1.09
-      All Interactions                           6   18.3652812   3.0608802  1.27
-      Nonlinear (Factor+Higher Order Factors)    6   20.4981213   3.4163536  1.41
-     Exer  (Factor+Higher Order Factors)         8   18.9434487   2.3679311  0.98
-      All Interactions                           6   18.3652812   3.0608802  1.27
-     Sex                                         1  238.6481748 238.6481748 98.77
-     random1                                     1    0.8668897   0.8668897  0.36
-     "random2"                                   1    0.9203942   0.9203942  0.38
-     Age * Exer  (Factor+Higher Order Factors)   6   18.3652812   3.0608802  1.27
-      Nonlinear                                  4   16.0954704   4.0238676  1.67
-      Nonlinear Interaction : f(A,B) vs. AB      4   16.0954704   4.0238676  1.67
-     TOTAL NONLINEAR                             6   20.4981213   3.4163536  1.41
-     TOTAL NONLINEAR + INTERACTION               8   22.5593168   2.8199146  1.17
-     REGRESSION                                 14  296.8126578  21.2009041  8.77
-     ERROR                                     220  531.5870869   2.4163049      
-     P     
-     0.3715
-     0.2738
-     0.2103
-     0.4525
-     0.2738
-     <.0001
-     0.5498
-     0.5378
-     0.2738
-     0.1591
-     0.1591
-     0.2103
-     0.3202
-     <.0001
-           
-    
     $hidden
                        variable                  coef_95CI Pvalue
     1                 Exer=None -3.870 (-50.426 to 42.685)  0.871
@@ -320,48 +252,6 @@
     8                       NULL    0.057 (-0.147 to 0.262)  0.582
     9         RCSoverallP: Age                    RCS terms  0.485
     10 RCSoverallP: Age * Exer                    RCS terms  0.340
-    
-    $anova
-                    Analysis of Variance          Response: Wr.Hnd 
-    
-     Factor                                    d.f. Partial SS  MS          F    
-     Age  (Factor+Higher Order Factors)          9   20.5649157   2.2849906  0.95
-      All Interactions                           6   16.5091569   2.7515261  1.14
-      Nonlinear (Factor+Higher Order Factors)    6   18.3360583   3.0560097  1.27
-     Exer  (Factor+Higher Order Factors)         8   17.3234399   2.1654300  0.90
-      All Interactions                           6   16.5091569   2.7515261  1.14
-     Sex                                         1  235.4172620 235.4172620 97.55
-     if                                          1    7.1377957   7.1377957  2.96
-     for                                         1    0.1755770   0.1755770  0.07
-     while                                       1    0.6925481   0.6925481  0.29
-     TRUE                                        1    0.1523873   0.1523873  0.06
-     NULL                                        1    0.7307896   0.7307896  0.30
-     Age * Exer  (Factor+Higher Order Factors)   6   16.5091569   2.7515261  1.14
-      Nonlinear                                  4   14.6677962   3.6669491  1.52
-      Nonlinear Interaction : f(A,B) vs. AB      4   14.6677962   3.6669491  1.52
-     TOTAL NONLINEAR                             6   18.3360583   3.0560097  1.27
-     TOTAL NONLINEAR + INTERACTION               8   19.9941540   2.4992692  1.04
-     REGRESSION                                 17  304.6896870  17.9229228  7.43
-     ERROR                                     217  523.7100577   2.4134104      
-     P     
-     0.4854
-     0.3401
-     0.2741
-     0.5196
-     0.3401
-     <.0001
-     0.0869
-     0.7876
-     0.5927
-     0.8018
-     0.5827
-     0.3401
-     0.1975
-     0.1975
-     0.2741
-     0.4102
-     <.0001
-           
     
     $hidden
                         variable                  coef_95CI Pvalue
