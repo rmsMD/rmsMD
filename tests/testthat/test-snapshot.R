@@ -61,7 +61,7 @@ test_that("Snapshot: OLS tests - model with splines and interactions", {
   fit_spline_interact <- ols(Wr.Hnd ~ rcs(Age, 4) * Exer + Sex, data = df)
   summary_spline_interact <- modelsummary_rms(fit_spline_interact)
   anova_out <- anova(fit_spline_interact)
-  full_out <- modelsummary_rms(fit_spline_interact, hide_rcs_coef = FALSE, rcs_overallp = FALSE, fullmodel = TRUE)
+  full_out <- modelsummary_rms(fit_spline_interact, hide_rcs_coef = FALSE, rcs_overallp = FALSE)
   expect_snapshot_output(list(summary = summary_spline_interact, anova = anova_out, full = full_out))
 })
 
@@ -73,22 +73,17 @@ df$high_wr <- as.factor(df$Wr.Hnd > median(df$Wr.Hnd, na.rm = TRUE))
 
 test_that("Snapshot: LRM tests - simple model", {
   fit_lrm <- lrm(high_wr ~ Age + Exer + Smoke + Height + Sex, data = df)
-  expect_snapshot_output(list(modelsummary_rms(fit_lrm), modelsummary_rms(fit_lrm, fullmodel = TRUE)))
+  expect_snapshot_output(list(modelsummary_rms(fit_lrm), modelsummary_rms(fit_lrm)))
 })
 
 test_that("Snapshot: LRM tests - model with interactions", {
   fit_lrm_int <- lrm(high_wr ~ Age * Exer, data = df)
-  expect_snapshot_output(list(modelsummary_rms(fit_lrm_int), modelsummary_rms(fit_lrm_int, fullmodel = TRUE)))
+  expect_snapshot_output(list(modelsummary_rms(fit_lrm_int), modelsummary_rms(fit_lrm_int)))
 })
 
 test_that("Snapshot: LRM tests - model with splines", {
   fit_lrm_spline <- lrm(high_wr ~ rcs(Age, 4) + Exer, data = df)
-  expect_snapshot_output(list(modelsummary_rms(fit_lrm_spline), modelsummary_rms(fit_lrm_spline, fullmodel = TRUE)))
-})
-
-test_that("Snapshot: LRM tests - model with splines and interactions", {
-  fit_lrm_spline_int <- lrm(high_wr ~ rcs(Age, 4) * Exer + Sex, data = df)
-  expect_snapshot_output(list(modelsummary_rms(fit_lrm_spline_int), modelsummary_rms(fit_lrm_spline_int, fullmodel = TRUE)))
+  expect_snapshot_output(list(modelsummary_rms(fit_lrm_spline), modelsummary_rms(fit_lrm_spline)))
 })
 
 ## ------------------------------
@@ -101,22 +96,22 @@ options(datadist = "dd")
 
 test_that("Snapshot: CPH tests - simple model", {
   fit_cph <- cph(Surv(time, status) ~ age + sex, data = lung, x = TRUE, y = TRUE)
-  expect_snapshot_output(list(modelsummary_rms(fit_cph), modelsummary_rms(fit_cph, fullmodel = TRUE)))
+  expect_snapshot_output(list(modelsummary_rms(fit_cph), modelsummary_rms(fit_cph)))
 })
 
 test_that("Snapshot: CPH tests - model with interactions", {
   fit_cph_int <- cph(Surv(time, status) ~ age * sex, data = lung, x = TRUE, y = TRUE)
-  expect_snapshot_output(list(modelsummary_rms(fit_cph_int), modelsummary_rms(fit_cph_int, fullmodel = TRUE)))
+  expect_snapshot_output(list(modelsummary_rms(fit_cph_int), modelsummary_rms(fit_cph_int)))
 })
 
 test_that("Snapshot: CPH tests - model with splines", {
   fit_cph_spline <- cph(Surv(time, status) ~ rcs(age, 4) + sex, data = lung, x = TRUE, y = TRUE)
-  expect_snapshot_output(list(modelsummary_rms(fit_cph_spline), modelsummary_rms(fit_cph_spline, fullmodel = TRUE)))
+  expect_snapshot_output(list(modelsummary_rms(fit_cph_spline), modelsummary_rms(fit_cph_spline)))
 })
 
 test_that("Snapshot: CPH tests - model with splines and interactions", {
   fit_cph_spline_int <- cph(Surv(time, status) ~ rcs(age, 4) * sex, data = lung, x = TRUE, y = TRUE)
-  expect_snapshot_output(list(modelsummary_rms(fit_cph_spline_int), modelsummary_rms(fit_cph_spline_int, fullmodel = TRUE)))
+  expect_snapshot_output(list(modelsummary_rms(fit_cph_spline_int), modelsummary_rms(fit_cph_spline_int)))
 })
 
 ## ------------------------------
