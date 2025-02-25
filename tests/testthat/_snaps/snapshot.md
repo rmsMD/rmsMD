@@ -326,17 +326,17 @@
     
      Factor                                    d.f. Partial SS  MS          F    
      Age  (Factor+Higher Order Factors)          9   20.5649157   2.2849906  0.95
-      All Interactions                           6   16.5091568   2.7515261  1.14
+      All Interactions                           6   16.5091569   2.7515261  1.14
       Nonlinear (Factor+Higher Order Factors)    6   18.3360583   3.0560097  1.27
      Exer  (Factor+Higher Order Factors)         8   17.3234399   2.1654300  0.90
-      All Interactions                           6   16.5091568   2.7515261  1.14
+      All Interactions                           6   16.5091569   2.7515261  1.14
      Sex                                         1  235.4172620 235.4172620 97.55
      if                                          1    7.1377957   7.1377957  2.96
      for                                         1    0.1755770   0.1755770  0.07
      while                                       1    0.6925481   0.6925481  0.29
      TRUE                                        1    0.1523873   0.1523873  0.06
      NULL                                        1    0.7307896   0.7307896  0.30
-     Age * Exer  (Factor+Higher Order Factors)   6   16.5091568   2.7515261  1.14
+     Age * Exer  (Factor+Higher Order Factors)   6   16.5091569   2.7515261  1.14
       Nonlinear                                  4   14.6677962   3.6669491  1.52
       Nonlinear Interaction : f(A,B) vs. AB      4   14.6677962   3.6669491  1.52
      TOTAL NONLINEAR                             6   18.3360583   3.0560097  1.27
