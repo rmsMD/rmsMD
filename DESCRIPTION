@@ -1,14 +1,14 @@
 Package: rmsMD
 Type: Package
-Title: Output Results From rms Models for Medical Journals
+Title: Output Results from 'rms' Models for Medical Journals
 Version: 0.1.0
-Description: This takes the output of models performed using the rms package and
+Description: This takes the output of models performed using the 'rms' package and
     returns a dataframe with the results. This output is in the format required by medical
     journals. For example for cox regression models, the hazard rations, their 95%
     confidence intervals, and p values will be provided. There are additional functions for outputs when the model included restricted 
-    cubic spline (RCS) terms. Models using imputed data (eg from aregimpute) and
-    fitted used fit.mult.impute can also be processed. The dataframe which is returned can easily be turned into a publication ready table
-    with packages flextable and officer.
+    cubic spline (RCS) terms. Models using imputed data (eg from aregimpute()) and
+    fitted used fit.mult.impute() can also be processed. The dataframe which is returned can easily be turned into a publication ready table
+    with packages 'flextable' and 'officer'.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
