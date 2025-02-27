@@ -42,9 +42,6 @@ test_that("Error when exp_coef is missing for non-standard rms model", {
 test_that("Model-specific behaviour for ols", {
   # Use the Boston dataset from MASS
   data("Boston", package = "MASS")
-  # Create and assign dd in the global environment so that rms functions can find it.
-  assign("dd", datadist(Boston), envir = .GlobalEnv)
-  options(datadist = "dd")
 
   # Fit a linear model using rms::ols (ordinary least squares)
   modelfit <- ols(medv ~ lstat, data = Boston)
@@ -77,9 +74,6 @@ test_that("Model-specific behaviour for ols", {
 test_that("Model-specific behaviour for lrm", {
   # Use the Boston dataset from MASS
   data("Boston", package = "MASS")
-  # Create and assign dd in the global environment so that rms functions can find it.
-  assign("dd", datadist(Boston), envir = .GlobalEnv)
-  options(datadist = "dd")
 
   #### lrm test: create a binary outcome based on medv ####
   # Create a binary outcome: 1 if medv is above the median, 0 otherwise.
@@ -96,9 +90,6 @@ test_that("Model-specific behaviour for lrm", {
 test_that("Model-specific behaviour for cph using the lung dataset", {
   # Load the lung dataset directly from the survival package
   lung <- survival::lung
-  # Create and assign dd in the global environment so that rms functions can find it.
-  assign("dd", datadist(lung), envir = .GlobalEnv)
-  options(datadist = "dd")
 
   # Fit a survival model using cph with the lung dataset.
   # Note: In the lung dataset, status is coded as 1=censored and 2=dead.
@@ -114,9 +105,6 @@ test_that("Model-specific behaviour for cph using the lung dataset", {
 test_that("RCS handling: warning when no RCS terms found", {
   # Use the Boston dataset from MASS
   data("Boston", package = "MASS")
-  # Create and assign dd in the global environment so that rms functions can find it.
-  assign("dd", datadist(Boston), envir = .GlobalEnv)
-  options(datadist = "dd")
 
   # Fit a linear model using rms::ols (which, in this case, has no RCS terms)
   modelfit <- ols(medv ~ lstat, data = Boston)
@@ -134,9 +122,6 @@ test_that("RCS handling: warning when no RCS terms found", {
 test_that("Final output formatting works with RCS terms", {
   # Use the Boston dataset from MASS
   data("Boston", package = "MASS")
-  # Assign dd to the global environment so that rms functions can access it.
-  assign("dd", datadist(Boston), envir = .GlobalEnv)
-  options(datadist = "dd")
 
   # Fit an ols model that includes an RCS term (for 'lstat') and another linear term ('crim')
   modelfit <- ols(medv ~ rcs(lstat, 4) + crim, data = Boston)
@@ -173,9 +158,6 @@ test_that("Final output formatting works with RCS terms", {
 test_that("Final output formatting works with RCS and interaction terms", {
   # Use the Boston dataset from MASS
   data("Boston", package = "MASS")
-  # Assign dd to the global environment so that rms functions can access it.
-  assign("dd", datadist(Boston), envir = .GlobalEnv)
-  options(datadist = "dd")
 
   # Fit an ols model that includes an RCS term (for 'lstat') and another linear term ('crim')
   modelfit <- ols(medv ~ rcs(lstat, 4) * crim, data = Boston)

@@ -7,17 +7,13 @@ library(MASS)
 library(rms)
 library(survival)
 
-# Set up Boston data and dd for tests (for functions using ols)
-# The Boston dataset is used to fit an ols model with rms, and we assign the dd
-# object to the global environment so that rms functions can access the distribution.
-data("Boston", package = "MASS")
-assign("dd", datadist(Boston), envir = .GlobalEnv)
-options(datadist = "dd")
 
 # Test for rmsMD_extract_coef_and_se:
 # This test fits an ols model and extracts coefficients and standard errors,
 # then compares them to the expected values computed directly from the model.
 test_that("rmsMD_extract_coef_and_se returns correct values", {
+  data("Boston", package = "MASS")
+
   # Fit an ols model on the Boston data.
   modelfit <- ols(medv ~ lstat, data = Boston)
   ext <- rmsMD_extract_coef_and_se(modelfit)
@@ -35,6 +31,8 @@ test_that("rmsMD_extract_coef_and_se returns correct values", {
 # This test ensures that the data frame created by the helper function contains
 # the correct column names and the values match those of the extracted coefficients and SEs.
 test_that("rmsMD_prepare_output_dataframe creates proper dataframe", {
+  data("Boston", package = "MASS")
+
   modelfit <- ols(medv ~ lstat, data = Boston)
   ext <- rmsMD_extract_coef_and_se(modelfit)
   df <- rmsMD_prepare_output_dataframe(ext$coef, ext$se)
@@ -49,6 +47,8 @@ test_that("rmsMD_prepare_output_dataframe creates proper dataframe", {
 # Test for rmsMD_calculate_raw_p_values:
 # This test confirms that raw p-values are computed correctly using the standard formula.
 test_that("rmsMD_calculate_raw_p_values computes correct p-values", {
+  data("Boston", package = "MASS")
+
   modelfit <- ols(medv ~ lstat, data = Boston)
   ext <- rmsMD_extract_coef_and_se(modelfit)
   df <- rmsMD_prepare_output_dataframe(ext$coef, ext$se)
@@ -62,6 +62,8 @@ test_that("rmsMD_calculate_raw_p_values computes correct p-values", {
 # Test for rmsMD_calculate_coef_confidence_intervals:
 # This test ensures that the 95% confidence intervals for each coefficient are computed correctly.
 test_that("rmsMD_calculate_coef_confidence_intervals adds correct CI columns", {
+  data("Boston", package = "MASS")
+
   modelfit <- ols(medv ~ lstat, data = Boston)
   ext <- rmsMD_extract_coef_and_se(modelfit)
   df <- rmsMD_prepare_output_dataframe(ext$coef, ext$se)
@@ -78,6 +80,8 @@ test_that("rmsMD_calculate_coef_confidence_intervals adds correct CI columns", {
 # Test for rmsMD_format_column_output:
 # This test checks that numeric values are correctly rounded to the specified number of decimal places.
 test_that("rmsMD_format_column_output rounds numeric values correctly", {
+  data("Boston", package = "MASS")
+
   modelfit <- ols(medv ~ lstat, data = Boston)
   ext <- rmsMD_extract_coef_and_se(modelfit)
   df <- rmsMD_prepare_output_dataframe(ext$coef, ext$se)
@@ -92,6 +96,8 @@ test_that("rmsMD_format_column_output rounds numeric values correctly", {
 # This test verifies that the confidence intervals are combined into a single string column
 # that follows the expected format (e.g., "number (number to number)").
 test_that("rmsMD_combine_CI_for_output creates combined CI column correctly", {
+  data("Boston", package = "MASS")
+
   modelfit <- ols(medv ~ lstat, data = Boston)
   ext <- rmsMD_extract_coef_and_se(modelfit)
   df <- rmsMD_prepare_output_dataframe(ext$coef, ext$se)
@@ -112,6 +118,8 @@ test_that("rmsMD_combine_CI_for_output creates combined CI column correctly", {
 # When fullmodel is FALSE, it should remove the intercept and only include specified columns.
 # When fullmodel is TRUE, all rows are returned.
 test_that("rmsMD_format_final_output returns correct columns", {
+  data("Boston", package = "MASS")
+
   modelfit <- ols(medv ~ lstat, data = Boston)
   ext <- rmsMD_extract_coef_and_se(modelfit)
   df <- rmsMD_prepare_output_dataframe(ext$coef, ext$se)

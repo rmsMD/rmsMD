@@ -4,18 +4,11 @@ library(rms)
 library(survival)
 
 ## ------------------------------
-## Setup for Survey Data (MASS::survey)
-## ------------------------------
-# Use the survey dataset from MASS for OLS and LRM tests.
-df <- MASS::survey
-# Set up the dd object (required by rms) in the global environment.
-assign("dd", datadist(df), envir = .GlobalEnv)
-options(datadist = "dd")
-
-## ------------------------------
 ## LM Tests using Survey Data
 ## ------------------------------
 test_that("Snapshot: Feed non-rms modelfit", {
+  df <- MASS::survey
+
   # Fit a non-rms model (using lm) on the survey data.
   fit_lm <- lm(Wr.Hnd ~ Age + Exer, data = df)
   # Capture the output of modelsummary_rms for a non-rms model.
@@ -23,6 +16,8 @@ test_that("Snapshot: Feed non-rms modelfit", {
 })
 
 test_that("Snapshot: Warning output for non-rms model without setting exp_coef", {
+  df <- MASS::survey
+
   # Fit a non-rms model (using lm) on the survey data.
   fit_lm <- lm(Wr.Hnd ~ Age + Exer, data = df)
   # Capture and snapshot the error produced by modelsummary_rms.
@@ -35,6 +30,8 @@ test_that("Snapshot: Warning output for non-rms model without setting exp_coef",
 ## OLS Tests using Survey Data
 ## ------------------------------
 test_that("Snapshot: OLS tests - simple model", {
+  df <- MASS::survey
+
   # Fit a simple OLS model using rms::ols.
   fit_ols <- ols(Wr.Hnd ~ Age + Exer + Smoke + Height + Sex, data = df)
   summary_df <- modelsummary_rms(fit_ols)
@@ -42,6 +39,8 @@ test_that("Snapshot: OLS tests - simple model", {
 })
 
 test_that("Snapshot: OLS tests - model with interactions", {
+  df <- MASS::survey
+
   # Fit an OLS model including an interaction term.
   fit_interact <- ols(Wr.Hnd ~ Age * Exer, data = df)
   summary_interact <- modelsummary_rms(fit_interact)
@@ -49,6 +48,8 @@ test_that("Snapshot: OLS tests - model with interactions", {
 })
 
 test_that("Snapshot: OLS tests - model with splines", {
+  df <- MASS::survey
+
   # Fit an OLS model with a restricted cubic spline on Age.
   fit_spline <- ols(Wr.Hnd ~ rcs(Age, 4) + Exer, data = df)
   summary_spline <- modelsummary_rms(fit_spline)
@@ -57,6 +58,8 @@ test_that("Snapshot: OLS tests - model with splines", {
 })
 
 test_that("Snapshot: OLS tests - model with splines and interactions", {
+  df <- MASS::survey
+
   # Fit an OLS model with splines and an interaction term.
   fit_spline_interact <- ols(Wr.Hnd ~ rcs(Age, 4) * Exer + Sex, data = df)
   summary_spline_interact <- modelsummary_rms(fit_spline_interact)
@@ -67,20 +70,30 @@ test_that("Snapshot: OLS tests - model with splines and interactions", {
 ## ------------------------------
 ## LRM Tests using Survey Data
 ## ------------------------------
-# Create a binary outcome variable for logistic regression.
-df$high_wr <- as.factor(df$Wr.Hnd > median(df$Wr.Hnd, na.rm = TRUE))
 
 test_that("Snapshot: LRM tests - simple model", {
+  df <- MASS::survey
+  # Create a binary outcome variable for logistic regression.
+  df$high_wr <- as.factor(df$Wr.Hnd > median(df$Wr.Hnd, na.rm = TRUE))
+
   fit_lrm <- lrm(high_wr ~ Age + Exer + Smoke + Height + Sex, data = df)
   expect_snapshot_output(list(modelsummary_rms(fit_lrm), modelsummary_rms(fit_lrm)))
 })
 
 test_that("Snapshot: LRM tests - model with interactions", {
+  df <- MASS::survey
+  # Create a binary outcome variable for logistic regression.
+  df$high_wr <- as.factor(df$Wr.Hnd > median(df$Wr.Hnd, na.rm = TRUE))
+
   fit_lrm_int <- lrm(high_wr ~ Age * Exer, data = df)
   expect_snapshot_output(list(modelsummary_rms(fit_lrm_int), modelsummary_rms(fit_lrm_int)))
 })
 
 test_that("Snapshot: LRM tests - model with splines", {
+  df <- MASS::survey
+  # Create a binary outcome variable for logistic regression.
+  df$high_wr <- as.factor(df$Wr.Hnd > median(df$Wr.Hnd, na.rm = TRUE))
+
   fit_lrm_spline <- lrm(high_wr ~ rcs(Age, 4) + Exer, data = df)
   expect_snapshot_output(list(modelsummary_rms(fit_lrm_spline), modelsummary_rms(fit_lrm_spline)))
 })
@@ -88,27 +101,31 @@ test_that("Snapshot: LRM tests - model with splines", {
 ## ------------------------------
 ## CPH Tests using Lung Data
 ## ------------------------------
-# Use the lung dataset from the survival package for CPH tests.
-data<-survival::lung
-assign("dd", datadist(lung), envir = .GlobalEnv)
-options(datadist = "dd")
 
 test_that("Snapshot: CPH tests - simple model", {
+  data<-survival::lung
+
   fit_cph <- cph(Surv(time, status) ~ age + sex, data = lung, x = TRUE, y = TRUE)
   expect_snapshot_output(list(modelsummary_rms(fit_cph), modelsummary_rms(fit_cph)))
 })
 
 test_that("Snapshot: CPH tests - model with interactions", {
+  data<-survival::lung
+
   fit_cph_int <- cph(Surv(time, status) ~ age * sex, data = lung, x = TRUE, y = TRUE)
   expect_snapshot_output(list(modelsummary_rms(fit_cph_int), modelsummary_rms(fit_cph_int)))
 })
 
 test_that("Snapshot: CPH tests - model with splines", {
+  data<-survival::lung
+
   fit_cph_spline <- cph(Surv(time, status) ~ rcs(age, 4) + sex, data = lung, x = TRUE, y = TRUE)
   expect_snapshot_output(list(modelsummary_rms(fit_cph_spline), modelsummary_rms(fit_cph_spline)))
 })
 
 test_that("Snapshot: CPH tests - model with splines and interactions", {
+  data<-survival::lung
+
   fit_cph_spline_int <- cph(Surv(time, status) ~ rcs(age, 4) * sex, data = lung, x = TRUE, y = TRUE)
   expect_snapshot_output(list(modelsummary_rms(fit_cph_spline_int), modelsummary_rms(fit_cph_spline_int)))
 })
@@ -117,6 +134,8 @@ test_that("Snapshot: CPH tests - model with splines and interactions", {
 ## Variables Checks: Labels and Special Variable Names
 ## ------------------------------
 test_that("Snapshot: Variables with labels and special names", {
+  df <- MASS::survey
+
   # Add labels to some existing variables
   attr(df$Sex, "label")    <- "Gender of respondent"
   attr(df$Wr.Hnd, "label") <- "Writing hand measurement (cm)"
@@ -141,6 +160,8 @@ test_that("Snapshot: Variables with labels and special names", {
 })
 
 test_that("Snapshot: Variables with reserved/special names", {
+  df <- MASS::survey
+
   # Create additional variables with reserved/special names.
   df$`if` <- rnorm(nrow(df))
   attr(df$`if`, "label") <- "Random variable with name 'if'"
