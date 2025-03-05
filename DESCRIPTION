@@ -2,7 +2,6 @@ Package: rmsMD
 Type: Package
 Title: Output Results from 'rms' Models for Medical Journals
 Version: 0.1.0
-Date: 2023-01-01
 Description: This takes the output of models performed using the 'rms' package and
     returns a dataframe with the results. This output is in the format required by medical
     journals. For example for cox regression models, the hazard rations, their 95%
