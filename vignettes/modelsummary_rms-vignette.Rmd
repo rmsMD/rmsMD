@@ -13,14 +13,6 @@ knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
 
-NOTE DELETE THIS LATER:
-
-XXXX it is just to make sure the knitted document uses the most recent version of rmsMD XXXXX
-
-```{r}
-devtools::load_all()
-```
-
 # Introduction
 
 The **modelsummary_rms** function is designed to process output from models fitted using the **rms** package and generate a summarised dataframe of the results. The goal is to produce publication-ready summaries of the models.
@@ -34,8 +26,6 @@ Make sure you have the required packages installed from CRAN or GitHub. Note, if
 ```{r}
 # Install the package if you haven't already
 # install.packages("rmsMD")
-# # # or for GitHub:
-# devtools::install_github("https://github.com/sjtingle/rmsMD")
 
 library(rms)
 library(rmsMD)
@@ -44,7 +34,7 @@ library(MASS)
 
 # Basic Usage
 
-Here is a simple example using a linear regression model ("ordinary least squares"; OLS). The example data being used here is the built-in survey dataset from the MASS package.
+Here is a simple example using a linear regression model ("ordinary least squares"; OLS). The example data being used here is the built-in survey dataset from the MASS package. The models are for demonstration purposes only.
 
 The output dataframe contains the estimated coefficients, their 95% confidence intervals, and the associated p-values. These are in a publication ready format.
 
@@ -103,7 +93,7 @@ summary_fullmodel <- modelsummary_rms(fit_ols,
 knitr::kable(summary_fullmodel)
 ```
 
-## Exponential Coefficients (including hazard ratios and odds ratios)
+## Exponentiating Coefficients (including hazard ratios and odds ratios)
 
 Exponentiating the coefficients of certain models makes the interpretation more intuitive (e.g. as odds ratios in logistic regression and hazard ratios in Cox models). This is controlled using the `exp_coef` argument.
 
@@ -141,12 +131,12 @@ knitr::kable(summary_lm)
 
 # Restricted Cubic Splines
 
-Restricted Cubic Splines (RCS) are a flexible modelling tool used to capture non-linear relationships between predictors and outcomes. In medicine, many continuous variables (e.g. age, blood pressure, or biomarker levels) do not have a strictly linear association with the outcome of interest. A key highlight of the **rms** package is the ability to analyse variables using RCS.
+Restricted Cubic Splines (RCS) are a flexible modelling tool used to capture non-linear relationships between predictors and outcomes. In medicine, for the majority of continuous variables (e.g. age, blood pressure, or biomarker levels) the assumption of linearity may not hold. A key highlight of the **rms** package is the ability to analyse variables using RCS.
 
 The **rmsMD** package is designed to report and summarise models that include RCS terms. Individual coefficients for RCS terms are difficult to interpret in isolation. Instead, an overall p-value can be generated to assess whether the overall relationship between the RCS variable and outcome is significant. By default **modelsummary_rms** removes the individual RCS coefficients, replacing them with the overall p-value for that variable.
 
 - **Display an overall p-value for the spline terms using the `rcs_overallp` option.**  
-  When this option is set to `TRUE` (which is the default), the function computes a single p-value that tests the overall significance of the spline terms. This overall p-value provides insight into whether the relationship between the predictor and the dependent variable is significant.
+  When this option is set to `TRUE` (which is the default), the function computes a single p-value that tests the overall significance of the spline terms for each variable. This overall p-value provides insight into whether the relationship between the predictor and the dependent variable is significant.
 
 - **Hide the individual spline coefficients using the `hide_rcs_coef` option.**  
   Hiding the individual spline coefficients can be advantageous because these lack straightforward clinical interpretation. Instead, the focus is on the overall association captured by all RCS terms for that specific variable. This helps simplify the output. If the variable has a signficant association with outcome, we recommend plotting this relationship.
