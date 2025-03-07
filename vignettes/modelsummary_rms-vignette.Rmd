@@ -12,7 +12,6 @@ vignette: >
 knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
 ```
 
-
 # Introduction
 
 The **modelsummary_rms** function is designed to process output from models fitted using the **rms** package and generate a summarised dataframe of the results. The goal is to produce publication-ready summaries of the models.
