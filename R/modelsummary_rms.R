@@ -1,22 +1,26 @@
 #' @title Create model summary for rms models
 #'
-#' @description The `modelsummary_rms` function processes the output from models fitted using the **rms** package and generates a summarized dataframe of the results.
+#' @description The `modelsummary_rms` function processes the output from models fitted using the `rms` package and generates a summarized dataframe of the results.
 #' This summary is tailored for publication in medical journals, presenting effect estimates, confidence intervals, and p-values.
 #'
 #' @param modelfit The output from an rms model.
 #' @param combine_ci If `TRUE`, combines the effect estimates and 95% confidence intervals into a single column. Default is `TRUE`.
 #' @param round_dp_coef Specifies the number of decimal places to display for the effect estimates. Default is `3`.
 #' @param round_dp_p Specifies the number of decimal places to display for P values. Default is `3`.
-#' @param rcs_overallp If `TRUE`, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from `anova(modelfit)`. Default is `FALSE`.
-#' @param hide_rcs_coef If `TRUE`, hides the individual coefficients for Restricted Cubic Spline (RCS) variables. Default is `FALSE`.
+#' @param rcs_overallp If `TRUE`, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from `anova(modelfit)`.
+#' @param hide_rcs_coef If `TRUE`, hides the individual coefficients for Restricted Cubic Spline (RCS) variables.
 #' @param exp_coef If `TRUE`, outputs the exponentiated coefficients (`exp(coef)`) as the effect estimates. Applicable only for model types other than `ols`, `lrm`, or `cph`. If `NULL`, no exponentiation is performed. Default is `NULL`.
-#' @param fullmodel If `TRUE`, includes all intermediate steps in the summary, allowing users to verify and compare with standard model outputs. Default is `FALSE`.
+#' @param fullmodel If `TRUE`, includes all intermediate steps in the summary, allowing users to verify and compare with standard model outputs.
 #'
 #' @return Returns a dataframe of results. This can easily be outputted to word using
 #' packages such as flextable and officer.
 #'
 #' @import rms
 #' @importFrom stats anova coef pnorm qnorm terms vcov
+#'
+#' @examples
+#' # For detailed examples please see the provided vignettes
+#'
 #' @export
 #'
 #'

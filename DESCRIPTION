@@ -20,7 +20,11 @@ RoxygenNote: 7.3.2
 Authors@R: c(
     person(given = "Samuel", family = "Tingle", email = "samjamestingle@gmail.com", role = c("aut", "cre")),
     person(given = "Georgios", family = "Kourounis", email = "george.kourounis@gmail.com", role = "aut"))
-Imports: rms
+Imports: 
+    rms, 
+    ggplot2,
+    rlang,
+    cowplot
 Suggests: 
     knitr,
     rmarkdown,

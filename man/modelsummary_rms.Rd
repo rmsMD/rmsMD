@@ -24,19 +24,23 @@ modelsummary_rms(
 
 \item{round_dp_p}{Specifies the number of decimal places to display for P values. Default is \code{3}.}
 
-\item{rcs_overallp}{If \code{TRUE}, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from \code{anova(modelfit)}. Default is \code{FALSE}.}
+\item{rcs_overallp}{If \code{TRUE}, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from \code{anova(modelfit)}.}
 
-\item{hide_rcs_coef}{If \code{TRUE}, hides the individual coefficients for Restricted Cubic Spline (RCS) variables. Default is \code{FALSE}.}
+\item{hide_rcs_coef}{If \code{TRUE}, hides the individual coefficients for Restricted Cubic Spline (RCS) variables.}
 
 \item{exp_coef}{If \code{TRUE}, outputs the exponentiated coefficients (\code{exp(coef)}) as the effect estimates. Applicable only for model types other than \code{ols}, \code{lrm}, or \code{cph}. If \code{NULL}, no exponentiation is performed. Default is \code{NULL}.}
 
-\item{fullmodel}{If \code{TRUE}, includes all intermediate steps in the summary, allowing users to verify and compare with standard model outputs. Default is \code{FALSE}.}
+\item{fullmodel}{If \code{TRUE}, includes all intermediate steps in the summary, allowing users to verify and compare with standard model outputs.}
 }
 \value{
 Returns a dataframe of results. This can easily be outputted to word using
 packages such as flextable and officer.
 }
 \description{
-The \code{modelsummary_rms} function processes the output from models fitted using the \strong{rms} package and generates a summarized dataframe of the results.
+The \code{modelsummary_rms} function processes the output from models fitted using the \code{rms} package and generates a summarized dataframe of the results.
 This summary is tailored for publication in medical journals, presenting effect estimates, confidence intervals, and p-values.
+}
+\examples{
+# For detailed examples please see the provided vignettes
+
 }
