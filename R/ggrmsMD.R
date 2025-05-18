@@ -47,6 +47,8 @@ ggrmsMD <- function(modelfit, data,
                     log_y = FALSE, # have a log transformed y axis
                     log_y_breaks = NULL, # specify breaks if the y axis is log transformed (as defaults can be awful) e.g. c(0.25, 0.5, 1, 2, 4).
                     xlims = NULL, #provide a list of the variables and x limits: list("age" = c(20,40), "bmi" = c(15,30))
+                    log_x_vars = NULL, # character vector of the variables to log transform x
+                    log_x_breaks = NULL, # list of variables and x break limits: list("age" = c(1,2,4,8))
                     lrm_prob = FALSE, # set to true to have the plots for lrm be probability rather than OR
                     var = NULL, # character vector of variables. leave null for automatic selection of fit rcs variables
                     ... # allows any plot_grid functions to be passed
@@ -119,6 +121,15 @@ ggrmsMD <- function(modelfit, data,
       v
     }
 
+    # see if this variable is to have log transformed x. will be either true or false
+    log_x <- !is.null(log_x_vars) && v %in% log_x_vars
+    # pull breaks if any
+    log_x_breaks_current <- if(!is.null(log_x_breaks) && v %in% names(log_x_breaks)){
+      log_x_breaks[[v]]
+    } else {
+      NULL
+    }
+
     # specify background for plots of OR or HR. nb specifying here as it needs to be first layer and ggplot doesn't like conditionals within the + chain. but it will ignore NULL
     # specify background for plots of OR or HR
     bg_layer_high <- NULL
@@ -134,11 +145,11 @@ ggrmsMD <- function(modelfit, data,
         stop('shade_inferior must be one of "none", "higher", or "lower"')
       }
       bg_layer_high <- annotate("rect",
-                                xmin = -Inf, xmax = Inf,
+                                xmin = if (log_x) 1e-10 else -Inf, xmax = Inf,
                                 ymin = 1, ymax = Inf,
                                 fill = colour_high, alpha = 0.1)
       bg_layer_low <- annotate("rect",
-                               xmin = -Inf, xmax = Inf,
+                               xmin = if (log_x) 1e-10 else -Inf, xmax = Inf,
                                ymin = if(log_y) 1e-10 else -Inf, #so that log_y doesn't break it
                                ymax = 1,
                                fill = colour_low, alpha = 0.1)
@@ -166,22 +177,58 @@ ggrmsMD <- function(modelfit, data,
       p <- p + geom_hline(yintercept = 1, linetype = "dashed", color = "darkgrey", linewidth = 0.7)
     }
 
-    # nb important that the order of coordcartesian and scale y is in correct order, and avoid double calling coordcartesian (or it overwrites)
     # set xlim to provided values or NULL
     xlim <- if (!is.null(xlims) && v %in% names(xlims)) xlims[[v]] else NULL
-    # for scaling y log 10, it breaks if you don't set y limits or y breaks
-    if(log_y){
-      if(is.null(ylim)) ylim <- c(min(pred$lower),max(pred$upper))
-      if(any(ylim <= 0)) stop("y axis limits contain zero or negative so cannot log scaled")
-      p <- p + coord_cartesian(ylim = ylim, xlim = xlim) + if (is.null(log_y_breaks)) {
+
+
+
+    # nb important that the order of coordcartesian and scale y is in correct order, and avoid double calling coordcartesian (or it overwrites)
+    # # for scaling y log 10, it breaks if you don't set y limits or y breaks
+    # if(log_y){
+    #   if(is.null(ylim)) ylim <- c(min(pred$lower),max(pred$upper))
+    #   if(any(ylim <= 0)) stop("y axis limits contain zero or negative so cannot log scaled")
+    #   p <- p + coord_cartesian(ylim = ylim, xlim = xlim) + if (is.null(log_y_breaks)) {
+    #     scale_y_log10()
+    #   } else {
+    #     scale_y_log10(breaks = log_y_breaks)
+    #   }
+    # } else {
+    #   # apply coord_cartesian (nb it just ignores any null arguments)
+    #   p <- p + coord_cartesian(ylim = ylim, xlim = xlim)
+    # }
+
+    # Set y-axis limits safely if log_y is TRUE
+    if (log_y) {
+      if (is.null(ylim)) ylim <- c(min(pred$lower), max(pred$upper))
+      if (any(ylim <= 0)) stop("y axis limits contain zero or negative values, so cannot apply log scale")
+    }
+
+    # Set x-axis limits safely if log_x is TRUE
+    if (log_x) {
+      if (is.null(xlim)) xlim <- range(pred[[v]], na.rm = TRUE)
+      if (any(xlim <= 0)) stop("x axis limits contain zero or negative values, so cannot apply log scale")
+    }
+
+    # Apply coord_cartesian (handles NULL safely)
+    p <- p + coord_cartesian(ylim = ylim, xlim = xlim)
+
+    if (log_y) {
+      p <- p + if (is.null(log_y_breaks)) {
         scale_y_log10()
       } else {
         scale_y_log10(breaks = log_y_breaks)
       }
-    } else {
-      # apply coord_cartesian (nb it just ignores any null arguments)
-      p <- p + coord_cartesian(ylim = ylim, xlim = xlim)
     }
+
+    # Add log x-scale if needed
+    if (log_x) {
+      p <- p + if (is.null(log_x_breaks_current)) {
+        scale_x_log10()
+      } else {
+        scale_x_log10(breaks = log_x_breaks_current)
+      }
+    }
+
 
     if (!is.null(titles) && v %in% names(titles)) {
       p <- p + ggtitle(titles[[v]])
