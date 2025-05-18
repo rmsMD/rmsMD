@@ -4,21 +4,24 @@
 #' The function detects RCS terms in the model and plots them all, with a suitable y-axis selected based on the model type. This outputs a list of plots, or a multi-panel figure using the `combined` argument.
 #' As outputs are `ggplot` objects they can easily be further customised by the user.
 #'
-#' @param modelfit A model fit object from `ols`, `lrm`, or `cph` from the `rms` package.
-#' @param data The dataframe which was used to fit the model.
-#' @param noeffline Logical. If `TRUE` (default), adds a horizontal reference line at 1 for odds/hazard ratio plots.
-#' @param shade_inferior Options are `"none"` (default), `"higher"`, or `"lower"`. Applies red/green shading to indicate worse/better outcomes relative to 1 on the y-axis.
+#' @param modelfit A model object from `ols`, `lrm`, or `cph` (from the `rms` package).
+#' @param data The dataset used to fit the model.
+#' @param noeffline Logical. If `TRUE` (default), adds a horizontal dashed line at 1 for odds/hazard ratio plots.
+#' @param shade_inferior Character. Options are `"none"` (default), `"higher"`, or `"lower"`. Applies red/green shading above or below 1 on the y-axis to indicate worse/better outcomes.
 #' @param combined Logical. If `TRUE`, returns a single multi-panel plot using `cowplot::plot_grid()`.
-#' @param ylab Character. Override the default y-axis label (applies to all plots).
-#' @param xlabs A named list to specify custom x-axis labels for each variable. E.g., `list(variablename = "Desired x axis label (units)", var2 = "variable 2")`.
-#' @param titles A named list of titles to be added to each plot. E.g., `list(variablename = "Desired title", var2 = "variable 2 title")`.
-#' @param ylim Provide desired y axis limits. E.g., `c(0,3)`. Applies this to all plots using `coord_cartesian()`.
+#' @param ylab Optional character. Override the default y-axis label.
+#' @param xlabs A named list of x-axis labels for each variable. E.g., `list(age = "Age (years)", bmi = "BMI (kg/m²"))`.
+#' @param titles A named list of plot titles for each variable.
+#' @param ylim Numeric vector (length 2). y-axis limits applied to all plots. E.g., `c(0.5, 2)`.
 #' @param log_y Logical. If `TRUE`, y-axis is log10-transformed.
-#' @param log_y_breaks Numeric vector to specify desired y-axis breaks when `log_y = TRUE`. E.g., `c(0.25,0.5,1,2,4)`.
-#' @param xlims A named list of desired x-axis limits per variable. E.g., `list(variablename = c(20, 80), var2 = c(0,15))`.
-#' @param lrm_prob Logical. If `TRUE` and model is `lrm`, plots predicted probabilities rather than odds ratios.
-#' @param var If `NULL` (default), the function will automatically select RCS variables and plot them. Alternatively, provide a character vector of variables to plot.
-#' @param ... Additional arguments passed to `cowplot::plot_grid()` when `combined = TRUE`. E.g, `align = "vh"`.
+#' @param log_y_breaks Optional numeric vector specifying y-axis tick marks when `log_y = TRUE`. E.g., `c(0.25, 0.5, 1, 2, 4)`.
+#' @param xlims A named list of x-axis limits per variable. E.g., `list(age = c(20, 80))`.
+#' @param log_x_vars Character vector. Names of variables for which x-axis should be log10-transformed.
+#' @param log_x_breaks A named list specifying x-axis tick marks for variables with log10-transformed x-axis.
+#' @param lrm_prob Logical. If `TRUE` and model is `lrm`, plots predicted probabilities instead of odds ratios.
+#' @param var Character vector. Optional. Variables to plot. If `NULL` (default), all RCS variables in the model will be plotted.
+#' @param np Integer. Number of points used to predict spline curves. Default is `400`. Consider increasing when using log-transformed x-axes.
+#' @param ... Additional arguments passed to `cowplot::plot_grid()` when `combined = TRUE`.
 #'
 #' @return A `ggplot` object (if one variable is plotted), a list of `ggplot` objects (if multiple variables), or a single combined `cowplot` plot if `combined = TRUE`.
 #'
