@@ -51,6 +51,7 @@ ggrmsMD <- function(modelfit, data,
                     log_x_breaks = NULL, # list of variables and x break limits: list("age" = c(1,2,4,8))
                     lrm_prob = FALSE, # set to true to have the plots for lrm be probability rather than OR
                     var = NULL, # character vector of variables. leave null for automatic selection of fit rcs variables
+                    np = 400, # used when predicting. number or equally spaced steps accross the variables range. consider increasing if using log scaled x
                     ... # allows any plot_grid functions to be passed
 ){
 
@@ -90,21 +91,21 @@ ggrmsMD <- function(modelfit, data,
     # get pred, y axis label +/- line of no effect
     no_eff_line <- FALSE
     if(type == "ols"){
-      pred <- do.call(Predict, list(modelfit, v))
+      pred <- do.call(Predict, list(modelfit, v, np = np))
       yaxislab <- "Predicted outcome"
     } else if (type == "lrm") {
       if (lrm_prob) {
-        pred <- do.call(Predict, list(modelfit, v, fun = plogis))
+        pred <- do.call(Predict, list(modelfit, v, fun = plogis, np=np))
         yaxislab <- "Predicted probability"
         no_eff_line <- FALSE
       } else {
-        pred <- do.call(Predict, list(modelfit, v, fun = exp, ref.zero = TRUE))
+        pred <- do.call(Predict, list(modelfit, v, fun = exp, ref.zero = TRUE, np=np))
         yaxislab <- "Odds ratio"
         no_eff_line <- TRUE
       }
 
     } else if (type == "cph") {
-      pred <- do.call(Predict, list(modelfit, v, fun = exp, ref.zero = TRUE))
+      pred <- do.call(Predict, list(modelfit, v, fun = exp, ref.zero = TRUE, np=np))
       yaxislab <- "Hazard ratio"
       no_eff_line <- TRUE
     }
