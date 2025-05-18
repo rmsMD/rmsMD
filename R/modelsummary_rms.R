@@ -33,16 +33,8 @@ modelsummary_rms <- function(modelfit,
                              exp_coef = NULL,
                              fullmodel = FALSE) {
 
-  ########## add some logic here that looks at the model types via class and gives
-  ########## you what the combine CI names etc will be (ie the HR OR etc)
-  ######### and also sets exp_coef to true or false, or it is isn't ols cph or lrm
-  ######### gives an error message saying exp_coef must be specified
-
-  # Warning if modelfit isn't an rms object
-  if (!inherits(modelfit, "rms")) {
-    # Check if the user explicitly provided an exp_coef argument
-    user_set_exp_coef <- "exp_coef" %in% names(match.call())
-    if (!user_set_exp_coef) {
+  # Warning if modelfit isn't an rms object and no exp_coef given to specify if coef or exp(coef) should be given
+  if (!inherits(modelfit, "rms") && !"exp_coef" %in% names(match.call())) {
       stop("The model fit does not belong to the 'rms' class. You must specify exp_coef argument to determine table output.")
     }
   }
@@ -84,9 +76,10 @@ modelsummary_rms <- function(modelfit,
   }
 
   ########## Extract coefficients and standard errors ##########
-  coef_se_list <- rmsMD_extract_coef_and_se(modelfit) # Helper function to extract coefficients and SE
-  coef_values <- coef_se_list$coef               # Extracted coefficients
-  se_values <- coef_se_list$se                   # Extracted standard errors
+  coef_values <- coef(modelfit)
+  se_values <- sqrt(diag(vcov(modelfit)))
+  # Ensure standard errors are in the same order as coefficients
+  se_values <- se_values[names(coef_values)]
 
   ########## Handle RCS terms (if applicable) ##########
   if (rcs_overallp) {

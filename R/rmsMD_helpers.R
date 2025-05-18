@@ -1,25 +1,4 @@
-#' Extracting Coefficients and Standard Errors
-#'
-#' takes model fit, returns two vectors: coef and se
-#'
-#' @param modelfit
-#'
-#' @return two vectors: coef and se
-#' @keywords internal
-#' @noRd
-rmsMD_extract_coef_and_se <- function(modelfit) {
-  # Extract the coefficients from the model fit object
-  coef_values <- coef(modelfit)
 
-  # Extract the standard errors by taking the square root of the diagonal of the variance-covariance matrix
-  se_values <- sqrt(diag(vcov(modelfit)))
-
-  # Ensure standard errors are in the same order as coefficients
-  se_values <- se_values[names(coef_values)]
-
-  # Return a list containing both coefficients and their corresponding standard errors
-  return(list(coef = coef_values, se = se_values))
-}
 
 #' Preparing the Output Data Frame
 #'
