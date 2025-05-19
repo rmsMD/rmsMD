@@ -36,7 +36,6 @@ modelsummary_rms <- function(modelfit,
   # Warning if modelfit isn't an rms object and no exp_coef given to specify if coef or exp(coef) should be given
   if (!inherits(modelfit, "rms") && !"exp_coef" %in% names(match.call())) {
       stop("The model fit does not belong to the 'rms' class. You must specify exp_coef argument to determine table output.")
-    }
   }
 
   ########## defining arguments based on model class ##########
@@ -65,6 +64,7 @@ modelsummary_rms <- function(modelfit,
       if (user_set_rcs && rcs_overallp) {
         warning("rcs_overallp was set to TRUE by the user but no RCS terms were found in the model fit. Setting rcs_overallp to FALSE.")
       }
+      #set defaults to false if model happpens to have no RCS
       rcs_overallp <- FALSE
       hide_rcs_coef <- FALSE
     }
@@ -85,13 +85,6 @@ modelsummary_rms <- function(modelfit,
   if (rcs_overallp) {
     # Extract indices and terms associated with RCS from the model design
     nonlinear_res <- modelfit$Design$nonlinear
-
-    # Check if there are any RCS terms
-    if (is.null(nonlinear_res) || all(!sapply(nonlinear_res, any))) {
-      stop("rcs_overallp set to TRUE but no RCS terms found in the model fit.")
-    }
-
-    # Identify terms with nonlinear components
     int_spline_indices <- sapply(nonlinear_res, any)
     any_rcs_coef_index <- unlist(modelfit$assign[int_spline_indices])  # Indices of coefficients with spline components
 
@@ -103,37 +96,24 @@ modelsummary_rms <- function(modelfit,
       coef_values <- coef_values[-any_rcs_coef_index]
       se_values <- se_values[-any_rcs_coef_index]
     }
-
-    # Generate anova results for RCS terms if needed
-    if (rcs_overallp) {
-      anova_result <- do.call(anova, c(
-        list(modelfit),
-        as.list(rcs_terms_incl_interaction),
-        list(india = FALSE, indnl = FALSE)
-      ))
-      rownames(anova_result)  # Print or process the ANOVA results if necessary
-    }
   }
 
-  ## we now have a coef_values and se_values list (minus the RCS terms if
-  # hide_rcs_coef is TRUE). Also list of rcs_variabes to also use later
-
   ########## make coef and SE into a dataframe ##########
-  output_df <- rmsMD_prepare_output_dataframe(coef_values, se_values)
 
+  output_df <- data.frame(
+    variable = names(coef_values), # Names of the variables
+    coef = coef_values, # Rounded coefficients
+    SE = se_values, # Standard errors
+    stringsAsFactors = FALSE # Do not treat character columns as factors
+  )
 
-  ########## Calculate raw p-values ##########
-  # note, don't want to round here, just want raw values and then a seperate
-  # function to format the pvalues after the anova raw p vals have been added
+  ############### p-values and CI   ###############
 
-  output_df <- rmsMD_calculate_raw_p_values(output_df)
+  # note, don't want to round here, as still have to add in anova p vals and deal with exp(coef)
+  output_df$p_values_raw <- 2 * (1 - pnorm(abs(output_df$coef / output_df$SE)))
+  output_df$coef_lower95 <- output_df$coef + qnorm(0.025) * output_df$SE
+  output_df$coef_upper95 <- output_df$coef + qnorm(0.975) * output_df$SE
 
-  ########## Calculate coef confidence intervals ##########
-  # note, don't want to round here for functions that need exp()
-  output_df <- rmsMD_calculate_coef_confidence_intervals(output_df)
-
-
-  ############### make exp_coef if needed ######################
   if(exp_coef){
     for(var in c("coef", "coef_lower95", "coef_upper95")){
       output_df[[paste0("exp_",var)]] <- exp(output_df[[var]])
@@ -141,6 +121,7 @@ modelsummary_rms <- function(modelfit,
   }
 
   ########## Add in ANOVA results for RCS terms (if applicable) ##########
+
   if (rcs_overallp) {
     # Generate anova results for RCS terms
     anova_result <- do.call(anova, c(
@@ -155,11 +136,9 @@ modelsummary_rms <- function(modelfit,
     # Get all row names from anova result
     anova_rows <- rownames(anova_result)
 
-    # Identify rows that have 'TOTAL', 'ERROR' or 'REGRESSION' in their names
-    suspicious_rows <- anova_rows[grepl("TOTAL|ERROR|REGRESSION", anova_rows, ignore.case = TRUE)]
-
-    # Remove any that are actually model variables
-    rows_to_remove <- setdiff(suspicious_rows, model_vars)
+    rows_rem <- anova_rows[grepl("TOTAL|ERROR|REGRESSION", anova_rows, ignore.case = TRUE)]
+    # make sure we aren't getting rid of an actual term
+    rows_to_remove <- setdiff(rows_rem, model_vars)
 
     # Keep only rows that are not in the final removal list
     keep_rows <- !(anova_rows %in% rows_to_remove)
@@ -206,21 +185,57 @@ modelsummary_rms <- function(modelfit,
   ########## format effect estimates and confidence intervals ############
   # dynamic based on key vars
 
-  output_df <- rmsMD_format_column_output(output_df,
-                                          key_vars,
-                                          round_dp_coef)
+  spr_text_coef <- paste0("%.", round_dp_coef, "f")
+
+  for(var in key_vars){
+    output_df[[var]] <- ifelse(is.na(output_df[[var]]),
+                               NA,
+                               sprintf(spr_text_coef, output_df[[var]]))
+  }
 
   ##################### make a combined CI column ###############################
   # dynamic based on key_vars
 
   if(combine_ci){
-    output_df <- rmsMD_combine_CI_for_output(output_df,
-                                             key_vars)
+    effect_est <- key_vars[1]
+    lower95 <- key_vars[2]
+    upper95 <- key_vars[3]
+
+    column_name <- paste0(effect_est,"_95CI")
+
+    output_df[[column_name]] <- ifelse(is.na(output_df[[effect_est]]),
+                                       "RCS terms",
+                                       paste(output_df[[effect_est]],
+                                             " (", output_df[[lower95]],
+                                             " to ", output_df[[upper95]], ")", sep = ""))
   }
 
+  ########## adding ref levels for categorical variables ##########
+
+  # nb relies on model structure, so only for main model types
+  if (inherits(modelfit, "rms") && any(class(modelfit) %in% c("ols", "lrm", "cph"))){
+    # indexes that are categorical
+    index_categorical <- modelfit$Design$assume == "category"
+    vars_cat <- names(modelfit$Design$assume)[index_categorical]
+
+    for (var in vars_cat) {
+      ref_value <- limits_list[[var]][["Adjust to"]]
+      if (is.factor(ref_value)) {
+        ref_levels[[var]] <- as.character(ref_value)
+      } else {
+        ref_levels[[var]] <- NA  # fallback if not a factor
+      }
+    }
+
+    ####### I'm up to here with this bit £££££££
+    # still need to add the rows and these ref values
+
+  }
+
+
+
   ########## Return final output ##########
-  # Use the new helper function to format the final output
-  ## will need to change quite a bit with exp_coef stuff
+  # helper function to format the final output
   final_output <- rmsMD_format_final_output(output_df, fullmodel,
                                             combine_ci, exp_coef, key_vars)
 
