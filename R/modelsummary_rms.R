@@ -213,26 +213,39 @@ modelsummary_rms <- function(modelfit,
   ########## adding ref levels for categorical variables ##########
 
   # nb relies on model structure, so only for main model types
+  # nb the combined column and p values already done and formatted
   if (inherits(modelfit, "rms") && any(class(modelfit) %in% c("ols", "lrm", "cph"))){
-    # indexes that are categorical
-    index_categorical <- modelfit$Design$assume == "category"
-    vars_cat <- names(modelfit$Design$assume)[index_categorical]
 
-    for (var in vars_cat) {
-      ref_value <- limits_list[[var]][["Adjust to"]]
-      if (is.factor(ref_value)) {
-        ref_levels[[var]] <- as.character(ref_value)
-      } else {
-        ref_levels[[var]] <- NA  # fallback if not a factor
+    # indexes and variables that are categorical
+    index_categorical <- modelfit$Design$assume == "category"
+    vars_cat <- modelfit$Design$name[index_categorical]
+
+    # getting the reference levels and adding them in
+    limits <- modelfit$Design$limits
+
+    for (i in seq_along(vars_cat)) {
+      cat_var <- vars_cat[[i]]
+      ref_group <- levels(limits[[cat_var]])[1]
+
+      # find first index
+      row_index <- which(grepl(paste0("^", cat_var, "="), output_df$variable))[1]
+
+      if (!is.na(row_index)) {
+        ref_row <- output_df[1, ]
+        ref_row[] <- "Ref"
+        ref_row$variable <- paste0(cat_var, "=", ref_group)
+        ref_row$Pvalue <- "-"
+        output_df <- rbind(
+          output_df[seq_len(row_index - 1), ],
+          ref_row,
+          output_df[seq(row_index, nrow(output_df)), ]
+        )
       }
+
     }
 
-    ####### I'm up to here with this bit £££££££
-    # still need to add the rows and these ref values
 
   }
-
-
 
   ########## Return final output ##########
   # helper function to format the final output
