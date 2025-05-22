@@ -9,7 +9,7 @@ ggrmsMD(
   data,
   noeffline = TRUE,
   shade_inferior = "none",
-  combined = FALSE,
+  combined = TRUE,
   ylab = NULL,
   xlabs = NULL,
   titles = NULL,
@@ -17,41 +17,50 @@ ggrmsMD(
   log_y = FALSE,
   log_y_breaks = NULL,
   xlims = NULL,
+  log_x_vars = NULL,
+  log_x_breaks = NULL,
   lrm_prob = FALSE,
   var = NULL,
+  np = 400,
   ...
 )
 }
 \arguments{
-\item{modelfit}{A model fit object from \code{ols}, \code{lrm}, or \code{cph} from the \code{rms} package.}
+\item{modelfit}{A model object from \code{ols}, \code{lrm}, or \code{cph} (from the \code{rms} package).}
 
-\item{data}{The dataframe which was used to fit the model.}
+\item{data}{The dataset used to fit the model.}
 
-\item{noeffline}{Logical. If \code{TRUE} (default), adds a horizontal reference line at 1 for odds/hazard ratio plots.}
+\item{noeffline}{Logical. If \code{TRUE} (default), adds a horizontal dashed line at 1 for odds/hazard ratio plots.}
 
-\item{shade_inferior}{Options are \code{"none"} (default), \code{"higher"}, or \code{"lower"}. Applies red/green shading to indicate worse/better outcomes relative to 1 on the y-axis.}
+\item{shade_inferior}{Character. Options are \code{"none"} (default), \code{"higher"}, or \code{"lower"}. Applies red/green shading above or below 1 on the y-axis to indicate worse/better outcomes.}
 
 \item{combined}{Logical. If \code{TRUE}, returns a single multi-panel plot using \code{cowplot::plot_grid()}.}
 
-\item{ylab}{Character. Override the default y-axis label (applies to all plots).}
+\item{ylab}{Optional character. Override the default y-axis label.}
 
-\item{xlabs}{A named list to specify custom x-axis labels for each variable. E.g., \code{list(variablename = "Desired x axis label (units)", var2 = "variable 2")}.}
+\item{xlabs}{A named list of x-axis labels for each variable. E.g., \verb{list(age = "Age (years)", bmi = "BMI (kg/m²"))}.}
 
-\item{titles}{A named list of titles to be added to each plot. E.g., \code{list(variablename = "Desired title", var2 = "variable 2 title")}.}
+\item{titles}{A named list of plot titles for each variable.}
 
-\item{ylim}{Provide desired y axis limits. E.g., \code{c(0,3)}. Applies this to all plots using \code{coord_cartesian()}.}
+\item{ylim}{Numeric vector (length 2). y-axis limits applied to all plots. E.g., \code{c(0.5, 2)}.}
 
 \item{log_y}{Logical. If \code{TRUE}, y-axis is log10-transformed.}
 
-\item{log_y_breaks}{Numeric vector to specify desired y-axis breaks when \code{log_y = TRUE}. E.g., \code{c(0.25,0.5,1,2,4)}.}
+\item{log_y_breaks}{Optional numeric vector specifying y-axis tick marks when \code{log_y = TRUE}. E.g., \code{c(0.25, 0.5, 1, 2, 4)}.}
 
-\item{xlims}{A named list of desired x-axis limits per variable. E.g., \code{list(variablename = c(20, 80), var2 = c(0,15))}.}
+\item{xlims}{A named list of x-axis limits per variable. E.g., \code{list(age = c(20, 80))}.}
 
-\item{lrm_prob}{Logical. If \code{TRUE} and model is \code{lrm}, plots predicted probabilities rather than odds ratios.}
+\item{log_x_vars}{Character vector. Names of variables for which x-axis should be log10-transformed.}
 
-\item{var}{If \code{NULL} (default), the function will automatically select RCS variables and plot them. Alternatively, provide a character vector of variables to plot.}
+\item{log_x_breaks}{A named list specifying x-axis tick marks for variables with log10-transformed x-axis.}
 
-\item{...}{Additional arguments passed to \code{cowplot::plot_grid()} when \code{combined = TRUE}. E.g, \code{align = "vh"}.}
+\item{lrm_prob}{Logical. If \code{TRUE} and model is \code{lrm}, plots predicted probabilities instead of odds ratios.}
+
+\item{var}{Character vector. Optional. Variables to plot. If \code{NULL} (default), all RCS variables in the model will be plotted.}
+
+\item{np}{Integer. Number of points used to predict spline curves. Default is \code{400}. Consider increasing when using log-transformed x-axes.}
+
+\item{...}{Additional arguments passed to \code{cowplot::plot_grid()} when \code{combined = TRUE}.}
 }
 \value{
 A \code{ggplot} object (if one variable is plotted), a list of \code{ggplot} objects (if multiple variables), or a single combined \code{cowplot} plot if \code{combined = TRUE}.

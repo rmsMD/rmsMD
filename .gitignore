@@ -9,3 +9,6 @@
 
 # Ignore the testEnv folder (for testing locally)
 testEnv/
+inst/doc
+/doc/
+/Meta/

@@ -38,7 +38,7 @@ rmsMD_format_final_output <- function(output_df, fullmodel, combine_ci,exp_coef,
 #'
 #' Formats the final output data frame, including the option to exclude intercept and select columns.
 #'
-#'
+#' @export
 
 simulated_rmsMD_data <- function(){
   set.seed(124)

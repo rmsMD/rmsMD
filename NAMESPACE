@@ -2,6 +2,7 @@
 
 export(ggrmsMD)
 export(modelsummary_rms)
+export(simulated_rmsMD_data)
 import(rms)
 importFrom(cowplot,plot_grid)
 importFrom(ggplot2,aes)
