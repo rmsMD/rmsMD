@@ -42,7 +42,7 @@
 ggrmsMD <- function(modelfit, data,
                     noeffline = TRUE, # set FALSE to get rid of line of no effect
                     shade_inferior = "none", # whether above or below one is shaded red, and other side set green. can be set to "none" "higher" (i.e. higher is inferior/red) "lower"
-                    combined = FALSE, # TRUE to return a cowplot plot_grid combined plot (rather than a list of plots)
+                    combined = TRUE, # TRUE to return a cowplot plot_grid combined plot. FALSE for all plots combined in a list
                     ylab = NULL, # mannually set the ylab rather than defaulting to predicted, OR or HR
                     xlabs = NULL, # provide a list of the labels. list("age" = "Age in years", "bmi" = "Body mass index")
                     titles = NULL, # provide a list of the variables and titles: list("age" = "Age in years", "bmi" = "Body mass index")

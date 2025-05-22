@@ -38,6 +38,11 @@ modelsummary_rms <- function(modelfit,
       stop("The model fit does not belong to the 'rms' class. You must specify exp_coef argument to determine table output.")
   }
 
+  # note the categorical variable ref groups won't pull if datadist not set
+  if (inherits(modelfit, "rms") && is.null(getOption("datadist"))) {
+    warning("Please ensure data distribution was set before the rms model was fit using:\n  dd <- datadist(data)\n  options(datadist = 'dd')")
+  }
+
   ########## defining arguments based on model class ##########
 
   if (inherits(modelfit, "ols")) {

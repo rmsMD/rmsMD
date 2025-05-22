@@ -32,7 +32,6 @@ Suggests:
     officer,
     flextable,
     dplyr,
-    MASS,
     testthat (>= 3.0.0),
     survival
 VignetteBuilder: knitr

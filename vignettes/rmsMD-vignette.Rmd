@@ -1,0 +1,380 @@
+---
+title: "modelsummary_rms vignettes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{modelsummary_rms-vignette}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = FALSE, message = FALSE)
+```
+
+# Introduction
+
+The **modelsummary_rms** function is designed to process output from models fitted using the **rms** package and generate a summarised dataframe of the results. The goal is to produce publication-ready summaries of the models. The **ggrmsMD** function generates publication ready plots of variables modelled with restricted cubic splines.
+
+This vignette will guide you through the basic usage of the function and then move on to more advanced examples.
+
+## Installation and Setup
+
+Make sure you have the required packages installed from CRAN. Note, if you plan to output the results into Microsoft Word, we recommend also installing flextable and officer.
+
+```{r}
+# Install the package if you haven't already
+# install.packages("rmsMD")
+
+library(rms)
+# library(rmsMD)
+```
+
+For these vignettes we will use a simulated dataset to predict the impact of age, BMI, Sex and Smoking status on outcome after surgery. The models are for illustration purposes only.
+
+```{r}
+
+# Load in the simulated data
+data <- simulated_rmsMD_data()
+
+# Set the datadist which is required for rms modelling (these two lines are standard)
+dd <- datadist(data)    
+options(datadist='dd') 
+
+```
+
+# Basic Usage
+
+Here is a simple example using a linear regression model ("ordinary least squares"; OLS). We use simulated data for the impact of patient factors on length of stay after an operation.
+
+The output dataframe contains the estimated coefficients, their 95% confidence intervals, and the associated p-values. These are in a publication ready format.
+
+```{r}
+
+# Fit a linear regression model using the rms package:
+fit_ols <- ols(lengthstay ~ age + bmi + sex + smoking, data = data)
+
+# Generate a model summary, and assign it to rmsMD_summary
+rmsMD_summary <- modelsummary_rms(fit_ols)
+
+# displaying rmsMD dataframe output
+rmsMD_summary
+
+# rmsMD dataframe as a table
+knitr::kable(rmsMD_summary)
+```
+
+## Customising the modelsummary_rms output
+
+By default, the function uses the following stylistic settings:
+
+- **combine_ci = TRUE:** Combines the effect estimate and the 95% confidence interval into a single column.
+- **round_dp_coef = 3:** Rounds the effect estimates to three decimal places.
+- **round_dp_p = 3:** Rounds the p-values to three decimal places.
+
+You can modify these defaults to adjust the appearance of the output.
+
+```{r}
+# Generate a model summary with custom styling options
+summary_custom <- modelsummary_rms(fit_ols, 
+                                   combine_ci = FALSE, 
+                                   round_dp_coef = 2, 
+                                   round_dp_p = 4)
+
+# to display the dataframe as a table
+knitr::kable(summary_custom)
+```
+
+## Exponentiating Coefficients (including hazard ratios and odds ratios)
+
+Exponentiating the coefficients of certain models makes the interpretation more intuitive (e.g. as odds ratios in logistic regression and hazard ratios in Cox models).
+
+The **modelsummary_rms** package does this automatically for the core **rms** models `ols`, `lrm`, and `cph`. This ensures OR and HR are displayed for logistic regression and Cox regression models respectively. 
+Below is an example using **modelsummary_rms** on an **rms** logistic regression model for postoperative complications. Note this automatically provides OR: 
+
+```{r}
+
+# fitting the model
+fit_lrm <- lrm(majorcomplication ~ age + bmi + sex + smoking, data = data)
+
+# rmsMD summary
+summary_lrm <- modelsummary_rms(fit_lrm)
+
+# displaying as a table
+knitr::kable(summary_lrm)
+```
+
+The **modelsummary_rms** from **rmsMD** package is also capable of working with non-rms models, such as those fitted using base R functions like lm(). However, in these cases the package does not automatically determine the appropriate value for exp_coef, so it must be set manually.
+
+For example, when using a linear model (where exponentiation of coefficients is not required), you should explicitly set exp_coef = FALSE.
+
+```{r}
+# Fit a simple linear model using lm() from base R (an example model fit without using rms package)
+fit_lm <- lm(majorcomplication ~ age + bmi + sex + smoking, data = data)
+
+# Generate a model summary for the non-RMS model by explicitly setting exp_coef = FALSE
+summary_lm <- modelsummary_rms(fit_lm, 
+                               exp_coef = FALSE)
+
+# display rmsMD results as a table
+knitr::kable(summary_lm)
+```
+
+# Restricted Cubic Splines
+
+Restricted Cubic Splines (RCS) are a flexible modelling tool used to capture non-linear relationships between predictors and outcomes. In medicine, for the majority of continuous variables (e.g. age, blood pressure, or biomarker levels) the assumption of linearity may not hold. A key highlight of the **rms** package is the ability to analyse variables using RCS.
+
+The **rmsMD** package is designed to report and summarise models that include RCS terms. Individual coefficients for RCS terms are difficult to interpret in isolation. Instead, an overall p-value can be generated to assess whether the overall relationship between the RCS variable and outcome is significant. By default **modelsummary_rms** removes the individual RCS coefficients, replacing them with the overall p-value for that variable. We recommend that these are then plotted using the **ggrmsMD** function, shown below.
+
+- **Display an overall p-value for the spline terms using the `rcs_overallp` option.**  
+  When this option is set to `TRUE` (which is the default), the function computes a single p-value that tests the overall significance of the spline terms for each variable. This overall p-value provides insight into whether the relationship between the predictor and the dependent variable is significant.
+
+- **Hide the individual spline coefficients using the `hide_rcs_coef` option.**  
+  Hiding the individual spline coefficients can be advantageous because these lack straightforward clinical interpretation. Instead, the focus is on the overall association captured by all RCS terms for that specific variable. This helps simplify the output. If the variable has a signficant association with outcome, we recommend plotting this relationship.
+
+Here is an example model predicting occurence of complications after surgery (binary), with the continuous variables age and BMI modelled using restricted cubic splines with 4 knots:
+
+```{r}
+
+# Fit an OLS model including a restricted cubic spline for Age (with 4 knots)
+fit_lrm <- lrm(majorcomplication ~ rcs(age,4) + rcs(bmi,4) + sex + smoking, data = data)
+
+# Generate an rmsMD model summary using default settings
+summary_spline <- modelsummary_rms(fit_lrm)
+
+# Outputting this as a table
+knitr::kable(summary_spline)
+```
+
+## Plotting with ggrmsMD
+
+Now that the model and overall p values have been assessed, the **ggrmsMD** function from **rmsMD** can be used to assess the relationship between variables modelled with restricted cubic splines, and the outcome.
+
+As a minimum, the model fit and data should be passed into the function. **ggrmsMD** will then generate plots for all variables which were modelled with restricted cubic splines. By default, for linear regression models predicted outcome is plotted, for logistic regression OR is plotted and for Cox regression HR is plotted. All of these plots are adjusted for all other variables in the model.
+
+All of the outputted plots are ggplots, and therefore can be further adapted using that framework.
+
+Here is the most basic use case with the logistic regression model for post-operative complications above:
+
+```{r}
+
+ggrmsMD(fit_lrm, data)
+
+```
+
+**ggrmsMD** has several additional options to improve these plot outputs for publications. Some of these options are shown below. For the examples below, this is done iteratively for demonstration purposes.
+
+Arguments which alter the y axis are applied to all plots. This is standardised as all plots have originated from the same regression model:
+
+```{r}
+
+ggrmsMD(fit_lrm, data,
+        ylab = "Complications (adjusted OR)", # custom y axis label 
+        ylim = c(0,3) # set y axis limits so variables can be compared more easily
+        )
+
+```
+
+Shading can be applied to these plots to make it clear which side of the no-effect line represents inferior/superior clinical outcome. This is achieved by setting `shade_inferior` to "higher" or "lower":
+
+```{r}
+ggrmsMD(fit_lrm, data,
+        ylab = "Complications (adjusted OR)", 
+        ylim = c(0,3), 
+        shade_inferior = "higher" # define that higher OR mean inferior outcome to add red shading
+        )
+```
+
+It may be preferable to have the y-axis on a log-scale rather than a linear scale. For logistic regression models like this one, predicted probability can be plotted instead of adjusted OR. For example:
+
+```{r}
+
+# to have the y axis on a log-scale:
+
+ggrmsMD(fit_lrm, data,
+        ylab = "Complications (adjusted OR)", 
+        ylim = c(0.25,4), 
+        shade_inferior = "higher",
+        log_y = TRUE, # have the y-axis on a log scale
+        log_y_breaks = c(0.25, 0.5 , 1, 2, 4) # optionally set the y-axis breaks
+        )
+
+# to plot predicted probability rather than adjusted OR. This is adjusted to mode/mean of the other variables
+
+ggrmsMD(fit_lrm, data,
+        ylim = c(0,0.4), 
+        lrm_prob = TRUE # set this to plot predicted probability
+        )
+
+```
+
+Changes applied to the x-axis and titles all apply to each plot individually (rather than being common accross all plots like the y-axis changes). This is achieved using lists. For example to alter the x-axis labels for both variables, and x-axis limits for only age:
+
+```{r}
+
+xlabels <- list ("age" = "Age (years)",
+                 "bmi" = "Body Mass Index")
+
+xlimits <- list("age" = c(35,65))
+
+ggrmsMD(fit_lrm, data,
+        ylab = "Complications (adjusted OR)", 
+        ylim = c(0,3), 
+        shade_inferior = "higher",
+        xlabs = xlabels,
+        xlims = xlimits
+        )
+
+```
+
+The same approach is used if titles are required:
+
+```{r}
+
+xlabels <- list ("age" = "Age (years)",
+                 "bmi" = "Body Mass Index")
+
+titles <- list ("age" = "Impact of Age on Complications",
+                 "bmi" = "Impact of BMI on Complications")
+
+ggrmsMD(fit_lrm, data,
+        ylab = "Complications (adjusted OR)", 
+        ylim = c(0,3), 
+        shade_inferior = "higher",
+        xlabs = xlabels,
+        titles = titles
+        )
+
+```
+
+The x-axis can also be displayed on a log-scale, rather than a linear scale. This is done using `log_x_vars` to specify which variables to have log-scaled x-axes:
+
+```{r}
+
+ggrmsMD(fit_lrm, data,
+        ylab = "Complications (adjusted OR)", 
+        ylim = c(0,3), 
+        shade_inferior = "higher",
+        xlabs = xlabels,
+        titles = titles,
+        log_x_vars = c("age", "bmi")
+        )
+
+```
+
+`combined` is set to `TRUE` by default to output a single combined plot, as shown above. `combined = FALSE` can be used to output a list of plots. If a single plot is required, this can be achieved with the `var` argument:
+
+```{r}
+
+ggrmsMD(fit_lrm, data,
+        ylab = "Complications (adjusted OR)", 
+        ylim = c(0,3), 
+        shade_inferior = "higher",
+        var = "age"
+        )
+
+```
+
+For linear regression models the ouput is predicted outcome. For example, here for length of stay:
+
+```{r}
+
+fit_ols <- ols(lengthstay ~ rcs(age,4) + rcs(bmi,4) + sex + smoking, data = data)
+
+ggrmsMD(fit_ols, data,
+        ylim = c(20,50),
+        ylab = "Predicted length of stay"
+        )
+
+```
+
+
+## Displaying RCS individual coefficients with modelsummary_rms
+
+If individual RCS coefficients are required (which is not the default), these can be added in by setting `hide_rcs_coef` to `FALSE`:
+
+```{r}
+
+# Generate a model summary with rcs_overallp set to TRUE and hide_rcs_coef set to TRUE
+summary_spline_hide <- modelsummary_rms(fit_lrm, 
+                                        hide_rcs_coef = FALSE)
+
+# Outputting this as a table
+knitr::kable(summary_spline_hide)
+```
+
+If overall p-values for the variables modelled with RCS are not wanted, `rcs_overallp` can be set to `FALSE`:
+
+```{r}
+# Fit an OLS model including a restricted cubic spline for Age (with 4 knots)
+summary_spline_hide <- modelsummary_rms(fit_lrm, 
+                                        hide_rcs_coef = FALSE,
+                                        rcs_overallp = FALSE)
+
+# Outputting this as a table
+knitr::kable(summary_spline_hide)
+
+```
+
+# Models with Interactions
+
+# I AM UP TO HERE!!!
+
+In medical research, interactions can be critical, as the impact of a treatment or risk factor might differ across subgroups (for example, by age or sex). These interaction terms are handled by **modelsummary_rms**.
+
+Here is a simple example, which does not show interactions:
+
+```{r}
+
+# Fit an OLS model using the rms package with an interaction between Age and Exer.
+fit_interact <- ols(Wr.Hnd ~ Age * Exer + Sex, data = survey)
+
+# Generate a model summary that includes the interaction term
+summary_interact <- modelsummary_rms(fit_interact)
+knitr::kable(summary_interact)
+```
+
+## Interactions with RCS variables
+
+The **rms** package allows interactions with variables modelled using restricted cubic splines. In this setting, the individual coefficients for RCS terms and their interactions are difficult to interpret. **modelsummary_rms** handles this situation by providing overall p-values for RCS variables (which give the overall p-value taking into account all spline terms and all of their interaction terms), and overall p-values for the interactions (takes into account linear and non-linear terms), instead of the individual coefficients. As above, this can be altered by changing `rcs_overallp` and `hide_rcs_coef`.
+
+```{r}
+# Using the built-in dataset from the MASS package
+data("survey", package = "MASS")
+
+# Fit an OLS model with a restricted cubic spline for Age and an interaction between Age and Exer.
+fit_spline_interact <- ols(Wr.Hnd ~ rcs(Age, 4) * Exer + Sex, data = survey)
+
+# Generate a model summary with default RCS output
+summary_spline_interact <- modelsummary_rms(fit_spline_interact)
+
+# Format the output as a nice table
+knitr::kable(summary_spline_interact)
+```
+
+# Exporting to Microsoft Word
+
+The output of **modelsummary_rms** is a dataframe, as this is easy to work with and further process if required. This dataframe output can easily be exported to a word document using **flextable** and **officer** packages.
+
+```{r}
+library(officer)
+library(flextable)
+library(dplyr)
+
+# converting modelsummary_rms dataframe generated above into a flextable
+rmsMD_as_table <- flextable(rmsMD_summary)
+
+# use officer to create a 
+doc <- read_docx() %>% 
+  body_add_flextable(rmsMD_as_table) %>%
+  body_add_par("Model summary from rmsMD", style = "heading 2")
+
+# generating a temporary output path for demonstration. This would be replaced by the file path where the word document will be generated
+output_path <- file.path(tempdir(), "example_output.docx")
+
+# generating the word document
+print(doc, target = output_path)
+
+print(doc, target = "temp.docx")
+```
+
