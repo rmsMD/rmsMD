@@ -184,23 +184,6 @@ ggrmsMD <- function(modelfit, data,
     # set xlim to provided values or NULL
     xlim <- if (!is.null(xlims) && v %in% names(xlims)) xlims[[v]] else NULL
 
-
-
-    # nb important that the order of coordcartesian and scale y is in correct order, and avoid double calling coordcartesian (or it overwrites)
-    # # for scaling y log 10, it breaks if you don't set y limits or y breaks
-    # if(log_y){
-    #   if(is.null(ylim)) ylim <- c(min(pred$lower),max(pred$upper))
-    #   if(any(ylim <= 0)) stop("y axis limits contain zero or negative so cannot log scaled")
-    #   p <- p + coord_cartesian(ylim = ylim, xlim = xlim) + if (is.null(log_y_breaks)) {
-    #     scale_y_log10()
-    #   } else {
-    #     scale_y_log10(breaks = log_y_breaks)
-    #   }
-    # } else {
-    #   # apply coord_cartesian (nb it just ignores any null arguments)
-    #   p <- p + coord_cartesian(ylim = ylim, xlim = xlim)
-    # }
-
     # Set y-axis limits safely if log_y is TRUE
     if (log_y) {
       if (is.null(ylim)) ylim <- c(min(pred$lower), max(pred$upper))
@@ -218,18 +201,18 @@ ggrmsMD <- function(modelfit, data,
 
     if (log_y) {
       p <- p + if (is.null(log_y_breaks)) {
-        scale_y_log10()
+        ggplot2::scale_y_log10()
       } else {
-        scale_y_log10(breaks = log_y_breaks)
+        ggplot2::scale_y_log10(breaks = log_y_breaks)
       }
     }
 
     # Add log x-scale if needed
     if (log_x) {
       p <- p + if (is.null(log_x_breaks_current)) {
-        scale_x_log10()
+        ggplot2::scale_x_log10()
       } else {
-        scale_x_log10(breaks = log_x_breaks_current)
+        ggplot2::scale_x_log10(breaks = log_x_breaks_current)
       }
     }
 
