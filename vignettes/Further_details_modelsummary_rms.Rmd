@@ -165,23 +165,6 @@ knitr::kable(summary_spline_hide)
 
 ```
 
-# Models with Interactions
-
-In medical research, interactions can be critical, as the impact of a treatment or risk factor might differ across subgroups (for example, by age or sex). These interaction terms are handled by `modelsummary_rms`.
-
-Here is a simple example:
-
-```{r}
-
-# Fit a logistic regression model using the rms package with an interaction between Age and smoking status.
-fit_lrm_interaction <- lrm(majorcomplication ~ age*smoking + rcs(bmi,4) + sex + smoking, data = data)
-
-# Generate a model summary that includes the interaction term
-modelsummary_rms(fit_lrm_interaction)
-
-knitr::kable(modelsummary_rms(fit_lrm_interaction))
-```
-
 ## Interactions with RCS variables
 
 The **rms** package allows interactions with variables modelled using restricted cubic splines. In this setting, the individual coefficients for RCS terms and their interactions are difficult to interpret. `modelsummary_rms` handles this situation by providing overall p-values for RCS variables (which give the overall p-value taking into account all spline terms and all of their interaction terms), and overall p-values for the interactions (takes into account linear and non-linear terms), instead of the individual coefficients. As above, this can be altered by changing `rcs_overallp` and `hide_rcs_coef`.
@@ -197,3 +180,10 @@ modelsummary_rms(fit_lrm_interaction)
 # Format the output as a nice table
 knitr::kable(modelsummary_rms(fit_lrm_interaction))
 ```
+
+To get further information, for example for the overall effect of smoking (the variable interacted with the spine for age here), use `anova` as below:
+
+```{r}
+anova(fit_lrm_interaction)
+```
+
