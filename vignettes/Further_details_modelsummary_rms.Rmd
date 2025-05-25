@@ -30,14 +30,12 @@ For standard use with `rms` models that use restricted cubic splines, please ref
 For these vignettes we will use a simulated dataset to predict the impact of age, BMI, Sex and Smoking status on outcome after surgery. The models are for illustration purposes only.
 
 ```{r}
-
 # Load in the simulated data
 data <- simulated_rmsMD_data()
 
 # Set the datadist which is required for rms modelling (these two lines are standard)
 dd <- datadist(data)    
 options(datadist='dd') 
-
 ```
 
 # Basic Usage
@@ -47,7 +45,6 @@ Here is a simple example using a linear regression model ("ordinary least square
 The output dataframe contains the estimated coefficients, their 95% confidence intervals, and the associated p-values. These are in a publication ready format.
 
 ```{r}
-
 # Fit a linear regression model using the rms package:
 fit_ols <- ols(lengthstay ~ age + bmi + sex + smoking, data = data)
 
@@ -87,7 +84,6 @@ The **modelsummary_rms** package does this automatically for the core **rms** mo
 Below is an example using **modelsummary_rms** on an **rms** logistic regression model for postoperative complications. Note this automatically provides OR: 
 
 ```{r}
-
 # fitting the model
 fit_lrm <- lrm(majorcomplication ~ age + bmi + sex + smoking, data = data)
 
@@ -128,9 +124,15 @@ The **rmsMD** package is designed to report and summarise models that include RC
 Here is an example model predicting occurence of complications after surgery (binary), with the continuous variables age and BMI modelled using restricted cubic splines with 4 knots:
 
 ```{r}
-
 # Fit an OLS model including a restricted cubic spline for Age (with 4 knots)
-fit_lrm <- lrm(majorcomplication ~ rcs(age,4) + rcs(bmi,4) + sex + smoking, data = data)
+fit_lrm <- lrm(
+        majorcomplication ~ 
+                rcs(age, 4) +        # Age modelled using restricted cubic splines with 4 knots
+                rcs(bmi, 4) +        # BMI also modelled with restricted cubic splines with 4 knots
+                sex +                # Binary variable for sex
+                smoking,             # Categorical variable for smoking status
+        data = data                  
+)
 
 # Generate an rmsMD model summary using default settings
 modelsummary_rms(fit_lrm)
@@ -141,7 +143,7 @@ knitr::kable(modelsummary_rms(fit_lrm))
 
 ## Displaying RCS individual coefficients with modelsummary_rms
 
-If individual RCS coefficients are required (which is not the default), these can be added in by setting `hide_rcs_coef` to `FALSE`:
+Displaying individual RCS coefficients is not the default behaviour. If individual RCS coefficients are required, these can be added in by setting `hide_rcs_coef` to `FALSE`:
 
 ```{r}
 
@@ -162,7 +164,6 @@ summary_spline_hide <- modelsummary_rms(fit_lrm,
 
 # Outputting this as a table
 knitr::kable(summary_spline_hide)
-
 ```
 
 ## Interactions with RCS variables
@@ -170,7 +171,6 @@ knitr::kable(summary_spline_hide)
 The **rms** package allows interactions with variables modelled using restricted cubic splines. In this setting, the individual coefficients for RCS terms and their interactions are difficult to interpret. `modelsummary_rms` handles this situation by providing overall p-values for RCS variables (which give the overall p-value taking into account all spline terms and all of their interaction terms), and overall p-values for the interactions (takes into account linear and non-linear terms), instead of the individual coefficients. As above, this can be altered by changing `rcs_overallp` and `hide_rcs_coef`.
 
 ```{r}
-
 # Fit an OLS model with a restricted cubic spline for Age and an interaction between Age and Exer.
 fit_lrm_interaction <- lrm(majorcomplication ~ rcs(age,4)*smoking + rcs(bmi,4) + sex + smoking, data = data)
 

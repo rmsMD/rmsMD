@@ -32,21 +32,19 @@ This vignette will guide you through the basic usage of the functions on a model
 For these vignettes we will use a simulated dataset to predict the impact of age, BMI, Sex and Smoking status on outcome after surgery. The models are for illustration purposes only. Note, if you plan to output the results into Microsoft Word, we recommend also installing flextable and officer.
 
 ```{r}
-
 # Load in the simulated data
 data <- simulated_rmsMD_data()
 
 # Set the datadist which is required for rms modelling (these two lines are standard)
 dd <- datadist(data)    
 options(datadist='dd') 
-
 ```
 
 ## Fitting Model with Restricted Cubic Splines
 
 Restricted Cubic Splines (RCS) are a flexible modelling tool used to capture non-linear relationships between predictors and outcomes. In medicine, for the majority of continuous variables (e.g. age, blood pressure, or biomarker levels) the assumption of linearity may not hold. A key highlight of the **rms** package is the ability to analyse variables using RCS.
 
-The **rmsMD** package is designed to report and summarise models that include RCS terms. Here is an example model predicting occurence of complications after surgery (binary), with the continuous variables age and BMI modelled using restricted cubic splines with 4 knots:
+The **rmsMD** package is designed to report and summarise models that include RCS terms. Here is an example model predicting occurrence of complications after surgery (binary), with the continuous variables age and BMI modelled using restricted cubic splines with 4 knots:
 
 ```{r}
 # Fit an OLS model including a restricted cubic spline for Age and BMI (with 4 knots)
@@ -68,7 +66,7 @@ modelsummary_rms(fit_lrm)
 knitr::kable(modelsummary_rms(fit_lrm))
 ```
 
-P values for restricted cubic spline terms in these outputs represent the whether there is an association between the predictor and outcome (which can be *either* linear or non-linear). We recommend that these are then plotted using the `ggrmsMD` function, shown below, to assess the nature of these relationships.
+P values for restricted cubic spline terms in these outputs indicate whether there is an association between the predictor and outcome. Please note that this association can be *either* linear or non-linear. The P value reflects the presence of an association, not its shape. We recommend that these associations are then plotted using the `ggrmsMD` function, shown below, to assess the linearity of these relationships.
 
 ## Plotting with ggrmsMD
 
@@ -81,13 +79,11 @@ Here is the most basic use case with the logistic regression model for post-oper
 ```{r}
 # most basic output
 ggrmsMD(fit_lrm, data)
-
 ```
 
 Further arguments in `ggrmsMD` allow these plots to be editted into a publication ready format. Example of a publication ready plot:
 
 ```{r}
-
 # x axis labels can be stored in a list
 xlabels <- list ("age" = "Age (years)",
                  "bmi" = "Body Mass Index")
@@ -103,7 +99,6 @@ ggrmsMD(fit_lrm, data,
         xlabs = xlabels, # set x axis labels for each variable
         titles = titles # set titles for each variable
         )
-
 ```
 
 Further arguments allow for log transformation of axes, selection of which variables are included, option to output plot lists rather than combined plots, ability to plot predicted probability rather than OR, etc. For further details please see the vignette **Further_details_ggrmsMD**. Outputted plots are ggplots, and therefore can be further adapted using that framework. 

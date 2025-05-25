@@ -28,21 +28,24 @@ This vignette goes into further details for the `ggrmsMD` function. For further 
 For these vignettes we will use a simulated dataset to predict the impact of age, BMI, Sex and Smoking status on outcome after surgery. The models are for illustration purposes only.
 
 ```{r}
-
 # Load in the simulated data
 data <- simulated_rmsMD_data()
 
 # Set the datadist which is required for rms modelling (these two lines are standard)
 dd <- datadist(data)    
 options(datadist='dd') 
-
 ```
 
 ```{r}
-
 # Fit an OLS model including a restricted cubic spline for Age and BMI (with 4 knots)
-fit_lrm <- lrm(majorcomplication ~ rcs(age,4) + rcs(bmi,4) + sex + smoking, data = data)
-
+fit_lrm <- lrm(
+        majorcomplication ~ 
+                rcs(age, 4) +        # Age modelled using restricted cubic splines with 4 knots
+                rcs(bmi, 4) +        # BMI also modelled with restricted cubic splines with 4 knots
+                sex +                # Binary variable for sex
+                smoking,             # Categorical variable for smoking status
+        data = data                  
+)
 ```
 
 ## Plotting with ggrmsMD
@@ -58,7 +61,6 @@ Here is the most basic use case with the logistic regression model for post-oper
 ```{r}
 # most basic output
 ggrmsMD(fit_lrm, data)
-
 ```
 
 `ggrmsMD` has several additional options to improve these plot outputs for publications. Some of these options are shown below. For the examples below, this is done iteratively for demonstration purposes.
@@ -80,16 +82,14 @@ Shading can be applied to these plots to make it clear which side of the no-effe
 ggrmsMD(fit_lrm, data,
         ylab = "Complications (adjusted OR)", 
         ylim = c(0,3), 
-        shade_inferior = "higher" # define that higher OR mean inferior outcome to add red shading
+        shade_inferior = "higher" # specifies that OR > 1 reflects poorer outcomes (e.g. higher OR complications); these will be highlighted in red
         )
 ```
 
-It may be preferable to have the y-axis on a log-scale rather than a linear scale. For logistic regression models like this one, predicted probability can be plotted instead of adjusted OR. For example:
+It may be preferable to have the y-axis on a log-scale rather than a linear scale. 
 
 ```{r}
-
 # to have the y axis on a log-scale:
-
 ggrmsMD(fit_lrm, data,
         ylab = "Complications (adjusted OR)", 
         ylim = c(0.25,4), 
@@ -97,20 +97,21 @@ ggrmsMD(fit_lrm, data,
         log_y = TRUE, # have the y-axis on a log scale
         log_y_breaks = c(0.25, 0.5 , 1, 2, 4) # optionally set the y-axis breaks
         )
+```
 
+For logistic regression models like this one, predicted probability can be plotted instead of adjusted OR. For example:
+
+```{r}
 # to plot predicted probability rather than adjusted OR. This is adjusted to mode/mean of the other variables
-
 ggrmsMD(fit_lrm, data,
         ylim = c(0,0.4), 
         lrm_prob = TRUE # set this to plot predicted probability
         )
-
 ```
 
-Changes applied to the x-axis and titles all apply to each plot individually (rather than being common accross all plots like the y-axis changes). This is achieved using lists. For example to alter the x-axis labels for both variables, and x-axis limits for only age:
+Changes to x-axis settings and titles are applied individually to each plot, unlike y-axis settings which apply globally across all plots. To customise individual x-axes, pass a named list. For example, to change the x-axis labels for both variables and set x-axis limits only for age:
 
 ```{r}
-
 xlabels <- list ("age" = "Age (years)",
                  "bmi" = "Body Mass Index")
 
@@ -123,13 +124,11 @@ ggrmsMD(fit_lrm, data,
         xlabs = xlabels,
         xlims = xlimits
         )
-
 ```
 
 The same approach is used if titles are required:
 
 ```{r}
-
 xlabels <- list ("age" = "Age (years)",
                  "bmi" = "Body Mass Index")
 
@@ -143,13 +142,11 @@ ggrmsMD(fit_lrm, data,
         xlabs = xlabels,
         titles = titles
         )
-
 ```
 
 The x-axis can also be displayed on a log-scale, rather than a linear scale. This is done using `log_x_vars` to specify which variables to have log-scaled x-axes:
 
 ```{r}
-
 ggrmsMD(fit_lrm, data,
         ylab = "Complications (adjusted OR)", 
         ylim = c(0,3), 
@@ -158,33 +155,35 @@ ggrmsMD(fit_lrm, data,
         titles = titles,
         log_x_vars = c("age", "bmi")
         )
-
 ```
 
 `combined` is set to `TRUE` by default to output a single combined plot, as shown above. `combined = FALSE` can be used to output a list of plots. If a single plot is required, this can be achieved with the `var` argument:
 
 ```{r}
-
 ggrmsMD(fit_lrm, data,
         ylab = "Complications (adjusted OR)", 
         ylim = c(0,3), 
         shade_inferior = "higher",
         var = "age"
         )
-
 ```
 
-For linear regression models the ouput is predicted outcome. For example, here for length of stay:
+For linear regression models the output is the predicted outcome. For example, here are the plots for length of stay linear model:
 
 ```{r}
-
-fit_ols <- ols(lengthstay ~ rcs(age,4) + rcs(bmi,4) + sex + smoking, data = data)
+fit_ols <- ols(
+        lengthstay ~ 
+                rcs(age, 4) +
+                rcs(bmi, 4) +
+                sex +
+                smoking,
+        data = data
+)
 
 ggrmsMD(fit_ols, data,
         ylim = c(20,50),
         ylab = "Predicted length of stay"
         )
-
 ```
 
 
