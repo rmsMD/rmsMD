@@ -1,10 +1,9 @@
 # Snapshot: Feed non-rms modelfit
 
          variable                 coef_95CI Pvalue
-    1 (Intercept) 18.672 (17.839 to 19.504) <0.001
-    2         Age   0.009 (-0.029 to 0.046)  0.649
-    3    ExerNone  -0.178 (-1.007 to 0.650)  0.673
-    4    ExerSome  -0.391 (-0.899 to 0.118)  0.132
+    1 (Intercept) 15.317 (14.124 to 16.509) <0.001
+    2         age    0.303 (0.290 to 0.316) <0.001
+    3         bmi    0.101 (0.062 to 0.140) <0.001
 
 # Snapshot: Warning output for non-rms model without setting exp_coef
 
@@ -12,257 +11,184 @@
 
 # Snapshot: OLS tests - simple model
 
-         variable                 coef_95CI Pvalue
-    1         Age   0.010 (-0.020 to 0.039)  0.523
-    2   Exer=None   0.243 (-0.456 to 0.942)  0.495
-    3   Exer=Some   0.192 (-0.231 to 0.615)  0.373
-    4 Smoke=Never -0.962 (-1.875 to -0.050)  0.039
-    5 Smoke=Occas -1.326 (-2.455 to -0.197)  0.021
-    6 Smoke=Regul  -0.639 (-1.802 to 0.524)  0.282
-    7      Height    0.069 (0.042 to 0.096) <0.001
-    8    Sex=Male    1.418 (0.889 to 1.948) <0.001
+             variable                coef_95CI Pvalue
+    1             age   0.303 (0.290 to 0.316) <0.001
+    2             bmi   0.102 (0.063 to 0.141) <0.001
+    3      sex=Female                      Ref      -
+    4        sex=Male -0.164 (-0.475 to 0.146)  0.299
+    5   smoking=Never                      Ref      -
+    6  smoking=Former -0.135 (-0.513 to 0.244)  0.486
+    7 smoking=Current   0.418 (0.037 to 0.799)  0.031
 
 # Snapshot: OLS tests - model with interactions
 
-             variable                coef_95CI Pvalue
-    1             Age  0.031 (-0.025 to 0.087)  0.284
-    2       Exer=None  0.342 (-2.391 to 3.076)  0.806
-    3       Exer=Some  0.484 (-1.200 to 2.168)  0.573
-    4 Age * Exer=None -0.025 (-0.148 to 0.097)  0.685
-    5 Age * Exer=Some -0.043 (-0.123 to 0.036)  0.285
+       variable                coef_95CI Pvalue
+    1       age   0.323 (0.241 to 0.405) <0.001
+    2       bmi  0.142 (-0.026 to 0.310)  0.098
+    3 age * bmi -0.001 (-0.004 to 0.002)  0.624
 
 # Snapshot: OLS tests - model with splines
 
     $simple
-              variable                coef_95CI Pvalue
-    1        Exer=None -0.277 (-1.098 to 0.544)  0.508
-    2        Exer=Some -0.389 (-0.893 to 0.115)  0.130
-    3 RCSoverallP: Age                RCS terms  0.048
+              variable              coef_95CI Pvalue
+    1              bmi 0.100 (0.061 to 0.139) <0.001
+    2 RCSoverallP: age              RCS terms <0.001
     
     $full
-       variable                   coef_95CI Pvalue
-    1       Age      1.116 (0.311 to 1.921)  0.007
-    2      Age' -35.856 (-64.042 to -7.670)  0.013
-    3     Age''  64.472 (13.384 to 115.559)  0.013
-    4 Exer=None    -0.277 (-1.098 to 0.544)  0.508
-    5 Exer=Some    -0.389 (-0.893 to 0.115)  0.130
+      variable                 coef_95CI Pvalue
+    1      age    0.343 (0.297 to 0.388) <0.001
+    2     age' -0.144 (-0.273 to -0.015)  0.029
+    3    age''    0.602 (0.086 to 1.117)  0.022
+    4      bmi    0.100 (0.061 to 0.139) <0.001
     
 
 # Snapshot: OLS tests - model with splines and interactions
 
     $summary
-                       variable                  coef_95CI Pvalue
-    1                 Exer=None -3.885 (-50.286 to 42.515)  0.870
-    2                 Exer=Some  23.159 (-1.786 to 48.104)  0.069
-    3                  Sex=Male     2.120 (1.705 to 2.536) <0.001
-    4        RCSoverallP: Age                    RCS terms  0.352
-    5 RCSoverallP: Age * Exer                    RCS terms  0.251
+                      variable                coef_95CI Pvalue
+    1                      bmi  0.228 (-0.188 to 0.644)  0.283
+    2               sex=Female                      Ref      -
+    3                 sex=Male -0.153 (-0.464 to 0.157)  0.334
+    4       RCSoverallP: age                  RCS terms <0.001
+    5 RCSoverallP: age * bmi                  RCS terms  0.678
     
     $full
-                variable                     coef_95CI Pvalue
-    1                Age        1.083 (0.031 to 2.135)  0.044
-    2               Age'    -36.061 (-72.524 to 0.402)  0.053
-    3              Age''    65.108 (-0.908 to 131.124)  0.053
-    4          Exer=None    -3.885 (-50.286 to 42.515)  0.870
-    5          Exer=Some     23.159 (-1.786 to 48.104)  0.069
-    6           Sex=Male        2.120 (1.705 to 2.536) <0.001
-    7    Age * Exer=None       0.173 (-2.441 to 2.788)  0.897
-    8   Age' * Exer=None   11.499 (-81.943 to 104.941)  0.809
-    9  Age'' * Exer=None -23.242 (-193.068 to 146.584)  0.789
-    10   Age * Exer=Some      -1.305 (-2.716 to 0.107)  0.070
-    11  Age' * Exer=Some     41.329 (-8.217 to 90.875)  0.102
-    12 Age'' * Exer=Some  -74.331 (-164.140 to 15.477)  0.105
+         variable                coef_95CI Pvalue
+    1         age   0.436 (0.149 to 0.723)  0.003
+    2        age' -0.503 (-1.313 to 0.307)  0.223
+    3       age''  2.269 (-0.958 to 5.497)  0.168
+    4         bmi  0.228 (-0.188 to 0.644)  0.283
+    5  sex=Female                      Ref      -
+    6    sex=Male -0.153 (-0.464 to 0.157)  0.334
+    7   age * bmi -0.004 (-0.015 to 0.008)  0.515
+    8  age' * bmi  0.014 (-0.018 to 0.047)  0.377
+    9 age'' * bmi -0.067 (-0.195 to 0.061)  0.304
     
 
 # Snapshot: LRM tests - simple model
 
-    [[1]]
-         variable                OR_95CI Pvalue
-    1         Age 1.016 (0.968 to 1.066)  0.525
-    2   Exer=None 1.780 (0.499 to 6.353)  0.374
-    3   Exer=Some 1.094 (0.512 to 2.341)  0.816
-    4 Smoke=Never 0.243 (0.046 to 1.278)  0.095
-    5 Smoke=Occas 0.313 (0.042 to 2.332)  0.257
-    6 Smoke=Regul 0.378 (0.040 to 3.596)  0.397
-    7      Height 1.113 (1.053 to 1.176) <0.001
-    8    Sex=Male 4.191 (1.812 to 9.693) <0.001
-    
-    [[2]]
-         variable                OR_95CI Pvalue
-    1         Age 1.016 (0.968 to 1.066)  0.525
-    2   Exer=None 1.780 (0.499 to 6.353)  0.374
-    3   Exer=Some 1.094 (0.512 to 2.341)  0.816
-    4 Smoke=Never 0.243 (0.046 to 1.278)  0.095
-    5 Smoke=Occas 0.313 (0.042 to 2.332)  0.257
-    6 Smoke=Regul 0.378 (0.040 to 3.596)  0.397
-    7      Height 1.113 (1.053 to 1.176) <0.001
-    8    Sex=Male 4.191 (1.812 to 9.693) <0.001
-    
+             variable                OR_95CI Pvalue
+    1             age 1.094 (1.087 to 1.101) <0.001
+    2             bmi 1.035 (1.019 to 1.051) <0.001
+    3      sex=Female                    Ref      -
+    4        sex=Male 0.955 (0.844 to 1.081)  0.467
+    5   smoking=Never                    Ref      -
+    6  smoking=Former 0.979 (0.842 to 1.138)  0.783
+    7 smoking=Current 1.165 (1.001 to 1.356)  0.049
 
 # Snapshot: LRM tests - model with interactions
 
-    [[1]]
-             variable                 OR_95CI Pvalue
-    1             Age  1.015 (0.954 to 1.081)  0.636
-    2       Exer=None 1.203 (0.063 to 22.853)  0.902
-    3       Exer=Some  0.795 (0.125 to 5.045)  0.807
-    4 Age * Exer=None  0.979 (0.857 to 1.118)  0.753
-    5 Age * Exer=Some  0.985 (0.903 to 1.076)  0.743
-    
-    [[2]]
-             variable                 OR_95CI Pvalue
-    1             Age  1.015 (0.954 to 1.081)  0.636
-    2       Exer=None 1.203 (0.063 to 22.853)  0.902
-    3       Exer=Some  0.795 (0.125 to 5.045)  0.807
-    4 Age * Exer=None  0.979 (0.857 to 1.118)  0.753
-    5 Age * Exer=Some  0.985 (0.903 to 1.076)  0.743
-    
+       variable                OR_95CI Pvalue
+    1       age 1.085 (1.043 to 1.130) <0.001
+    2       bmi 1.018 (0.939 to 1.105)  0.662
+    3 age * bmi 1.000 (0.999 to 1.002)  0.705
 
 # Snapshot: LRM tests - model with splines
 
-    [[1]]
               variable                OR_95CI Pvalue
-    1        Exer=None 0.710 (0.290 to 1.735)  0.452
-    2        Exer=Some 0.574 (0.329 to 1.001)  0.050
-    3 RCSoverallP: Age              RCS terms  0.249
-    
-    [[2]]
-              variable                OR_95CI Pvalue
-    1        Exer=None 0.710 (0.290 to 1.735)  0.452
-    2        Exer=Some 0.574 (0.329 to 1.001)  0.050
-    3 RCSoverallP: Age              RCS terms  0.249
-    
+    1              bmi 1.034 (1.018 to 1.050) <0.001
+    2 RCSoverallP: age              RCS terms <0.001
 
 # Snapshot: CPH tests - simple model
 
-    [[1]]
-      variable                HR_95CI Pvalue
-    1      age 1.017 (0.999 to 1.036)  0.065
-    2      sex 0.599 (0.431 to 0.831)  0.002
-    
-    [[2]]
-      variable                HR_95CI Pvalue
-    1      age 1.017 (0.999 to 1.036)  0.065
-    2      sex 0.599 (0.431 to 0.831)  0.002
-    
+        variable                HR_95CI Pvalue
+    1        age 0.999 (0.996 to 1.002)  0.507
+    2 sex=Female                    Ref      -
+    3   sex=Male 1.005 (0.940 to 1.074)  0.884
 
 # Snapshot: CPH tests - model with interactions
 
-    [[1]]
-       variable                 HR_95CI Pvalue
-    1       age  1.030 (0.976 to 1.088)  0.279
-    2       sex 1.100 (0.099 to 12.219)  0.938
-    3 age * sex  0.990 (0.953 to 1.029)  0.618
-    
-    [[2]]
-       variable                 HR_95CI Pvalue
-    1       age  1.030 (0.976 to 1.088)  0.279
-    2       sex 1.100 (0.099 to 12.219)  0.938
-    3 age * sex  0.990 (0.953 to 1.029)  0.618
-    
+            variable                HR_95CI Pvalue
+    1            age 0.999 (0.995 to 1.003)  0.588
+    2     sex=Female                    Ref      -
+    3       sex=Male 0.991 (0.747 to 1.314)  0.947
+    4 age * sex=Male 1.000 (0.995 to 1.006)  0.918
 
 # Snapshot: CPH tests - model with splines
 
-    [[1]]
               variable                HR_95CI Pvalue
-    1              sex 0.603 (0.434 to 0.838)  0.003
-    2 RCSoverallP: age              RCS terms  0.135
-    
-    [[2]]
-              variable                HR_95CI Pvalue
-    1              sex 0.603 (0.434 to 0.838)  0.003
-    2 RCSoverallP: age              RCS terms  0.135
-    
+    1       sex=Female                    Ref      -
+    2         sex=Male 1.005 (0.940 to 1.074)  0.881
+    3 RCSoverallP: age              RCS terms  0.920
 
 # Snapshot: CPH tests - model with splines and interactions
 
-    [[1]]
-                      variable                  HR_95CI Pvalue
-    1                      sex 0.048 (0.000 to 131.415)  0.452
-    2       RCSoverallP: age                  RCS terms  0.375
-    3 RCSoverallP: age * sex                  RCS terms  0.839
-    
-    [[2]]
-                      variable                  HR_95CI Pvalue
-    1                      sex 0.048 (0.000 to 131.415)  0.452
-    2       RCSoverallP: age                  RCS terms  0.375
-    3 RCSoverallP: age * sex                  RCS terms  0.839
-    
+                      variable                HR_95CI Pvalue
+    1               sex=Female                    Ref      -
+    2                 sex=Male 1.954 (0.967 to 3.949)  0.062
+    3       RCSoverallP: age                RCS terms  0.551
+    4 RCSoverallP: age * sex                RCS terms  0.228
 
 # Snapshot: Variables with labels and special names
 
     $summary
-                       variable                  coef_95CI Pvalue
-    1                 Exer=None -3.870 (-50.426 to 42.685)  0.871
-    2                 Exer=Some  22.829 (-2.232 to 47.891)  0.074
-    3                  Sex=Male     2.113 (1.696 to 2.530) <0.001
-    4                   random1   -0.066 (-0.283 to 0.151)  0.549
-    5                 "random2"   -0.063 (-0.264 to 0.137)  0.537
-    6        RCSoverallP: Age                    RCS terms  0.372
-    7 RCSoverallP: Age * Exer                    RCS terms  0.274
+                      variable                coef_95CI Pvalue
+    1                      bmi  0.233 (-0.184 to 0.649)  0.273
+    2               sex=Female                      Ref      -
+    3                 sex=Male -0.156 (-0.466 to 0.155)  0.326
+    4                  random1 -0.051 (-0.207 to 0.105)  0.524
+    5                "random2"  0.150 (-0.005 to 0.305)  0.057
+    6       RCSoverallP: age                  RCS terms <0.001
+    7 RCSoverallP: age * bmi                  RCS terms  0.667
     
     $hidden
-                       variable                  coef_95CI Pvalue
-    1                 Exer=None -3.870 (-50.426 to 42.685)  0.871
-    2                 Exer=Some  22.829 (-2.232 to 47.891)  0.074
-    3                  Sex=Male     2.113 (1.696 to 2.530) <0.001
-    4                   random1   -0.066 (-0.283 to 0.151)  0.549
-    5                 "random2"   -0.063 (-0.264 to 0.137)  0.537
-    6        RCSoverallP: Age                    RCS terms  0.372
-    7 RCSoverallP: Age * Exer                    RCS terms  0.274
+                      variable                coef_95CI Pvalue
+    1                      bmi  0.233 (-0.184 to 0.649)  0.273
+    2               sex=Female                      Ref      -
+    3                 sex=Male -0.156 (-0.466 to 0.155)  0.326
+    4                  random1 -0.051 (-0.207 to 0.105)  0.524
+    5                "random2"  0.150 (-0.005 to 0.305)  0.057
+    6       RCSoverallP: age                  RCS terms <0.001
+    7 RCSoverallP: age * bmi                  RCS terms  0.667
     
 
 # Snapshot: Variables with reserved/special names
 
     $structure
-     [1] "'data.frame':\t237 obs. of  17 variables:"                                       
-     [2] " $ Sex   : Factor w/ 2 levels \"Female\",\"Male\": 1 2 2 2 2 1 2 1 2 2 ..."      
-     [3] " $ Wr.Hnd: num  18.5 19.5 18 18.8 20 18 17.7 17 20 18.5 ..."                     
-     [4] " $ NW.Hnd: num  18 20.5 13.3 18.9 20 17.7 17.7 17.3 19.5 18.5 ..."               
-     [5] " $ W.Hnd : Factor w/ 2 levels \"Left\",\"Right\": 2 1 2 2 2 2 2 2 2 2 ..."       
-     [6] " $ Fold  : Factor w/ 3 levels \"L on R\",\"Neither\",..: 3 3 1 3 2 1 1 3 3 3 ..."
-     [7] " $ Pulse : int  92 104 87 NA 35 64 83 74 72 90 ..."                              
-     [8] " $ Clap  : Factor w/ 3 levels \"Left\",\"Neither\",..: 1 1 2 2 3 3 3 3 3 3 ..."  
-     [9] " $ Exer  : Factor w/ 3 levels \"Freq\",\"None\",..: 3 2 2 2 3 3 1 1 3 3 ..."     
-    [10] " $ Smoke : Factor w/ 4 levels \"Heavy\",\"Never\",..: 2 4 3 2 2 2 2 2 2 2 ..."   
-    [11] " $ Height: num  173 178 NA 160 165 ..."                                          
-    [12] " $ M.I   : Factor w/ 2 levels \"Imperial\",\"Metric\": 2 1 NA 2 2 1 1 2 2 2 ..." 
-    [13] " $ Age   : num  18.2 17.6 16.9 20.3 23.7 ..."                                    
-    [14] " $ if    : num  -0.214 0.152 1.712 -0.326 0.373 ..."                             
-    [15] "  ..- attr(*, \"label\")= chr \"Random variable with name 'if'\""                
-    [16] " $ for   : num  -0.2128 -0.0936 -0.0867 1.4415 1.1251 ..."                       
-    [17] "  ..- attr(*, \"label\")= chr \"Random variable with name 'for'\""               
-    [18] " $ while : num  -0.272 -1.214 -0.141 -1.005 0.156 ..."                           
-    [19] "  ..- attr(*, \"label\")= chr \"Random variable with name 'while'\""             
-    [20] " $ TRUE  : num  1.168 -0.823 -0.307 1.44 -2.199 ..."                             
-    [21] "  ..- attr(*, \"label\")= chr \"Random variable with name 'TRUE'\""              
-    [22] " $ NULL  : num  0.29256 0.66875 -0.59418 1.58043 -0.00399 ..."                   
-    [23] "  ..- attr(*, \"label\")= chr \"Random variable with name 'NULL'\""              
+     [1] "'data.frame':\t5000 obs. of  13 variables:"                                               
+     [2] " $ age              : num  33.4 50.5 40.8 52.5 67.1 58.9 58.4 47.2 52.4 64.5 ..."         
+     [3] " $ bmi              : num  26.1 21.5 22.4 25 31.4 27.5 21.5 25.7 29.6 23.3 ..."           
+     [4] " $ sex              : Factor w/ 2 levels \"Female\",\"Male\": 2 2 1 1 1 1 1 2 2 1 ..."    
+     [5] " $ smoking          : Factor w/ 3 levels \"Never\",\"Former\",..: 2 2 2 1 2 2 3 2 1 2 ..."
+     [6] " $ majorcomplication: int  0 0 0 0 0 0 0 0 1 0 ..."                                       
+     [7] " $ lengthstay       : num  29.7 33 31 34.1 38.2 ..."                                      
+     [8] " $ time             : num  44.4 47.7 65.6 50.7 51.3 ..."                                  
+     [9] " $ status           : int  1 1 0 1 1 1 0 0 0 1 ..."                                       
+    [10] " $ if               : num  2.371 -0.167 0.927 -0.568 0.225 ..."                           
+    [11] "  ..- attr(*, \"label\")= chr \"Random variable with name 'if'\""                         
+    [12] " $ for              : num  -1.354 -0.579 -0.861 0.973 0.619 ..."                          
+    [13] "  ..- attr(*, \"label\")= chr \"Random variable with name 'for'\""                        
+    [14] " $ while            : num  -0.836 -0.221 -2.104 -1.668 -1.098 ..."                        
+    [15] "  ..- attr(*, \"label\")= chr \"Random variable with name 'while'\""                      
+    [16] " $ TRUE             : num  -0.795 -1.135 0.58 0.518 0.208 ..."                            
+    [17] "  ..- attr(*, \"label\")= chr \"Random variable with name 'TRUE'\""                       
+    [18] " $ NULL             : num  -0.194 0.258 -0.538 -1.179 0.901 ..."                          
+    [19] "  ..- attr(*, \"label\")= chr \"Random variable with name 'NULL'\""                       
     
     $summary
-                        variable                  coef_95CI Pvalue
-    1                  Exer=None -1.015 (-48.194 to 46.163)  0.966
-    2                  Exer=Some  24.099 (-1.229 to 49.426)  0.062
-    3                   Sex=Male     2.127 (1.705 to 2.549) <0.001
-    4                         if   -0.190 (-0.407 to 0.027)  0.085
-    5                        for   -0.028 (-0.228 to 0.173)  0.787
-    6                      while   -0.058 (-0.269 to 0.153)  0.592
-    7                       TRUE   -0.028 (-0.248 to 0.191)  0.802
-    8                       NULL    0.057 (-0.147 to 0.262)  0.582
-    9         RCSoverallP: Age                    RCS terms  0.485
-    10 RCSoverallP: Age * Exer                    RCS terms  0.340
+                       variable                coef_95CI Pvalue
+    1                       bmi  0.230 (-0.186 to 0.646)  0.279
+    2                sex=Female                      Ref      -
+    3                  sex=Male -0.148 (-0.458 to 0.163)  0.352
+    4                        if  0.044 (-0.111 to 0.200)  0.575
+    5                       for -0.107 (-0.262 to 0.048)  0.176
+    6                     while -0.083 (-0.237 to 0.071)  0.292
+    7                      TRUE  0.084 (-0.072 to 0.241)  0.292
+    8                      NULL  0.015 (-0.141 to 0.170)  0.855
+    9        RCSoverallP: age                  RCS terms <0.001
+    10 RCSoverallP: age * bmi                  RCS terms  0.679
     
     $hidden
-                        variable                  coef_95CI Pvalue
-    1                  Exer=None -1.015 (-48.194 to 46.163)  0.966
-    2                  Exer=Some  24.099 (-1.229 to 49.426)  0.062
-    3                   Sex=Male     2.127 (1.705 to 2.549) <0.001
-    4                         if   -0.190 (-0.407 to 0.027)  0.085
-    5                        for   -0.028 (-0.228 to 0.173)  0.787
-    6                      while   -0.058 (-0.269 to 0.153)  0.592
-    7                       TRUE   -0.028 (-0.248 to 0.191)  0.802
-    8                       NULL    0.057 (-0.147 to 0.262)  0.582
-    9         RCSoverallP: Age                    RCS terms  0.485
-    10 RCSoverallP: Age * Exer                    RCS terms  0.340
+                       variable                coef_95CI Pvalue
+    1                       bmi  0.230 (-0.186 to 0.646)  0.279
+    2                sex=Female                      Ref      -
+    3                  sex=Male -0.148 (-0.458 to 0.163)  0.352
+    4                        if  0.044 (-0.111 to 0.200)  0.575
+    5                       for -0.107 (-0.262 to 0.048)  0.176
+    6                     while -0.083 (-0.237 to 0.071)  0.292
+    7                      TRUE  0.084 (-0.072 to 0.241)  0.292
+    8                      NULL  0.015 (-0.141 to 0.170)  0.855
+    9        RCSoverallP: age                  RCS terms <0.001
+    10 RCSoverallP: age * bmi                  RCS terms  0.679
     
 
