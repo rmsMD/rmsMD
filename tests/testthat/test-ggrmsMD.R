@@ -213,7 +213,7 @@ test_that("np argument works for prediction points", {
         dd <- datadist(data)
         assign("dd", dd, envir = .GlobalEnv)
         options(datadist = "dd")
-        fit <- rms::ols(lengthstay ~ rcs(age, 4), data = data)
+        fit <- rms::ols(lengthstay ~ rcs(age, 6), data = data)
         p_10 <- ggrmsMD(fit, data, np = 10)
         expect_s3_class(p_10, "ggplot")
 })
