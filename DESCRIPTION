@@ -33,6 +33,7 @@ Suggests:
     flextable,
     dplyr,
     testthat (>= 3.0.0),
-    survival
+    survival,
+    vdiffr
 VignetteBuilder: knitr
 Config/testthat/edition: 3

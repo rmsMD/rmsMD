@@ -1,6 +1,5 @@
 library(testthat)
 library(rms)
-library(survival)
 
 # ---- Prepare simulated data ----
 sim_data <- simulated_rmsMD_data()
