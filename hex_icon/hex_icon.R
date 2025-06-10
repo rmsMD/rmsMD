@@ -5,6 +5,7 @@ library(rms)
 set.seed(1234)
 n <- 500
 
+
 # Simulate predictors
 age <- round(rnorm(n, mean = 50, sd = 12), 1)
 bmi <- round(rnorm(n, mean = 25, sd = 4), 1)
