@@ -11,6 +11,7 @@
 #' @param hide_rcs_coef If `TRUE`, hides the individual coefficients for Restricted Cubic Spline (RCS) variables.
 #' @param exp_coef If `TRUE`, outputs the exponentiated coefficients (`exp(coef)`) as the effect estimates. Applicable only for model types other than `ols`, `lrm`, or `cph`. If `NULL`, no exponentiation is performed. Default is `NULL`.
 #' @param fullmodel If `TRUE`, includes all intermediate steps in the summary, allowing users to verify and compare with standard model outputs.
+#' @param MI_lrt If `TRUE` then overall p-values for RCS terms from models with multiple imputed data from `fit.mult.impute` with `lrt = TRUE` will represent likelihood ratio chi-square tests from `rms::processMI()`, rather than Wald tests.
 #'
 #' @return Returns a dataframe of results. This can easily be outputted to word using
 #' packages such as flextable and officer.
@@ -31,7 +32,8 @@ modelsummary_rms <- function(modelfit,
                              rcs_overallp = TRUE,
                              hide_rcs_coef = TRUE,
                              exp_coef = NULL,
-                             fullmodel = FALSE) {
+                             fullmodel = FALSE,
+                             MI_lrt = FALSE) {
 
   # Warning if modelfit isn't an rms object and no exp_coef given to specify if coef or exp(coef) should be given
   if (!inherits(modelfit, "rms") && !"exp_coef" %in% names(match.call())) {
@@ -125,15 +127,86 @@ modelsummary_rms <- function(modelfit,
     }
   }
 
-  ########## Add in ANOVA results for RCS terms (if applicable) ##########
+  ########## Add in anova results for RCS terms (if applicable) ##########
 
   if (rcs_overallp) {
-    # Generate anova results for RCS terms
-    anova_result <- do.call(anova, c(
-      list(modelfit),
-      as.list(rcs_terms_incl_interaction),
-      list(india = FALSE, indnl = FALSE)
-    ))
+
+
+    # first get the anova_result
+    # deals with all combos of MI vs complete case, and ols/lrm/cph. if none of those, defaults to anova.rms default
+
+    test_arg <- NULL
+
+    if(!MI_lrt){
+      if(!inherits(modelfit, "fit.mult.impute")){
+        if(inherits(modelfit, "ols")){
+          # complete case and ols
+          test_arg <- "F"
+        }
+        if(inherits(modelfit, c("lrm", "cph"))) {
+          # complete case and lrm/cph
+          # attempt to give LR, but if not able then give wald and warning
+          if(!is.null(modelfit$x) && !is.null(modelfit$y)){
+            test_arg <- "LR"
+          } else {
+            test_arg <- "Chisq"
+            warning("RCS overall p-values displayed are from Wald tests. To use the recommended test for this model type (LR chi-square test)
+                    \nplease set 'x = TRUE, y = TRUE' when fitting the model.")
+          }
+        } else {
+          # for fit.mult.impute model fit objects
+          # nb if MI_lrt for LR tests this is handled below in a seperate block
+          if(inherits(modelfit, "ols")){
+            # MI and ols
+            test_arg <- "Chisq"
+          }
+          if(inherits(modelfit, c("lrm", "cph"))) {
+            # MI and lrm/cph, but MI_lrt not TRUE
+            test_arg <- "Chisq"
+            message("RCS overall p-values displayed are from Wald tests. To use LR chi-square test set `MI_lrt = TRUE`
+                    \n and set `lrt = TRUE` within fit.mult.impute() when fitting the model.")
+          }
+
+        }
+
+      }
+
+      # making anova result based on test_arg
+      # if no test_arg then it does the anova.rms defaults
+      if(!is.null(test_arg)){
+        anova_result <- do.call(anova, c(
+          list(modelfit),
+          as.list(rcs_terms_incl_interaction),
+          list(india = FALSE, indnl = FALSE, test = test_arg)
+        ))
+      } else {
+        # use anova.rms default test as back-up
+        anova_result <- do.call(anova, c(
+          list(modelfit),
+          as.list(rcs_terms_incl_interaction),
+          list(india = FALSE, indnl = FALSE)
+        ))
+      }
+
+    } else {
+      # uses processMI for when MI_lrt is TRUE
+      if (!inherits(modelfit, "fit.mult.impute")) {
+        stop("MI_lrt = TRUE was set, but the model object is not a fit.mult.impute object. MI_lrt is only applicable to fit.mult.impute objects.")
+      }
+
+      if(modelfit$fmimethod == "ordinary"){
+        stop("MI_lrt = TRUE was set, but when fitting the model with fit.mult.impute, `lrt = TRUE` was not used.")
+      }
+      anova_result <- processMI(modelfit, "anova")
+      anova_rows <- rownames(anova_result)
+
+      # Keep only rows containing any rcs terms (can't pass variables into processMI like you can with anova.rms)
+      rows_keep <- anova_rows[
+        Reduce(`|`, lapply(rcs_terms_incl_interaction, function(term) grepl(term, anova_rows, fixed = TRUE)))
+      ]
+      anova_result <- anova_result[rows_keep, , drop = FALSE]
+
+    }
 
     # Get list of variable names from the model
     model_vars <- modelfit$Design$name
@@ -141,7 +214,9 @@ modelsummary_rms <- function(modelfit,
     # Get all row names from anova result
     anova_rows <- rownames(anova_result)
 
+    # doing this approach as variables we want may be re-labelled 'or higher order factor' etc, so can't just use anova_rows %in% rcs_terms_incl_interaction
     rows_rem <- anova_rows[grepl("TOTAL|ERROR|REGRESSION", anova_rows, ignore.case = TRUE)]
+
     # make sure we aren't getting rid of an actual term
     rows_to_remove <- setdiff(rows_rem, model_vars)
 
@@ -166,6 +241,7 @@ modelsummary_rms <- function(modelfit,
 
     # Merge the filtered ANOVA results with the main output
     output_df <- rbind(output_df, anova_df[, output_columns])
+
   }
 
 
