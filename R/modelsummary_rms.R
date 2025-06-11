@@ -206,6 +206,9 @@ modelsummary_rms <- function(modelfit,
       ]
       anova_result <- anova_result[rows_keep, , drop = FALSE]
 
+      # just for labelling later
+      test_arg <- "LR"
+
     }
 
     # Get list of variable names from the model
@@ -284,8 +287,18 @@ modelsummary_rms <- function(modelfit,
 
     column_name <- paste0(effect_est,"_95CI")
 
+    rcs_test <- if(test_arg == "LR"){
+      "LR test"
+    } else if(test_arg == "Chisq"){
+      "Wald test"
+    } else if(test_arg == "F"){
+      "F test"
+    } else{
+      "RCS terms"
+    }
+
     output_df[[column_name]] <- ifelse(is.na(output_df[[effect_est]]),
-                                       "RCS terms",
+                                       rcs_test,
                                        paste(output_df[[effect_est]],
                                              " (", output_df[[lower95]],
                                              " to ", output_df[[upper95]], ")", sep = ""))
