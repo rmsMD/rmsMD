@@ -150,26 +150,26 @@ modelsummary_rms <- function(modelfit,
             test_arg <- "LR"
           } else {
             test_arg <- "Chisq"
-            warning("RCS overall p-values displayed are from Wald tests. To use the recommended test for this model type (LR chi-square test)
-                    \nplease set 'x = TRUE, y = TRUE' when fitting the model.")
+            message("RCS overall p-values displayed are from Wald tests. To use the recommended test for this model type (LR chi-square test)
+                    please set 'x = TRUE, y = TRUE' when fitting the model.")
           }
-        } else {
-          # for fit.mult.impute model fit objects
-          # nb if MI_lrt for LR tests this is handled below in a seperate block
-          if(inherits(modelfit, "ols")){
-            # MI and ols
-            test_arg <- "Chisq"
-          }
-          if(inherits(modelfit, c("lrm", "cph"))) {
-            # MI and lrm/cph, but MI_lrt not TRUE
-            test_arg <- "Chisq"
-            message("RCS overall p-values displayed are from Wald tests. To use LR chi-square test set `MI_lrt = TRUE`
-                    \n and set `lrt = TRUE` within fit.mult.impute() when fitting the model.")
-          }
-
+        }
+      } else {
+        # for fit.mult.impute model fit objects
+        # nb if MI_lrt for LR tests this is handled below in a seperate block
+        if(inherits(modelfit, "ols")){
+          # MI and ols
+          test_arg <- "Chisq"
+        }
+        if(inherits(modelfit, c("lrm", "cph"))) {
+          # MI and lrm/cph, but MI_lrt not TRUE
+          test_arg <- "Chisq"
+          message("RCS overall p-values displayed are from Wald tests. To use LR chi-square test set `MI_lrt = TRUE`
+                  and set `lrt = TRUE` within fit.mult.impute() when fitting the model.")
         }
 
       }
+
 
       # making anova result based on test_arg
       # if no test_arg then it does the anova.rms defaults
