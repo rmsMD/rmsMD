@@ -287,14 +287,16 @@ modelsummary_rms <- function(modelfit,
 
     column_name <- paste0(effect_est,"_95CI")
 
-    rcs_test <- if(test_arg == "LR"){
-      "LR test"
-    } else if(test_arg == "Chisq"){
-      "Wald test"
-    } else if(test_arg == "F"){
-      "F test"
-    } else{
-      "RCS terms"
+    if(rcs_overallp){
+      rcs_test <- if(test_arg == "LR"){
+        "LR test"
+      } else if(test_arg == "Chisq"){
+        "Wald test"
+      } else if(test_arg == "F"){
+        "F test"
+      } else{
+        "RCS terms"
+      }
     }
 
     output_df[[column_name]] <- ifelse(is.na(output_df[[effect_est]]),
