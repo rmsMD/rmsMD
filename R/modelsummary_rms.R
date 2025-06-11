@@ -190,6 +190,11 @@ modelsummary_rms <- function(modelfit,
 
     } else {
       # uses processMI for when MI_lrt is TRUE
+
+      if (!inherits(modelfit, c("cph","lrm"))) {
+        stop("MI_lrt = TRUE is currently available for lrm() and cph() `rms` models only.")
+      }
+
       if (!inherits(modelfit, "fit.mult.impute")) {
         stop("MI_lrt = TRUE was set, but the model object is not a fit.mult.impute() object. MI_lrt is only applicable to fit.mult.impute() objects.")
       }
@@ -197,6 +202,7 @@ modelsummary_rms <- function(modelfit,
       if(modelfit$fmimethod == "ordinary"){
         stop("MI_lrt = TRUE was set, but when fitting the model with fit.mult.impute(), `lrt = TRUE` was not used.")
       }
+
       anova_result <- processMI(modelfit, "anova")
       anova_rows <- rownames(anova_result)
 
