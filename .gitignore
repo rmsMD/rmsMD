@@ -8,7 +8,7 @@
 .quarto
 
 # Ignore the testEnv folder (for testing locally)
-testEnv/
+# testEnv/
 inst/doc
 /doc/
 /Meta/

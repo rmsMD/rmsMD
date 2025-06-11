@@ -150,7 +150,7 @@ modelsummary_rms <- function(modelfit,
             test_arg <- "LR"
           } else {
             test_arg <- "Chisq"
-            message("RCS overall p-values displayed are from Wald tests. To use the recommended test for this model type (LR chi-square test)
+            message("RCS overall p-values displayed are from Wald tests. To use the recommended test for this model type (LR test)
                     please set 'x = TRUE, y = TRUE' when fitting the model.")
           }
         }
@@ -164,8 +164,8 @@ modelsummary_rms <- function(modelfit,
         if(inherits(modelfit, c("lrm", "cph"))) {
           # MI and lrm/cph, but MI_lrt not TRUE
           test_arg <- "Chisq"
-          message("RCS overall p-values displayed are from Wald tests. To use LR chi-square test set `MI_lrt = TRUE`
-                  and set `lrt = TRUE` within fit.mult.impute() when fitting the model.")
+          message("RCS overall p-values displayed are from Wald tests. To use LR test set `MI_lrt = TRUE` in modelsummary_rms(),
+                  and set `lrt = TRUE` in fit.mult.impute() when fitting the model.")
         }
 
       }
@@ -191,11 +191,11 @@ modelsummary_rms <- function(modelfit,
     } else {
       # uses processMI for when MI_lrt is TRUE
       if (!inherits(modelfit, "fit.mult.impute")) {
-        stop("MI_lrt = TRUE was set, but the model object is not a fit.mult.impute object. MI_lrt is only applicable to fit.mult.impute objects.")
+        stop("MI_lrt = TRUE was set, but the model object is not a fit.mult.impute() object. MI_lrt is only applicable to fit.mult.impute() objects.")
       }
 
       if(modelfit$fmimethod == "ordinary"){
-        stop("MI_lrt = TRUE was set, but when fitting the model with fit.mult.impute, `lrt = TRUE` was not used.")
+        stop("MI_lrt = TRUE was set, but when fitting the model with fit.mult.impute(), `lrt = TRUE` was not used.")
       }
       anova_result <- processMI(modelfit, "anova")
       anova_rows <- rownames(anova_result)
