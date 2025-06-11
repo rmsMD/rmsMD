@@ -62,6 +62,12 @@ simulated_rmsMD_data <- function(type = c("complete_case", "missing_for_MI")){
   p <- 1 / (1 + exp(-lp))
   majorcomplication <- rbinom(n, 1, prob = p)
 
+  # simulate time to event using same lp
+  haz <- 0.03  * exp(lp)
+  survtime <- rexp(n, rate = haz)
+  censor_time <- quantile(survtime, probs = 0.9)
+  event <- as.integer(survtime <= censor_time)
+  observed_time <- pmin(survtime, censor_time)
 
   length_of_stay <- 15 + 0.3 * age + 0.1 * bmi +
     0.04 * (smoking == "Current") + 3 * majorcomplication +
@@ -69,7 +75,7 @@ simulated_rmsMD_data <- function(type = c("complete_case", "missing_for_MI")){
 
   # Create data frame and clean environment
   data <- data.frame(age = age, bmi = bmi, sex = sex, smoking = smoking,
-                     majorcomplication = majorcomplication, lengthstay = length_of_stay)
+                     majorcomplication = majorcomplication, lengthstay = length_of_stay, time = observed_time, event = event)
 
   if(type == "complete_case"){
     return(data)
