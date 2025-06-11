@@ -40,7 +40,7 @@ rmsMD_format_final_output <- function(output_df, fullmodel, combine_ci,exp_coef,
 #'
 #' @export
 
-simulated_rmsMD_data <- function(){
+simulated_rmsMD_data <- function(type = c("complete_case", "missing_for_MI")){
   set.seed(124)
 
   # Simulate data
@@ -63,13 +63,24 @@ simulated_rmsMD_data <- function(){
   majorcomplication <- rbinom(n, 1, prob = p)
 
 
-length_of_stay <- 15 + 0.3 * age + 0.1 * bmi +
-  0.04 * (smoking == "Current") + 3 * majorcomplication +
-  rnorm(n, mean = 0, sd = 5.5)
+  length_of_stay <- 15 + 0.3 * age + 0.1 * bmi +
+    0.04 * (smoking == "Current") + 3 * majorcomplication +
+    rnorm(n, mean = 0, sd = 5.5)
 
   # Create data frame and clean environment
   data <- data.frame(age = age, bmi = bmi, sex = sex, smoking = smoking,
                      majorcomplication = majorcomplication, lengthstay = length_of_stay)
-  return(data)
+
+  if(type == "complete_case"){
+    return(data)
+  } else if(type == "missing_for_MI"){
+    # Randomly introduce 10% missing values in each predictor column
+    predictors <- c("age", "bmi", "sex", "smoking")
+    for (col in predictors) {
+      na_idx <- sample(1:n, size = floor(0.1 * n), replace = FALSE)
+      data[na_idx, col] <- NA
+    }
+    return(data)
+  }
 
 }
