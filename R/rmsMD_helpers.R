@@ -41,6 +41,7 @@ rmsMD_format_final_output <- function(output_df, fullmodel, combine_ci,exp_coef,
 #' @export
 
 simulated_rmsMD_data <- function(type = c("complete_case", "missing_for_MI")){
+  type <- match.arg(type) # ensures type is a single string from the choices
   set.seed(124)
 
   # Simulate data
