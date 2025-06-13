@@ -82,11 +82,71 @@
 <div class="section level2">
 <h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
+<div class="section level3">
+<h3 id="fit-regression-models-and-create-clean-outputs">Fit regression models and create clean outputs<a class="anchor" aria-label="anchor" href="#fit-regression-models-and-create-clean-outputs"></a>
+</h3>
+<p>Fit a logistic regression model with restricted cubic splines for age and BMI.<br>
+Generate a publication-ready summary table from the fitted model.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rmsMD/rmsMD" class="external-link">rmsMD</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://hbiostat.org/R/rms/" class="external-link">rms</a></span><span class="op">)</span></span>
 <span></span>
-<span><span class="co">### use some code from a vignette plus images from there</span></span></code></pre></div>
+<span><span class="co"># Fit an OLS model including a restricted cubic spline </span></span>
+<span><span class="co"># for Age and BMI (with 4 knots)</span></span>
+<span><span class="va">fit_lrm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">majorcomplication</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">age</span>,<span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>                 <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">bmi</span>,<span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>                 <span class="va">sex</span> <span class="op">+</span> </span>
+<span>                 <span class="va">smoking</span>, </span>
+<span>               data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># Generate a publication-ready summary table</span></span>
+<span><span class="fu"><a href="reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/TableForReadMe.png" alt="Example output table" width="400"></p>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="building-basic-plots">Building basic plots<a class="anchor" aria-label="anchor" href="#building-basic-plots"></a>
+</h3>
+<p>Create basic plots of the model’s restricted cubic spline terms to visualize adjusted effects.</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># Most basic output</span></span>
+<span><span class="fu"><a href="reference/ggrmsMD.html">ggrmsMD</a></span><span class="op">(</span><span class="va">fit_lrm</span>, <span class="va">data</span><span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/Fig1ForReadMe.png" alt="Basic RCS plot" width="800"></p>
+<hr>
+</div>
+<div class="section level3">
+<h3 id="plot-customisation">Plot customisation<a class="anchor" aria-label="anchor" href="#plot-customisation"></a>
+</h3>
+<p>Customize axis labels, plot titles, and shading to highlight inferior outcomes visually.</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># x axis labels can be stored in a list</span></span>
+<span><span class="va">xlabels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span><span class="st">"age"</span> <span class="op">=</span> <span class="st">"Age (years)"</span>,</span>
+<span>                 <span class="st">"bmi"</span> <span class="op">=</span> <span class="st">"Body Mass Index"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># titles for each variable can be stored in a list</span></span>
+<span><span class="va">titles</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span><span class="st">"age"</span> <span class="op">=</span> <span class="st">"Impact of Age on Complications"</span>,</span>
+<span>                 <span class="st">"bmi"</span> <span class="op">=</span> <span class="st">"Impact of BMI on Complications"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="reference/ggrmsMD.html">ggrmsMD</a></span><span class="op">(</span><span class="va">fit_lrm</span>, <span class="va">data</span>,</span>
+<span>        <span class="co"># set y axis label for all plots</span></span>
+<span>        ylab <span class="op">=</span> <span class="st">"Complications (adjusted OR)"</span>, </span>
+<span>        <span class="co"># set y axis limits</span></span>
+<span>        ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">3</span><span class="op">)</span>,</span>
+<span>        <span class="co"># set higher OR as inferior outcome to assign red shading</span></span>
+<span>        shade_inferior <span class="op">=</span> <span class="st">"higher"</span>, </span>
+<span>        <span class="co"># set x axis labels for each variable</span></span>
+<span>        xlabs <span class="op">=</span> <span class="va">xlabels</span>, </span>
+<span>        <span class="co"># set titles for each variable</span></span>
+<span>        titles <span class="op">=</span> <span class="va">titles</span> </span>
+<span>        <span class="op">)</span></span></code></pre></div>
+<p><img src="reference/figures/Fig2ForReadMe.png" alt="Advanced RCS plot" width="800"></p>
+<hr>
+</div>
+</div>
+<div class="section level2">
+<h2 id="learn-more">Learn more<a class="anchor" aria-label="anchor" href="#learn-more"></a>
+</h2>
+<p>See the <a href="articles/Standard_workflow_with_restricted_cubic_splines.html">Standard workflow with restricted cubic splines vignette</a> for a full worked example.</p>
 </div>
 </div>
 
