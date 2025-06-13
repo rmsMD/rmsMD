@@ -12,7 +12,8 @@ modelsummary_rms(
   rcs_overallp = TRUE,
   hide_rcs_coef = TRUE,
   exp_coef = NULL,
-  fullmodel = FALSE
+  fullmodel = FALSE,
+  MI_lrt = FALSE
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ modelsummary_rms(
 \item{exp_coef}{If \code{TRUE}, outputs the exponentiated coefficients (\code{exp(coef)}) as the effect estimates. Applicable only for model types other than \code{ols}, \code{lrm}, or \code{cph}. If \code{NULL}, no exponentiation is performed. Default is \code{NULL}.}
 
 \item{fullmodel}{If \code{TRUE}, includes all intermediate steps in the summary, allowing users to verify and compare with standard model outputs.}
+
+\item{MI_lrt}{If \code{TRUE} then overall p-values for RCS terms from models with multiple imputed data from \code{fit.mult.impute} with \code{lrt = TRUE} will represent likelihood ratio chi-square tests from \code{rms::processMI()}, rather than Wald tests.}
 }
 \value{
 Returns a dataframe of results. This can easily be outputted to word using

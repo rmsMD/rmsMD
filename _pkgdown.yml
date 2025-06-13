@@ -1,0 +1,26 @@
+url: https://rmsmd.github.io/rmsMD/
+template:
+  bootstrap: 5
+  # params:
+  #   bootswatch: flatly
+
+navbar:
+  structure:
+    left: [home, reference, articles]
+    right: [search, github]
+  components:
+    articles:
+      text: "Articles"
+      menu:
+        - text: "Standard workflow with restricted cubic splines"
+          href: articles/Standard_workflow_with_restricted_cubic_splines.html
+        - text: "Further details: modelsummary_rms"
+          href: articles/Further_details_modelsummary_rms.html
+        - text: "Further details: ggrmsMD"
+          href: articles/Further_details_ggrmsMD.html
+
+authors:
+  Samuel Tingle:
+    href: "https://scholar.google.com/citations?user=op7Z53gAAAAJ&hl=en&oi=ao"
+  Georgios Kourounis:
+    href: "https://scholar.google.com/citations?user=X6Q-y3EAAAAJ&hl=en&oi=ao"

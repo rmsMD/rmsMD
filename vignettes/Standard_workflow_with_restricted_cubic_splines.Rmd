@@ -1,6 +1,7 @@
 ---
 title: "Standard workflow with restricted cubic splines"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
 vignette: >
   %\VignetteIndexEntry{Standard_workflow_with_restricted_cubic_splines}
   %\VignetteEngine{knitr::rmarkdown}
@@ -35,7 +36,8 @@ For these vignettes we will use a simulated dataset to predict the impact of age
 # Load in the simulated data
 data <- simulated_rmsMD_data()
 
-# Set the datadist which is required for rms modelling (these two lines are standard)
+# Set the datadist which is required for rms modelling 
+# (these two lines are standard)
 dd <- datadist(data)    
 options(datadist='dd') 
 ```
@@ -47,8 +49,13 @@ Restricted Cubic Splines (RCS) are a flexible modelling tool used to capture non
 The **rmsMD** package is designed to report and summarise models that include RCS terms. Here is an example model predicting occurrence of complications after surgery (binary), with the continuous variables age and BMI modelled using restricted cubic splines with 4 knots:
 
 ```{r}
-# Fit an OLS model including a restricted cubic spline for Age and BMI (with 4 knots)
-fit_lrm <- lrm(majorcomplication ~ rcs(age,4) + rcs(bmi,4) + sex + smoking, data = data)
+# Fit an OLS model including a restricted cubic spline 
+# for Age and BMI (with 4 knots)
+fit_lrm <- lrm(majorcomplication ~ rcs(age,4) + 
+                 rcs(bmi,4) + 
+                 sex + 
+                 smoking, 
+               data = data)
 ```
 
 ## Intuitive output with modelsummary_rms
@@ -77,7 +84,7 @@ As a minimum, the model fit and data should be passed into the function. `ggrmsM
 Here is the most basic use case with the logistic regression model for post-operative complications above:
 
 ```{r}
-# most basic output
+# Most basic output
 ggrmsMD(fit_lrm, data)
 ```
 
@@ -93,11 +100,16 @@ titles <- list ("age" = "Impact of Age on Complications",
                  "bmi" = "Impact of BMI on Complications")
 
 ggrmsMD(fit_lrm, data,
-        ylab = "Complications (adjusted OR)", # set y axis label, which applies to all plots
-        ylim = c(0,3), # set y axis limits
-        shade_inferior = "higher", # define that higher OR mean inferior outcome to add red shading
-        xlabs = xlabels, # set x axis labels for each variable
-        titles = titles # set titles for each variable
+        # set y axis label for all plots
+        ylab = "Complications (adjusted OR)", 
+        # set y axis limits
+        ylim = c(0,3),
+        # set higher OR as inferior outcome to assign red shading
+        shade_inferior = "higher", 
+        # set x axis labels for each variable
+        xlabs = xlabels, 
+        # set titles for each variable
+        titles = titles 
         )
 ```
 
@@ -112,19 +124,20 @@ library(officer)
 library(flextable)
 library(dplyr)
 
-# converting modelsummary_rms dataframe generated above into a flextable
+# Convert modelsummary_rms dataframe to a flextable
 rmsMD_as_table <- flextable(modelsummary_rms(fit_lrm))
 
-# use officer to create a 
-doc <- read_docx() %>% 
+# Create a new Word document, add table and a heading
+doc <- read_docx() %>%
   body_add_flextable(rmsMD_as_table) %>%
   body_add_par("Model summary from rmsMD", style = "heading 2")
 
-# generating a temporary output path for demonstration. This would be replaced by the file path where the word document will be generated
+# Temporary file path for output (replace with your actual path as needed)
 output_path <- file.path(tempdir(), "example_output.docx")
 
-# generating the word document
+# Generate the Word document
 print(doc, target = output_path)
 
+# Alternatively, save as 'temp.docx' in the working directory
 print(doc, target = "temp.docx")
 ```

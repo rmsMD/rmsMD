@@ -15,7 +15,7 @@ test_that("Warning for model not inheriting from 'rms'", {
   # Should error with specific message if modelsummary_rms is called without exp_coef.
   expect_error(
     modelsummary_rms(modelfit),
-    "The model fit does not belong to the 'rms' class. You must specify exp_coef argument to determine table output."
+    "The model fit does not belong to the 'rms' class.\nYou must specify the exp_coef argument to determine table output."
   )
 })
 
@@ -34,7 +34,7 @@ test_that("Error when exp_coef is missing for non-standard rms model", {
   # Should error with message about specifying exp_coef for non-ols/lrm/cph models.
   expect_error(
     modelsummary_rms(modelfit),
-    "Model not ols, lrm or cph. You must specify exp_coef argument to determine table output."
+    "Model not ols, lrm or cph.\nYou must specify the exp_coef argument to determine table output."
   )
 })
 
@@ -130,7 +130,7 @@ test_that("RCS handling: warning when no RCS terms found", {
   # but no RCS terms were found, so the setting is reset to FALSE.
   expect_warning(
     modelsummary_rms(modelfit, rcs_overallp = TRUE),
-    "rcs_overallp was set to TRUE by the user but no RCS terms were found in the model fit. Setting rcs_overallp to FALSE."
+    "rcs_overallp was set to TRUE by the user, but no RCS terms were found in the model fit.\nSetting rcs_overallp to FALSE."
   )
 })
 
@@ -244,7 +244,7 @@ test_that("modelsummary_rms errors when MI_lrt=TRUE used but lrt=TRUE not set in
   # was fitted with fit.mult.impute() without lrt = TRUE, the proper error is raised.
   expect_error(
     modelsummary_rms(fit_MI_lrm, MI_lrt = TRUE),
-    regexp = "MI_lrt = TRUE was set, but when fitting the model with fit.mult.impute\\(\\), `lrt = TRUE` was not used"
+    regexp = "MI_lrt = TRUE was set, but when fitting the model with fit.mult.impute\\(\\), \n`lrt = TRUE` was not used"
   )
 })
 

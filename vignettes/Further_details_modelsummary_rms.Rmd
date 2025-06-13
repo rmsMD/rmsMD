@@ -1,6 +1,7 @@
 ---
 title: "Further details modelsummary_rms"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
 vignette: >
   %\VignetteIndexEntry{Further_details_modelsummary_rms}
   %\VignetteEngine{knitr::rmarkdown}
@@ -33,7 +34,8 @@ For these vignettes we will use a simulated dataset to predict the impact of age
 # Load in the simulated data
 data <- simulated_rmsMD_data()
 
-# Set the datadist which is required for rms modelling (these two lines are standard)
+# Set the datadist which is required for rms modelling 
+# (these two lines are standard)
 dd <- datadist(data)    
 options(datadist='dd') 
 ```
@@ -46,7 +48,11 @@ The output dataframe contains the estimated coefficients, their 95% confidence i
 
 ```{r}
 # Fit a linear regression model using the rms package:
-fit_ols <- ols(lengthstay ~ age + bmi + sex + smoking, data = data)
+fit_ols <- ols(lengthstay ~ age + 
+                 bmi + 
+                 sex + 
+                 smoking, 
+               data = data)
 
 # Generate a model summary and display it as a dataframe
 modelsummary_rms(fit_ols)
@@ -66,7 +72,7 @@ By default, the function uses the following stylistic settings:
 You can modify these defaults to adjust the appearance of the output.
 
 ```{r}
-# Generate a model summary with custom styling options and store it as summary_custom
+# Generate a model summary with custom styling options & store as summary_custom
 summary_custom <- modelsummary_rms(fit_ols, 
                                    combine_ci = FALSE, 
                                    round_dp_coef = 2, 
@@ -85,7 +91,11 @@ Below is an example using **modelsummary_rms** on an **rms** logistic regression
 
 ```{r}
 # fitting the model
-fit_lrm <- lrm(majorcomplication ~ age + bmi + sex + smoking, data = data)
+fit_lrm <- lrm(majorcomplication ~ age + 
+                 bmi + 
+                 sex + 
+                 smoking, 
+               data = data)
 
 # rmsMD summary
 modelsummary_rms(fit_lrm)
@@ -99,10 +109,16 @@ The **modelsummary_rms** from **rmsMD** package is also capable of working with 
 For example, when using a linear model (where exponentiation of coefficients is not required), you should explicitly set exp_coef = FALSE.
 
 ```{r}
-# Fit a simple linear model using lm() from base R (an example model fit without using rms package)
-fit_lm <- lm(majorcomplication ~ age + bmi + sex + smoking, data = data)
+# Fit a simple linear model using lm() from base R 
+# (an example model fit without using rms package)
+fit_lm <- lm(majorcomplication ~ age + 
+               bmi + 
+               sex + 
+               smoking, 
+             data = data)
 
-# Generate a model summary for the non-RMS model by explicitly setting exp_coef = FALSE
+# Generate a model summary for the non-RMS model 
+# by explicitly setting exp_coef = FALSE
 modelsummary_rms(fit_lm, exp_coef = FALSE)
 
 # display rmsMD results as a table
@@ -127,10 +143,10 @@ Here is an example model predicting occurence of complications after surgery (bi
 # Fit an OLS model including a restricted cubic spline for Age (with 4 knots)
 fit_lrm <- lrm(
         majorcomplication ~ 
-                rcs(age, 4) +        # Age modelled using restricted cubic splines with 4 knots
-                rcs(bmi, 4) +        # BMI also modelled with restricted cubic splines with 4 knots
-                sex +                # Binary variable for sex
-                smoking,             # Categorical variable for smoking status
+                rcs(age, 4) +   # Age modelled using RCS with 4 knots
+                rcs(bmi, 4) +   # BMI also modelled with RCS with 4 knots
+                sex +           # Binary variable for sex
+                smoking,        # Categorical variable for smoking status
         data = data                  
 )
 
@@ -147,7 +163,8 @@ Displaying individual RCS coefficients is not the default behaviour. If individu
 
 ```{r}
 
-# Generate a model summary with rcs_overallp set to TRUE and hide_rcs_coef set to TRUE
+# Generate a model summary with rcs_overallp set to TRUE 
+# and hide_rcs_coef set to TRUE
 modelsummary_rms(fit_lrm, hide_rcs_coef = FALSE)
 
 # Outputting this as a table
@@ -171,8 +188,13 @@ knitr::kable(summary_spline_hide)
 The **rms** package allows interactions with variables modelled using restricted cubic splines. In this setting, the individual coefficients for RCS terms and their interactions are difficult to interpret. `modelsummary_rms` handles this situation by providing overall p-values for RCS variables (which give the overall p-value taking into account all spline terms and all of their interaction terms), and overall p-values for the interactions (takes into account linear and non-linear terms), instead of the individual coefficients. As above, this can be altered by changing `rcs_overallp` and `hide_rcs_coef`.
 
 ```{r}
-# Fit an OLS model with a restricted cubic spline for Age and an interaction between Age and Exer.
-fit_lrm_interaction <- lrm(majorcomplication ~ rcs(age,4)*smoking + rcs(bmi,4) + sex + smoking, data = data)
+# Fit an OLS model with a restricted cubic spline for Age 
+# and an interaction between Age and Exer.
+fit_lrm_interaction <- lrm(majorcomplication ~ rcs(age,4)*smoking + 
+                             rcs(bmi,4) + 
+                             sex + 
+                             smoking, 
+                           data = data)
 
 # Generate a model summary with default RCS output
 modelsummary_rms(fit_lrm_interaction)
