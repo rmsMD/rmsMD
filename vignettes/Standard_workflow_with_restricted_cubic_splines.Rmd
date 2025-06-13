@@ -48,7 +48,9 @@ The **rmsMD** package is designed to report and summarise models that include RC
 
 ```{r}
 # Fit an OLS model including a restricted cubic spline for Age and BMI (with 4 knots)
-fit_lrm <- lrm(majorcomplication ~ rcs(age,4) + rcs(bmi,4) + sex + smoking, data = data)
+fit_lrm <- lrm(majorcomplication ~ rcs(age,4) + rcs(bmi,4) + sex + smoking, data = data,
+               x = TRUE, y = TRUE)
+# setting x = TRUE and y = TRUE allows subsequent likelihood ratio tests to be performed
 ```
 
 ## Intuitive output with modelsummary_rms
