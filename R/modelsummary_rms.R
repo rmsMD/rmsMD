@@ -187,23 +187,16 @@ modelsummary_rms <- function(modelfit,
 
       }
 
-
       # making anova result based on test_arg
       # if no test_arg then it does the anova.rms defaults
+      # note do.call etc all break with large ols models if you try define subset of variables
       if(!is.null(test_arg)){
-        anova_result <- do.call(anova, c(
-          list(modelfit),
-          as.list(rcs_terms_incl_interaction),
-          list(india = FALSE, indnl = FALSE, test = test_arg)
-        ))
+        anova_result <- anova(modelfit, india = FALSE, indnl = FALSE, test = test_arg)
       } else {
         # use anova.rms default test as back-up
-        anova_result <- do.call(anova, c(
-          list(modelfit),
-          as.list(rcs_terms_incl_interaction),
-          list(india = FALSE, indnl = FALSE)
-        ))
+        anova_result <- anova(modelfit, india = FALSE, indnl = FALSE)
       }
+
 
     } else {
       # uses processMI for when MI_lrt is TRUE
@@ -224,34 +217,21 @@ modelsummary_rms <- function(modelfit,
       }
 
       anova_result <- processMI(modelfit, "anova")
-      anova_rows <- rownames(anova_result)
-
-      # Keep only rows containing any rcs terms (can't pass variables into processMI like you can with anova.rms)
-      rows_keep <- anova_rows[
-        Reduce(`|`, lapply(rcs_terms_incl_interaction, function(term) grepl(term, anova_rows, fixed = TRUE)))
-      ]
-      anova_result <- anova_result[rows_keep, , drop = FALSE]
 
       # just for labelling later
       test_arg <- "LR"
 
     }
 
-    # Get list of variable names from the model
-    model_vars <- modelfit$Design$name
-
-    # Get all row names from anova result
     anova_rows <- rownames(anova_result)
 
-    # doing this approach as variables we want may be re-labelled 'or higher order factor' etc, so can't just use anova_rows %in% rcs_terms_incl_interaction
-    rows_rem <- anova_rows[grepl("TOTAL|ERROR|REGRESSION", anova_rows, ignore.case = TRUE)]
+    rows_keep <- vapply(anova_rows, function(row) {
+      any(vapply(rcs_terms_incl_interaction, function(term) {
+        grepl(paste0("^", term, "\\b"), row)
+      }, logical(1)))
+    }, logical(1))
 
-    # make sure we aren't getting rid of an actual term
-    rows_to_remove <- setdiff(rows_rem, model_vars)
-
-    # Keep only rows that are not in the final removal list
-    keep_rows <- !(anova_rows %in% rows_to_remove)
-    filtered_anova_result <- anova_result[keep_rows, , drop = FALSE]
+    filtered_anova_result <- anova_result[rows_keep, , drop = FALSE]
 
     # Extract the relevant rows and p-values for RCS terms
     anova_df <- data.frame(
