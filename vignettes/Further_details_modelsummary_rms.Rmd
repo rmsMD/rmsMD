@@ -131,7 +131,8 @@ fit_lrm <- lrm(
                 rcs(bmi, 4) +        # BMI also modelled with restricted cubic splines with 4 knots
                 sex +                # Binary variable for sex
                 smoking,             # Categorical variable for smoking status
-        data = data                  
+        data = data,
+        x = TRUE, y = TRUE           # Required for subsequent likelihood ratio tests
 )
 
 # Generate an rmsMD model summary using default settings
