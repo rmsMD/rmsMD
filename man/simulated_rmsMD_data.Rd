@@ -4,7 +4,7 @@
 \alias{simulated_rmsMD_data}
 \title{Simulated data for the Vignette}
 \usage{
-simulated_rmsMD_data()
+simulated_rmsMD_data(type = c("complete_case", "missing_for_MI"))
 }
 \description{
 Formats the final output data frame, including the option to exclude intercept and select columns.

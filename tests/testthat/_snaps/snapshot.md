@@ -7,7 +7,8 @@
 
 # Snapshot: Warning output for non-rms model without setting exp_coef
 
-    The model fit does not belong to the 'rms' class. You must specify exp_coef argument to determine table output.
+    The model fit does not belong to the 'rms' class.
+    You must specify the exp_coef argument to determine table output.
 
 # Snapshot: OLS tests - simple model
 

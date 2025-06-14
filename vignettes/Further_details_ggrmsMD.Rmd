@@ -1,6 +1,7 @@
 ---
 title: "Further details ggrmsMD"
-output: rmarkdown::html_vignette
+output:
+  rmarkdown::html_vignette:
 vignette: >
   %\VignetteIndexEntry{Further_details_ggrmsMD}
   %\VignetteEngine{knitr::rmarkdown}
@@ -31,19 +32,21 @@ For these vignettes we will use a simulated dataset to predict the impact of age
 # Load in the simulated data
 data <- simulated_rmsMD_data()
 
-# Set the datadist which is required for rms modelling (these two lines are standard)
+# Set the datadist which is required for rms modelling 
+# (these two lines are standard)
 dd <- datadist(data)    
 options(datadist='dd') 
 ```
 
 ```{r}
-# Fit an OLS model including a restricted cubic spline for Age and BMI (with 4 knots)
+# Fit an OLS model including a restricted cubic spline 
+# for Age and BMI (with 4 knots)
 fit_lrm <- lrm(
         majorcomplication ~ 
-                rcs(age, 4) +        # Age modelled using restricted cubic splines with 4 knots
-                rcs(bmi, 4) +        # BMI also modelled with restricted cubic splines with 4 knots
-                sex +                # Binary variable for sex
-                smoking,             # Categorical variable for smoking status
+                rcs(age, 4) +     # Age modelled using RCS with 4 knots
+                rcs(bmi, 4) +     # BMI also modelled with RCS with 4 knots
+                sex +             # Binary variable for sex
+                smoking,          # Categorical variable for smoking status
         data = data                  
 )
 ```
@@ -68,12 +71,12 @@ ggrmsMD(fit_lrm, data)
 Arguments which alter the y axis are applied to all plots. This is standardised as all plots have originated from the same regression model:
 
 ```{r}
-
 ggrmsMD(fit_lrm, data,
-        ylab = "Complications (adjusted OR)", # custom y axis label 
-        ylim = c(0,3) # set y axis limits so variables can be compared more easily
+        # custom y axis label 
+        ylab = "Complications (adjusted OR)", 
+        # set y axis limits so variables can be compared more easily
+        ylim = c(0,3) 
         )
-
 ```
 
 Shading can be applied to these plots to make it clear which side of the no-effect line represents inferior/superior clinical outcome. This is achieved by setting `shade_inferior` to "higher" or "lower":
@@ -82,7 +85,9 @@ Shading can be applied to these plots to make it clear which side of the no-effe
 ggrmsMD(fit_lrm, data,
         ylab = "Complications (adjusted OR)", 
         ylim = c(0,3), 
-        shade_inferior = "higher" # specifies that OR > 1 reflects poorer outcomes (e.g. higher OR complications); these will be highlighted in red
+        # specifies that OR > 1 reflects poorer outcomes 
+        # (e.g. higher OR complications) these will be highlighted in red
+        shade_inferior = "higher" 
         )
 ```
 
@@ -102,7 +107,8 @@ ggrmsMD(fit_lrm, data,
 For logistic regression models like this one, predicted probability can be plotted instead of adjusted OR. For example:
 
 ```{r}
-# to plot predicted probability rather than adjusted OR. This is adjusted to mode/mean of the other variables
+# to plot predicted probability rather than adjusted OR. 
+# This is adjusted to mode/mean of the other variables
 ggrmsMD(fit_lrm, data,
         ylim = c(0,0.4), 
         lrm_prob = TRUE # set this to plot predicted probability

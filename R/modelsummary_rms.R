@@ -37,12 +37,17 @@ modelsummary_rms <- function(modelfit,
 
   # Warning if modelfit isn't an rms object and no exp_coef given to specify if coef or exp(coef) should be given
   if (!inherits(modelfit, "rms") && !"exp_coef" %in% names(match.call())) {
-      stop("The model fit does not belong to the 'rms' class. You must specify exp_coef argument to determine table output.")
+    stop(
+      "The model fit does not belong to the 'rms' class.\nYou must specify the exp_coef argument to determine table output."
+    )
   }
 
   # note the categorical variable ref groups won't pull if datadist not set
   if (inherits(modelfit, "rms") && is.null(getOption("datadist"))) {
-    warning("Please ensure data distribution was set before the rms model was fit using:\n  dd <- datadist(data)\n  options(datadist = 'dd')")
+    warning(
+      "Please ensure data distribution was set before the rms model was fit\n",
+      "using:\n  dd <- datadist(data)\n  options(datadist = 'dd')"
+    )
   }
 
   ########## defining arguments based on model class ##########
@@ -56,7 +61,7 @@ modelsummary_rms <- function(modelfit,
     exp_coef <- TRUE
     exp_coef_name <- "HR"
   } else if(is.null(exp_coef)){
-    stop("Model not ols, lrm or cph. You must specify exp_coef argument to determine table output.")
+    stop("Model not ols, lrm or cph.\nYou must specify the exp_coef argument to determine table output.")
   }
 
   # this checks if rcs_overallp is set to TRUE by default or if the user specifically set it to TRUE
@@ -69,7 +74,9 @@ modelsummary_rms <- function(modelfit,
     no_rcs <- all(unlist(modelfit$Design$nonlinear) == FALSE)
     if (no_rcs) {
       if (user_set_rcs && rcs_overallp) {
-        warning("rcs_overallp was set to TRUE by the user but no RCS terms were found in the model fit. Setting rcs_overallp to FALSE.")
+        warning(
+          "rcs_overallp was set to TRUE by the user, but no RCS terms were found in the model fit.\nSetting rcs_overallp to FALSE."
+        )
       }
       #set defaults to false if model happpens to have no RCS
       rcs_overallp <- FALSE
@@ -79,7 +86,11 @@ modelsummary_rms <- function(modelfit,
 
   # Ensure rcs_overallp is TRUE if hide_rcs_coef is TRUE
   if (hide_rcs_coef && !rcs_overallp) {
-    warning("When hiding RCS coefficients (hide_rcs_coef = TRUE),\nthe overall RCS p-value should be provided (rcs_overallp = TRUE).\nWe recommend you have rcs_overallp as TRUE if hide_rcs_coef is TRUE")
+    warning(
+      "When hiding RCS coefficients (hide_rcs_coef = TRUE),\n",
+      "the overall RCS p-value should be provided (rcs_overallp = TRUE).\n",
+      "We recommend you set rcs_overallp = TRUE if hide_rcs_coef = TRUE."
+    )
   }
 
   ########## Extract coefficients and standard errors ##########
@@ -150,8 +161,11 @@ modelsummary_rms <- function(modelfit,
             test_arg <- "LR"
           } else {
             test_arg <- "Chisq"
-            message("RCS overall p-values displayed are from Wald tests. To use the recommended test for this model type (LR test)
-                    please set 'x = TRUE, y = TRUE' when fitting the model.")
+            message(
+              "RCS overall p-values displayed are from Wald tests.\n",
+              "To use the recommended test for this model type (LR test),\n",
+              "please set 'x = TRUE, y = TRUE' when fitting the model."
+            )
           }
         }
       } else {
@@ -164,8 +178,11 @@ modelsummary_rms <- function(modelfit,
         if(inherits(modelfit, c("lrm", "cph"))) {
           # MI and lrm/cph, but MI_lrt not TRUE
           test_arg <- "Chisq"
-          message("RCS overall p-values displayed are from Wald tests. To use LR test set `MI_lrt = TRUE` in modelsummary_rms(),
-                  and set `lrt = TRUE` in fit.mult.impute() when fitting the model.")
+          message(
+            "RCS overall p-values displayed are from Wald tests.\n",
+            "To use LR test set `MI_lrt = TRUE` in modelsummary_rms(), and set ",
+            "`lrt = TRUE` in fit.mult.impute() when fitting the model."
+          )
         }
 
       }
@@ -196,11 +213,14 @@ modelsummary_rms <- function(modelfit,
       }
 
       if (!inherits(modelfit, "fit.mult.impute")) {
-        stop("MI_lrt = TRUE was set, but the model object is not a fit.mult.impute() object. MI_lrt is only applicable to fit.mult.impute() objects.")
+        stop(
+          "MI_lrt = TRUE was set, but the model object is not a fit.mult.impute() object.\n",
+          "MI_lrt is only applicable to fit.mult.impute() objects."
+        )
       }
 
       if(modelfit$fmimethod == "ordinary"){
-        stop("MI_lrt = TRUE was set, but when fitting the model with fit.mult.impute(), `lrt = TRUE` was not used.")
+        stop("MI_lrt = TRUE was set, but when fitting the model with fit.mult.impute(), \n`lrt = TRUE` was not used.")
       }
 
       anova_result <- processMI(modelfit, "anova")
