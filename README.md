@@ -3,7 +3,7 @@
 [![CRAN_downloads_total](https://cranlogs.r-pkg.org/badges/grand-total/rmsMD)](https://cran.r-project.org/package=rmsMD)
 
 
-rmsMD <img src="man/figures/logo.png" align="right" height="120"/>
+rmsMD <img src="man/figures/logo.png" align="right"/>
 ==============================
 
 **rmsMD** provides streamlined functions for summarising and visualising regression models fitted with the [`rms`](https://cran.r-project.org/package=rms) package, in the preferred format for medical journal reporting. 
