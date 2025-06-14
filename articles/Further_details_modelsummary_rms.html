@@ -90,8 +90,7 @@ models are for illustration purposes only.</p>
 <code class="sourceCode R"><span><span class="co"># Load in the simulated data</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulated_rmsMD_data.html">simulated_rmsMD_data</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Set the datadist which is required for rms modelling </span></span>
-<span><span class="co"># (these two lines are standard)</span></span>
+<span><span class="co"># Set the datadist which is required for rms modelling (these two lines are standard)</span></span>
 <span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/datadist.html" class="external-link">datadist</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>    </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>datadist<span class="op">=</span><span class="st">'dd'</span><span class="op">)</span> </span></code></pre></div>
 </div>
@@ -106,11 +105,7 @@ confidence intervals, and the associated p-values. These are in a
 publication ready format.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Fit a linear regression model using the rms package:</span></span>
-<span><span class="va">fit_ols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/ols.html" class="external-link">ols</a></span><span class="op">(</span><span class="va">lengthstay</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> </span>
-<span>                 <span class="va">bmi</span> <span class="op">+</span> </span>
-<span>                 <span class="va">sex</span> <span class="op">+</span> </span>
-<span>                 <span class="va">smoking</span>, </span>
-<span>               data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<span><span class="va">fit_ols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/ols.html" class="external-link">ols</a></span><span class="op">(</span><span class="va">lengthstay</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">bmi</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">smoking</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate a model summary and display it as a dataframe</span></span>
 <span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_ols</span><span class="op">)</span></span>
@@ -187,7 +182,7 @@ decimal places.</li>
 <p>You can modify these defaults to adjust the appearance of the
 output.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Generate a model summary with custom styling options &amp; store as summary_custom</span></span>
+<code class="sourceCode R"><span><span class="co"># Generate a model summary with custom styling options and store it as summary_custom</span></span>
 <span><span class="va">summary_custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_ols</span>, </span>
 <span>                                   combine_ci <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>                                   round_dp_coef <span class="op">=</span> <span class="fl">2</span>, </span>
@@ -273,11 +268,7 @@ regression model for postoperative complications. Note this
 automatically provides OR:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># fitting the model</span></span>
-<span><span class="va">fit_lrm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">majorcomplication</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> </span>
-<span>                 <span class="va">bmi</span> <span class="op">+</span> </span>
-<span>                 <span class="va">sex</span> <span class="op">+</span> </span>
-<span>                 <span class="va">smoking</span>, </span>
-<span>               data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<span><span class="va">fit_lrm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">majorcomplication</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">bmi</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">smoking</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># rmsMD summary</span></span>
 <span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span><span class="op">)</span></span>
@@ -345,16 +336,10 @@ exp_coef, so it must be set manually.</p>
 coefficients is not required), you should explicitly set exp_coef =
 FALSE.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Fit a simple linear model using lm() from base R </span></span>
-<span><span class="co"># (an example model fit without using rms package)</span></span>
-<span><span class="va">fit_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">majorcomplication</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> </span>
-<span>               <span class="va">bmi</span> <span class="op">+</span> </span>
-<span>               <span class="va">sex</span> <span class="op">+</span> </span>
-<span>               <span class="va">smoking</span>, </span>
-<span>             data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Fit a simple linear model using lm() from base R (an example model fit without using rms package)</span></span>
+<span><span class="va">fit_lm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm</a></span><span class="op">(</span><span class="va">majorcomplication</span> <span class="op">~</span> <span class="va">age</span> <span class="op">+</span> <span class="va">bmi</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">smoking</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Generate a model summary for the non-RMS model </span></span>
-<span><span class="co"># by explicitly setting exp_coef = FALSE</span></span>
+<span><span class="co"># Generate a model summary for the non-RMS model by explicitly setting exp_coef = FALSE</span></span>
 <span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lm</span>, exp_coef <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
 <span><span class="co">#&gt;         variable                coef_95CI Pvalue</span></span>
 <span><span class="co">#&gt; 1    (Intercept) -0.023 (-0.103 to 0.057)  0.569</span></span>
@@ -449,32 +434,27 @@ using restricted cubic splines with 4 knots:</p>
 <code class="sourceCode R"><span><span class="co"># Fit an OLS model including a restricted cubic spline for Age (with 4 knots)</span></span>
 <span><span class="va">fit_lrm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span></span>
 <span>        <span class="va">majorcomplication</span> <span class="op">~</span> </span>
-<span>                <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">age</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">+</span>   <span class="co"># Age modelled using RCS with 4 knots</span></span>
-<span>                <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">bmi</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">+</span>   <span class="co"># BMI also modelled with RCS with 4 knots</span></span>
-<span>                <span class="va">sex</span> <span class="op">+</span>           <span class="co"># Binary variable for sex</span></span>
-<span>                <span class="va">smoking</span>,        <span class="co"># Categorical variable for smoking status</span></span>
-<span>        data <span class="op">=</span> <span class="va">data</span>                  </span>
+<span>                <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">age</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">+</span>        <span class="co"># Age modelled using restricted cubic splines with 4 knots</span></span>
+<span>                <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">bmi</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">+</span>        <span class="co"># BMI also modelled with restricted cubic splines with 4 knots</span></span>
+<span>                <span class="va">sex</span> <span class="op">+</span>                <span class="co"># Binary variable for sex</span></span>
+<span>                <span class="va">smoking</span>,             <span class="co"># Categorical variable for smoking status</span></span>
+<span>        data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>        x <span class="op">=</span> <span class="cn">TRUE</span>, y <span class="op">=</span> <span class="cn">TRUE</span>           <span class="co"># Required for subsequent likelihood ratio tests</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate an rmsMD model summary using default settings</span></span>
 <span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span><span class="op">)</span></span>
-<span><span class="co">#&gt; RCS overall p-values displayed are from Wald tests.</span></span>
-<span><span class="co">#&gt; To use the recommended test for this model type (LR test),</span></span>
-<span><span class="co">#&gt; please set 'x = TRUE, y = TRUE' when fitting the model.</span></span>
 <span><span class="co">#&gt;           variable                OR_95CI Pvalue</span></span>
 <span><span class="co">#&gt; 1       sex=Female                    Ref      -</span></span>
 <span><span class="co">#&gt; 2         sex=Male 1.078 (0.927 to 1.255)  0.330</span></span>
 <span><span class="co">#&gt; 3    smoking=Never                    Ref      -</span></span>
 <span><span class="co">#&gt; 4   smoking=Former 0.986 (0.806 to 1.207)  0.892</span></span>
 <span><span class="co">#&gt; 5  smoking=Current 2.078 (1.731 to 2.496) &lt;0.001</span></span>
-<span><span class="co">#&gt; 6 RCSoverallP: age              Wald test &lt;0.001</span></span>
-<span><span class="co">#&gt; 7 RCSoverallP: bmi              Wald test  0.030</span></span>
+<span><span class="co">#&gt; 6 RCSoverallP: age                LR test &lt;0.001</span></span>
+<span><span class="co">#&gt; 7 RCSoverallP: bmi                LR test  0.034</span></span>
 <span></span>
 <span><span class="co"># Outputting this as a table</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; RCS overall p-values displayed are from Wald tests.</span></span>
-<span><span class="co">#&gt; To use the recommended test for this model type (LR test),</span></span>
-<span><span class="co">#&gt; please set 'x = TRUE, y = TRUE' when fitting the model.</span></span></code></pre></div>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">variable</th>
@@ -509,13 +489,13 @@ using restricted cubic splines with 4 knots:</p>
 </tr>
 <tr class="even">
 <td align="left">RCSoverallP: age</td>
-<td align="left">Wald test</td>
+<td align="left">LR test</td>
 <td align="left">&lt;0.001</td>
 </tr>
 <tr class="odd">
 <td align="left">RCSoverallP: bmi</td>
-<td align="left">Wald test</td>
-<td align="left">0.030</td>
+<td align="left">LR test</td>
+<td align="left">0.034</td>
 </tr>
 </tbody>
 </table>
@@ -527,12 +507,8 @@ If individual RCS coefficients are required, these can be added in by
 setting <code>hide_rcs_coef</code> to <code>FALSE</code>:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span></span>
-<span><span class="co"># Generate a model summary with rcs_overallp set to TRUE </span></span>
-<span><span class="co"># and hide_rcs_coef set to TRUE</span></span>
+<span><span class="co"># Generate a model summary with rcs_overallp set to TRUE and hide_rcs_coef set to TRUE</span></span>
 <span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span>, hide_rcs_coef <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span></span>
-<span><span class="co">#&gt; RCS overall p-values displayed are from Wald tests.</span></span>
-<span><span class="co">#&gt; To use the recommended test for this model type (LR test),</span></span>
-<span><span class="co">#&gt; please set 'x = TRUE, y = TRUE' when fitting the model.</span></span>
 <span><span class="co">#&gt;            variable                OR_95CI Pvalue</span></span>
 <span><span class="co">#&gt; 1               age 1.005 (0.980 to 1.030)  0.701</span></span>
 <span><span class="co">#&gt; 2              age' 1.061 (0.992 to 1.134)  0.085</span></span>
@@ -545,14 +521,11 @@ setting <code>hide_rcs_coef</code> to <code>FALSE</code>:</p>
 <span><span class="co">#&gt; 9     smoking=Never                    Ref      -</span></span>
 <span><span class="co">#&gt; 10   smoking=Former 0.986 (0.806 to 1.207)  0.892</span></span>
 <span><span class="co">#&gt; 11  smoking=Current 2.078 (1.731 to 2.496) &lt;0.001</span></span>
-<span><span class="co">#&gt; 12 RCSoverallP: age              Wald test &lt;0.001</span></span>
-<span><span class="co">#&gt; 13 RCSoverallP: bmi              Wald test  0.030</span></span>
+<span><span class="co">#&gt; 12 RCSoverallP: age                LR test &lt;0.001</span></span>
+<span><span class="co">#&gt; 13 RCSoverallP: bmi                LR test  0.034</span></span>
 <span></span>
 <span><span class="co"># Outputting this as a table</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span>, hide_rcs_coef <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; RCS overall p-values displayed are from Wald tests.</span></span>
-<span><span class="co">#&gt; To use the recommended test for this model type (LR test),</span></span>
-<span><span class="co">#&gt; please set 'x = TRUE, y = TRUE' when fitting the model.</span></span></code></pre></div>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span>, hide_rcs_coef <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">variable</th>
@@ -617,13 +590,13 @@ setting <code>hide_rcs_coef</code> to <code>FALSE</code>:</p>
 </tr>
 <tr class="even">
 <td align="left">RCSoverallP: age</td>
-<td align="left">Wald test</td>
+<td align="left">LR test</td>
 <td align="left">&lt;0.001</td>
 </tr>
 <tr class="odd">
 <td align="left">RCSoverallP: bmi</td>
-<td align="left">Wald test</td>
-<td align="left">0.030</td>
+<td align="left">LR test</td>
+<td align="left">0.034</td>
 </tr>
 </tbody>
 </table>
@@ -716,13 +689,8 @@ into account linear and non-linear terms), instead of the individual
 coefficients. As above, this can be altered by changing
 <code>rcs_overallp</code> and <code>hide_rcs_coef</code>.</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Fit an OLS model with a restricted cubic spline for Age </span></span>
-<span><span class="co"># and an interaction between Age and Exer.</span></span>
-<span><span class="va">fit_lrm_interaction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">majorcomplication</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">age</span>,<span class="fl">4</span><span class="op">)</span><span class="op">*</span><span class="va">smoking</span> <span class="op">+</span> </span>
-<span>                             <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">bmi</span>,<span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>                             <span class="va">sex</span> <span class="op">+</span> </span>
-<span>                             <span class="va">smoking</span>, </span>
-<span>                           data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="co"># Fit an OLS model with a restricted cubic spline for Age and an interaction between Age and Exer.</span></span>
+<span><span class="va">fit_lrm_interaction</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">majorcomplication</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">age</span>,<span class="fl">4</span><span class="op">)</span><span class="op">*</span><span class="va">smoking</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">bmi</span>,<span class="fl">4</span><span class="op">)</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">smoking</span>, data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate a model summary with default RCS output</span></span>
 <span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm_interaction</span><span class="op">)</span></span>

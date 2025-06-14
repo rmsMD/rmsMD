@@ -96,8 +96,7 @@ and officer.</p>
 <code class="sourceCode R"><span><span class="co"># Load in the simulated data</span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/simulated_rmsMD_data.html">simulated_rmsMD_data</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Set the datadist which is required for rms modelling </span></span>
-<span><span class="co"># (these two lines are standard)</span></span>
+<span><span class="co"># Set the datadist which is required for rms modelling (these two lines are standard)</span></span>
 <span><span class="va">dd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/datadist.html" class="external-link">datadist</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span>    </span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span>datadist<span class="op">=</span><span class="st">'dd'</span><span class="op">)</span> </span></code></pre></div>
 </div>
@@ -116,13 +115,10 @@ predicting occurrence of complications after surgery (binary), with the
 continuous variables age and BMI modelled using restricted cubic splines
 with 4 knots:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Fit an OLS model including a restricted cubic spline </span></span>
-<span><span class="co"># for Age and BMI (with 4 knots)</span></span>
-<span><span class="va">fit_lrm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">majorcomplication</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">age</span>,<span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>                 <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">bmi</span>,<span class="fl">4</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>                 <span class="va">sex</span> <span class="op">+</span> </span>
-<span>                 <span class="va">smoking</span>, </span>
-<span>               data <span class="op">=</span> <span class="va">data</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="co"># Fit an OLS model including a restricted cubic spline for Age and BMI (with 4 knots)</span></span>
+<span><span class="va">fit_lrm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span><span class="va">majorcomplication</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">age</span>,<span class="fl">4</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">bmi</span>,<span class="fl">4</span><span class="op">)</span> <span class="op">+</span> <span class="va">sex</span> <span class="op">+</span> <span class="va">smoking</span>, data <span class="op">=</span> <span class="va">data</span>,</span>
+<span>               x <span class="op">=</span> <span class="cn">TRUE</span>, y <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span><span class="co"># setting x = TRUE and y = TRUE allows subsequent likelihood ratio tests to be performed</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="intuitive-output-with-modelsummary_rms">Intuitive output with modelsummary_rms<a class="anchor" aria-label="anchor" href="#intuitive-output-with-modelsummary_rms"></a>
@@ -136,23 +132,17 @@ that variable.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Generate an rmsMD model summary using default settings</span></span>
 <span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span><span class="op">)</span></span>
-<span><span class="co">#&gt; RCS overall p-values displayed are from Wald tests.</span></span>
-<span><span class="co">#&gt; To use the recommended test for this model type (LR test),</span></span>
-<span><span class="co">#&gt; please set 'x = TRUE, y = TRUE' when fitting the model.</span></span>
 <span><span class="co">#&gt;           variable                OR_95CI Pvalue</span></span>
 <span><span class="co">#&gt; 1       sex=Female                    Ref      -</span></span>
 <span><span class="co">#&gt; 2         sex=Male 1.078 (0.927 to 1.255)  0.330</span></span>
 <span><span class="co">#&gt; 3    smoking=Never                    Ref      -</span></span>
 <span><span class="co">#&gt; 4   smoking=Former 0.986 (0.806 to 1.207)  0.892</span></span>
 <span><span class="co">#&gt; 5  smoking=Current 2.078 (1.731 to 2.496) &lt;0.001</span></span>
-<span><span class="co">#&gt; 6 RCSoverallP: age              Wald test &lt;0.001</span></span>
-<span><span class="co">#&gt; 7 RCSoverallP: bmi              Wald test  0.030</span></span></code></pre></div>
+<span><span class="co">#&gt; 6 RCSoverallP: age                LR test &lt;0.001</span></span>
+<span><span class="co">#&gt; 7 RCSoverallP: bmi                LR test  0.034</span></span></code></pre></div>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Outputting this as a table</span></span>
-<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; RCS overall p-values displayed are from Wald tests.</span></span>
-<span><span class="co">#&gt; To use the recommended test for this model type (LR test),</span></span>
-<span><span class="co">#&gt; please set 'x = TRUE, y = TRUE' when fitting the model.</span></span></code></pre></div>
+<span><span class="fu">knitr</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/knitr/man/kable.html" class="external-link">kable</a></span><span class="op">(</span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <table class="table">
 <thead><tr class="header">
 <th align="left">variable</th>
@@ -187,13 +177,13 @@ that variable.</p>
 </tr>
 <tr class="even">
 <td align="left">RCSoverallP: age</td>
-<td align="left">Wald test</td>
+<td align="left">LR test</td>
 <td align="left">&lt;0.001</td>
 </tr>
 <tr class="odd">
 <td align="left">RCSoverallP: bmi</td>
-<td align="left">Wald test</td>
-<td align="left">0.030</td>
+<td align="left">LR test</td>
+<td align="left">0.034</td>
 </tr>
 </tbody>
 </table>
@@ -222,7 +212,7 @@ model.</p>
 <p>Here is the most basic use case with the logistic regression model
 for post-operative complications above:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Most basic output</span></span>
+<code class="sourceCode R"><span><span class="co"># most basic output</span></span>
 <span><span class="fu"><a href="../reference/ggrmsMD.html">ggrmsMD</a></span><span class="op">(</span><span class="va">fit_lrm</span>, <span class="va">data</span><span class="op">)</span></span></code></pre></div>
 <p><img src="Standard_workflow_with_restricted_cubic_splines_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
 <p>Further arguments in <code>ggrmsMD</code> allow these plots to be
@@ -238,16 +228,11 @@ plot:</p>
 <span>                 <span class="st">"bmi"</span> <span class="op">=</span> <span class="st">"Impact of BMI on Complications"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/ggrmsMD.html">ggrmsMD</a></span><span class="op">(</span><span class="va">fit_lrm</span>, <span class="va">data</span>,</span>
-<span>        <span class="co"># set y axis label for all plots</span></span>
-<span>        ylab <span class="op">=</span> <span class="st">"Complications (adjusted OR)"</span>, </span>
-<span>        <span class="co"># set y axis limits</span></span>
-<span>        ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">3</span><span class="op">)</span>,</span>
-<span>        <span class="co"># set higher OR as inferior outcome to assign red shading</span></span>
-<span>        shade_inferior <span class="op">=</span> <span class="st">"higher"</span>, </span>
-<span>        <span class="co"># set x axis labels for each variable</span></span>
-<span>        xlabs <span class="op">=</span> <span class="va">xlabels</span>, </span>
-<span>        <span class="co"># set titles for each variable</span></span>
-<span>        titles <span class="op">=</span> <span class="va">titles</span> </span>
+<span>        ylab <span class="op">=</span> <span class="st">"Complications (adjusted OR)"</span>, <span class="co"># set y axis label, which applies to all plots</span></span>
+<span>        ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">3</span><span class="op">)</span>, <span class="co"># set y axis limits</span></span>
+<span>        shade_inferior <span class="op">=</span> <span class="st">"higher"</span>, <span class="co"># define that higher OR mean inferior outcome to add red shading</span></span>
+<span>        xlabs <span class="op">=</span> <span class="va">xlabels</span>, <span class="co"># set x axis labels for each variable</span></span>
+<span>        titles <span class="op">=</span> <span class="va">titles</span> <span class="co"># set titles for each variable</span></span>
 <span>        <span class="op">)</span></span></code></pre></div>
 <p><img src="Standard_workflow_with_restricted_cubic_splines_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
 <p>Further arguments allow for log transformation of axes, selection of
@@ -280,24 +265,20 @@ output can easily be exported to a word document using
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     intersect, setdiff, setequal, union</span></span>
 <span></span>
-<span><span class="co"># Convert modelsummary_rms dataframe to a flextable</span></span>
+<span><span class="co"># converting modelsummary_rms dataframe generated above into a flextable</span></span>
 <span><span class="va">rmsMD_as_table</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/flextable.html" class="external-link">flextable</a></span><span class="op">(</span><span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_lrm</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; RCS overall p-values displayed are from Wald tests.</span></span>
-<span><span class="co">#&gt; To use the recommended test for this model type (LR test),</span></span>
-<span><span class="co">#&gt; please set 'x = TRUE, y = TRUE' when fitting the model.</span></span>
 <span></span>
-<span><span class="co"># Create a new Word document, add table and a heading</span></span>
-<span><span class="va">doc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://davidgohel.github.io/officer/reference/read_docx.html" class="external-link">read_docx</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
+<span><span class="co"># use officer to create a </span></span>
+<span><span class="va">doc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://davidgohel.github.io/officer/reference/read_docx.html" class="external-link">read_docx</a></span><span class="op">(</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span> </span>
 <span>  <span class="fu"><a href="https://davidgohel.github.io/flextable/reference/body_add_flextable.html" class="external-link">body_add_flextable</a></span><span class="op">(</span><span class="va">rmsMD_as_table</span><span class="op">)</span> <span class="op"><a href="https://magrittr.tidyverse.org/reference/pipe.html" class="external-link">%&gt;%</a></span></span>
 <span>  <span class="fu"><a href="https://davidgohel.github.io/officer/reference/body_add_par.html" class="external-link">body_add_par</a></span><span class="op">(</span><span class="st">"Model summary from rmsMD"</span>, style <span class="op">=</span> <span class="st">"heading 2"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Temporary file path for output (replace with your actual path as needed)</span></span>
+<span><span class="co"># generating a temporary output path for demonstration. This would be replaced by the file path where the word document will be generated</span></span>
 <span><span class="va">output_path</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html" class="external-link">file.path</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/tempfile.html" class="external-link">tempdir</a></span><span class="op">(</span><span class="op">)</span>, <span class="st">"example_output.docx"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Generate the Word document</span></span>
+<span><span class="co"># generating the word document</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">doc</span>, target <span class="op">=</span> <span class="va">output_path</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Alternatively, save as 'temp.docx' in the working directory</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">doc</span>, target <span class="op">=</span> <span class="st">"temp.docx"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
