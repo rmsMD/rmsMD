@@ -140,14 +140,15 @@ The **rmsMD** package is designed to report and summarise models that include RC
 Here is an example model predicting occurence of complications after surgery (binary), with the continuous variables age and BMI modelled using restricted cubic splines with 4 knots:
 
 ```{r}
-# Fit an OLS model including a restricted cubic spline for Age (with 4 knots)
+# Fit a logistic regression model including a restricted cubic spline for Age (with 4 knots)
 fit_lrm <- lrm(
         majorcomplication ~ 
                 rcs(age, 4) +   # Age modelled using RCS with 4 knots
                 rcs(bmi, 4) +   # BMI also modelled with RCS with 4 knots
                 sex +           # Binary variable for sex
                 smoking,        # Categorical variable for smoking status
-        data = data                  
+                data = data,
+                x = TRUE, y = TRUE   # allows subsequent LR tests for lrm and cph          
 )
 
 # Generate an rmsMD model summary using default settings
@@ -190,11 +191,13 @@ The **rms** package allows interactions with variables modelled using restricted
 ```{r}
 # Fit an OLS model with a restricted cubic spline for Age 
 # and an interaction between Age and Exer.
-fit_lrm_interaction <- lrm(majorcomplication ~ rcs(age,4)*smoking + 
+fit_lrm_interaction <- lrm(majorcomplication ~ 
+                             rcs(age,4)*smoking + 
                              rcs(bmi,4) + 
                              sex + 
                              smoking, 
-                           data = data)
+                           data = data,
+                           x = TRUE, y = TRUE)
 
 # Generate a model summary with default RCS output
 modelsummary_rms(fit_lrm_interaction)
@@ -206,6 +209,6 @@ knitr::kable(modelsummary_rms(fit_lrm_interaction))
 To get further information, for example for the overall effect of smoking (the variable interacted with the spine for age here), use `anova` as below:
 
 ```{r}
-anova(fit_lrm_interaction)
+anova(fit_lrm_interaction, test = "LR")
 ```
 
