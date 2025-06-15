@@ -14,7 +14,7 @@ License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 URL: https://github.com/rmsMD/rmsMD, https://rmsmd.github.io/rmsMD/
-BugReports: https://github.com/sjtingle/rmsMD/issues
+BugReports: https://github.com/rmsMD/rmsMD/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
 Authors@R: c(
