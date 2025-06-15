@@ -1,5 +1,16 @@
 url: https://rmsmd.github.io/rmsMD/
 template:
+  includes:
+    in_header: |
+      <!-- Google tag (gtag.js) -->
+      <script async src="https://www.googletagmanager.com/gtag/js?id=G-TXK27Q23VR"></script>
+      <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+
+        gtag('config', 'G-TXK27Q23VR');
+      </script>
   bootstrap: 5
 navbar:
   structure:
@@ -25,4 +36,3 @@ authors:
     href: https://scholar.google.com/citations?user=op7Z53gAAAAJ&hl=en&oi=ao
   Georgios Kourounis:
     href: https://scholar.google.com/citations?user=X6Q-y3EAAAAJ&hl=en&oi=ao
-
