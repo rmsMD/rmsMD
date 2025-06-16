@@ -97,4 +97,4 @@ ggrmsMD(fit_lrm, data,
 
 ## Learn more
 
-See the [Standard workflow with restricted cubic splines vignette](articles/Standard_workflow_with_restricted_cubic_splines.html) for a full worked example.
+See the [Standard workflow with restricted cubic splines vignette](https://rmsmd.github.io/rmsMD/articles/Standard_workflow_with_restricted_cubic_splines.html) for a full worked example.
