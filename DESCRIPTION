@@ -2,7 +2,7 @@ Package: rmsMD
 Type: Package
 Title: Output Results from 'rms' Models for Medical Journals
 Version: 1.0.0
-Date: 2025-03-03
+Date: 2025-06-16
 Description: This package provides streamlined functions for summarising and visualising 
   regression models fitted with the 'rms' package, in the preferred format for medical journals. 
   The `modelsummary_rms` function produces concise summaries for linear, logistic, and 
@@ -13,7 +13,7 @@ Description: This package provides streamlined functions for summarising and vis
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-URL: https://github.com/rmsMD/rmsMD, https://rmsmd.github.io/rmsMD/
+URL: https://rmsmd.github.io/rmsMD
 BugReports: https://github.com/rmsMD/rmsMD/issues
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.3.2
