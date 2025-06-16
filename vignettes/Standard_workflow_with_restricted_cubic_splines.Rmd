@@ -58,7 +58,8 @@ fit_lrm <- lrm(majorcomplication ~
                  smoking, 
                data = data,
                x = TRUE, y = TRUE)
-# setting x = TRUE, y = TRUE allows subsequent likelihood ratio tests to be performed
+# setting x = TRUE, y = TRUE allows subsequent likelihood ratio tests to be 
+# performed which is recommended for lrm() and cph() models
 ```
 
 ## Intuitive output with modelsummary_rms

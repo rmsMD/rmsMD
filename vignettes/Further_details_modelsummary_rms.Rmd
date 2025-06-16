@@ -72,7 +72,8 @@ By default, the function uses the following stylistic settings:
 You can modify these defaults to adjust the appearance of the output.
 
 ```{r}
-# Generate a model summary with custom styling options & store as summary_custom
+# Generate a model summary with custom styling options
+# & store as summary_custom
 summary_custom <- modelsummary_rms(fit_ols, 
                                    combine_ci = FALSE, 
                                    round_dp_coef = 2, 
@@ -140,7 +141,7 @@ The **rmsMD** package is designed to report and summarise models that include RC
 Here is an example model predicting occurence of complications after surgery (binary), with the continuous variables age and BMI modelled using restricted cubic splines with 4 knots:
 
 ```{r}
-# Fit a logistic regression model including a restricted cubic spline for Age (with 4 knots)
+# Fit a logistic regression model including a RCS for Age & BMI (with 4 knots)
 fit_lrm <- lrm(
         majorcomplication ~ 
                 rcs(age, 4) +   # Age modelled using RCS with 4 knots
@@ -148,7 +149,9 @@ fit_lrm <- lrm(
                 sex +           # Binary variable for sex
                 smoking,        # Categorical variable for smoking status
                 data = data,
-                x = TRUE, y = TRUE   # allows subsequent LR tests for lrm and cph          
+                # set x = TRUE, y = TRUE to allow 
+                # subsequent LR tests for lrm() and cph() models
+                x = TRUE, y = TRUE             
 )
 
 # Generate an rmsMD model summary using default settings
