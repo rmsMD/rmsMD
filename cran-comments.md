@@ -1,6 +1,5 @@
 ## Changes in this version
-- Minor updates to vignettes for clarity.
-- No changes to package functionality.
+- Addition of new function ggrmsMD() and associated helpers and vignettes
 
 ## Additional Notes
 - This is an update to an existing package, *not* a new release.
