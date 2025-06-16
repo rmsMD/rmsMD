@@ -42,6 +42,7 @@ rmsMD_format_final_output <- function(output_df, fullmodel, combine_ci,exp_coef,
 #'
 #' @return A data frame with simulated variables: \code{age}, \code{bmi}, \code{sex}, \code{smoking}, \code{majorcomplication}, \code{lengthstay}, \code{time}, and \code{event}.
 #'
+#' @importFrom stats rnorm rbinom rexp quantile
 #' @export
 
 
