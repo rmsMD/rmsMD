@@ -25,7 +25,7 @@ modelsummary_rms(
 
 \item{round_dp_p}{Specifies the number of decimal places to display for P values. Default is \code{3}.}
 
-\item{rcs_overallp}{If \code{TRUE}, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from \code{anova(modelfit)}.}
+\item{rcs_overallp}{If \code{TRUE}, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from \code{anova(modelfit)}. Automatically selects appropriate test (LR, F or Wald)}
 
 \item{hide_rcs_coef}{If \code{TRUE}, hides the individual coefficients for Restricted Cubic Spline (RCS) variables.}
 
@@ -33,7 +33,7 @@ modelsummary_rms(
 
 \item{fullmodel}{If \code{TRUE}, includes all intermediate steps in the summary, allowing users to verify and compare with standard model outputs.}
 
-\item{MI_lrt}{If \code{TRUE} then overall p-values for RCS terms from models with multiple imputed data from \code{fit.mult.impute} with \code{lrt = TRUE} will represent likelihood ratio chi-square tests from \code{rms::processMI()}, rather than Wald tests.}
+\item{MI_lrt}{If \code{TRUE} then overall p-values for RCS terms from models with multiple imputed data from \code{fit.mult.impute} will represent likelihood ratio chi-square tests from \code{rms::processMI()}, rather than Wald tests.}
 }
 \value{
 Returns a dataframe of results. This can easily be outputted to word using
