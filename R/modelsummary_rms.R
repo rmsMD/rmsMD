@@ -7,11 +7,11 @@
 #' @param combine_ci If `TRUE`, combines the effect estimates and 95% confidence intervals into a single column. Default is `TRUE`.
 #' @param round_dp_coef Specifies the number of decimal places to display for the effect estimates. Default is `3`.
 #' @param round_dp_p Specifies the number of decimal places to display for P values. Default is `3`.
-#' @param rcs_overallp If `TRUE`, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from `anova(modelfit)`.
+#' @param rcs_overallp If `TRUE`, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from `anova(modelfit)`. Automatically selects appropriate test (LR, F or Wald)
+#' @param MI_lrt If `TRUE` then overall p-values for RCS terms from models with multiple imputed data from `fit.mult.impute` will represent likelihood ratio chi-square tests from `rms::processMI()`, rather than Wald tests.
 #' @param hide_rcs_coef If `TRUE`, hides the individual coefficients for Restricted Cubic Spline (RCS) variables.
 #' @param exp_coef If `TRUE`, outputs the exponentiated coefficients (`exp(coef)`) as the effect estimates. Applicable only for model types other than `ols`, `lrm`, or `cph`. If `NULL`, no exponentiation is performed. Default is `NULL`.
 #' @param fullmodel If `TRUE`, includes all intermediate steps in the summary, allowing users to verify and compare with standard model outputs.
-#' @param MI_lrt If `TRUE` then overall p-values for RCS terms from models with multiple imputed data from `fit.mult.impute` with `lrt = TRUE` will represent likelihood ratio chi-square tests from `rms::processMI()`, rather than Wald tests.
 #'
 #' @return Returns a dataframe of results. This can easily be outputted to word using
 #' packages such as flextable and officer.
