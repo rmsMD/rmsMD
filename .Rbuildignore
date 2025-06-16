@@ -9,3 +9,6 @@
 ^docs$
 ^pkgdown$
 ^\.github$
+^hex_icon$
+^testEnv$
+^man/figures$
