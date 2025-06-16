@@ -41,6 +41,7 @@
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
+<li class="nav-item"><a class="nav-link" href="../articles/Standard_workflow_with_restricted_cubic_splines.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="active nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
@@ -194,7 +195,8 @@ decimal places.</li>
 <p>You can modify these defaults to adjust the appearance of the
 output.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Generate a model summary with custom styling options &amp; store as summary_custom</span></span>
+<code class="sourceCode R"><span><span class="co"># Generate a model summary with custom styling options</span></span>
+<span><span class="co"># &amp; store as summary_custom</span></span>
 <span><span class="va">summary_custom</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/modelsummary_rms.html">modelsummary_rms</a></span><span class="op">(</span><span class="va">fit_ols</span>, </span>
 <span>                                   combine_ci <span class="op">=</span> <span class="cn">FALSE</span>, </span>
 <span>                                   round_dp_coef <span class="op">=</span> <span class="fl">2</span>, </span>
@@ -453,7 +455,7 @@ relationship.</p></li>
 surgery (binary), with the continuous variables age and BMI modelled
 using restricted cubic splines with 4 knots:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Fit a logistic regression model including a restricted cubic spline for Age (with 4 knots)</span></span>
+<code class="sourceCode R"><span><span class="co"># Fit a logistic regression model including a RCS for Age &amp; BMI (with 4 knots)</span></span>
 <span><span class="va">fit_lrm</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/rms/man/lrm.html" class="external-link">lrm</a></span><span class="op">(</span></span>
 <span>        <span class="va">majorcomplication</span> <span class="op">~</span> </span>
 <span>                <span class="fu"><a href="https://rdrr.io/pkg/rms/man/rms.trans.html" class="external-link">rcs</a></span><span class="op">(</span><span class="va">age</span>, <span class="fl">4</span><span class="op">)</span> <span class="op">+</span>   <span class="co"># Age modelled using RCS with 4 knots</span></span>
@@ -461,7 +463,9 @@ using restricted cubic splines with 4 knots:</p>
 <span>                <span class="va">sex</span> <span class="op">+</span>           <span class="co"># Binary variable for sex</span></span>
 <span>                <span class="va">smoking</span>,        <span class="co"># Categorical variable for smoking status</span></span>
 <span>                data <span class="op">=</span> <span class="va">data</span>,</span>
-<span>                x <span class="op">=</span> <span class="cn">TRUE</span>, y <span class="op">=</span> <span class="cn">TRUE</span>   <span class="co"># allows subsequent LR tests for lrm and cph          </span></span>
+<span>                <span class="co"># set x = TRUE, y = TRUE to allow </span></span>
+<span>                <span class="co"># subsequent LR tests for lrm() and cph() models</span></span>
+<span>                x <span class="op">=</span> <span class="cn">TRUE</span>, y <span class="op">=</span> <span class="cn">TRUE</span>             </span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Generate an rmsMD model summary using default settings</span></span>
