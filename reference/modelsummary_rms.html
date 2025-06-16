@@ -87,7 +87,7 @@ This summary is tailored for publication in medical journals, presenting effect 
 
 
 <dt id="arg-rcs-overallp">rcs_overallp<a class="anchor" aria-label="anchor" href="#arg-rcs-overallp"></a></dt>
-<dd><p>If <code>TRUE</code>, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from <code>anova(modelfit)</code>.</p></dd>
+<dd><p>If <code>TRUE</code>, provides an overall P value for Restricted Cubic Spline (RCS) terms, sourced from <code>anova(modelfit)</code>. Automatically selects appropriate test (LR, F or Wald)</p></dd>
 
 
 <dt id="arg-hide-rcs-coef">hide_rcs_coef<a class="anchor" aria-label="anchor" href="#arg-hide-rcs-coef"></a></dt>
@@ -103,7 +103,7 @@ This summary is tailored for publication in medical journals, presenting effect 
 
 
 <dt id="arg-mi-lrt">MI_lrt<a class="anchor" aria-label="anchor" href="#arg-mi-lrt"></a></dt>
-<dd><p>If <code>TRUE</code> then overall p-values for RCS terms from models with multiple imputed data from <code>fit.mult.impute</code> with <code>lrt = TRUE</code> will represent likelihood ratio chi-square tests from <code><a href="https://rdrr.io/pkg/rms/man/processMI.html" class="external-link">rms::processMI()</a></code>, rather than Wald tests.</p></dd>
+<dd><p>If <code>TRUE</code> then overall p-values for RCS terms from models with multiple imputed data from <code>fit.mult.impute</code> will represent likelihood ratio chi-square tests from <code><a href="https://rdrr.io/pkg/rms/man/processMI.html" class="external-link">rms::processMI()</a></code>, rather than Wald tests.</p></dd>
 
 </dl></div>
     <div class="section level2">
