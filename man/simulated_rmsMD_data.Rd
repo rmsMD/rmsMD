@@ -2,10 +2,16 @@
 % Please edit documentation in R/rmsMD_helpers.R
 \name{simulated_rmsMD_data}
 \alias{simulated_rmsMD_data}
-\title{Simulated data for the Vignette}
+\title{Simulated Data for the Vignette}
 \usage{
 simulated_rmsMD_data(type = c("complete_case", "missing_for_MI"))
 }
+\arguments{
+\item{type}{Character string; either \code{"complete_case"} (no missing data) or \code{"missing_for_MI"} (introduces 10\% missing data in each predictor).}
+}
+\value{
+A data frame with simulated variables: \code{age}, \code{bmi}, \code{sex}, \code{smoking}, \code{majorcomplication}, \code{lengthstay}, \code{time}, and \code{event}.
+}
 \description{
-Formats the final output data frame, including the option to exclude intercept and select columns.
+Generates a synthetic dataset for testing and demonstration purposes in the \code{rmsMD} package.
 }

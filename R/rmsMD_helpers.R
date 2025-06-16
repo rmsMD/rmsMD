@@ -34,11 +34,16 @@ rmsMD_format_final_output <- function(output_df, fullmodel, combine_ci,exp_coef,
 }
 
 
-#' Simulated data for the Vignette
+#' Simulated Data for the Vignette
 #'
-#' Formats the final output data frame, including the option to exclude intercept and select columns.
+#' Generates a synthetic dataset for testing and demonstration purposes in the \code{rmsMD} package.
+#'
+#' @param type Character string; either \code{"complete_case"} (no missing data) or \code{"missing_for_MI"} (introduces 10% missing data in each predictor).
+#'
+#' @return A data frame with simulated variables: \code{age}, \code{bmi}, \code{sex}, \code{smoking}, \code{majorcomplication}, \code{lengthstay}, \code{time}, and \code{event}.
 #'
 #' @export
+
 
 simulated_rmsMD_data <- function(type = c("complete_case", "missing_for_MI")){
   type <- match.arg(type) # ensures type is a single string from the choices
