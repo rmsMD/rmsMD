@@ -16,12 +16,16 @@ navbar:
   structure:
     left:
     - home
+    - get-started
     - reference
     - articles
     right:
     - search
     - github
   components:
+    get-started:
+      text: Get started
+      href: articles/Standard_workflow_with_restricted_cubic_splines.html
     articles:
       text: Articles
       menu:
@@ -31,6 +35,7 @@ navbar:
         href: articles/Further_details_modelsummary_rms.html
       - text: 'Further details: ggrmsMD'
         href: articles/Further_details_ggrmsMD.html
+
 authors:
   Samuel Tingle:
     href: https://scholar.google.com/citations?user=op7Z53gAAAAJ&hl=en&oi=ao
