@@ -229,3 +229,54 @@ test_that("Snapshot: Variables with reserved/special names", {
                               summary = summary_special,
                               hidden = hidden_special))
 })
+
+## ------------------------------
+## Variables Checks: Labels and Special Variable Names (using Hmisc::label)
+## ------------------------------
+test_that("Snapshot: Variables with labels and special names", {
+  # Add labels to some existing variables
+  Hmisc::label(df_CC$sex)    <- "Sex of patient"
+  Hmisc::label(df_CC$age)    <- "Patient (years)"
+  Hmisc::label(df_CC$bmi)    <- "Body mass index (kg/m2)"
+
+  set.seed(123)
+  df_CC$random1 <- rnorm(nrow(df_CC))
+  df_CC$`"random2"` <- rnorm(nrow(df_CC))
+
+  Hmisc::label(df_CC$random1)   <- "Random normal variable 1"
+  Hmisc::label(df_CC$`"random2"`)  <- "Random normal variable 2 with double quote in its name"
+
+  fit_vars <- ols(lengthstay ~ rcs(age, 4) * bmi + sex + random1 + `"random2"`, data = df_CC)
+  summary_vars <- modelsummary_rms(fit_vars)
+  hidden_vars <- modelsummary_rms(fit_vars, hide_rcs_coef = TRUE, rcs_overallp = TRUE)
+
+  expect_snapshot_output(list(summary = summary_vars, hidden = hidden_vars))
+})
+
+test_that("Snapshot: Variables with reserved/special names", {
+  df_CC$`if` <- rnorm(nrow(df_CC))
+  attr(df_CC$`if`, "label") <- "Random variable with name 'if'"
+
+  df_CC$`for` <- rnorm(nrow(df_CC))
+  attr(df_CC$`for`, "label") <- "Random variable with name 'for'"
+
+  df_CC$`while` <- rnorm(nrow(df_CC))
+  attr(df_CC$`while`, "label") <- "Random variable with name 'while'"
+
+  df_CC$`TRUE` <- rnorm(nrow(df_CC))
+  attr(df_CC$`TRUE`, "label") <- "Random variable with name 'TRUE'"
+
+  df_CC$`NULL` <- rnorm(nrow(df_CC))
+  attr(df_CC$`NULL`, "label") <- "Random variable with name 'NULL'"
+
+  # Check the structure of the updated data frame
+  str_output <- capture.output(str(df_CC))
+
+  fit_special <- ols(lengthstay ~ rcs(age, 4) * bmi + sex + `if` + `for` + `while` + `TRUE` + `NULL`, data = df_CC)
+  summary_special <- modelsummary_rms(fit_special)
+  hidden_special <- modelsummary_rms(fit_special, hide_rcs_coef = TRUE, rcs_overallp = TRUE)
+
+  expect_snapshot_output(list(structure = str_output,
+                              summary = summary_special,
+                              hidden = hidden_special))
+})

@@ -275,7 +275,118 @@
     7  0.464
     
 
+---
+
+    $summary
+                                                   variable               coef_95CI
+    1                                                   bmi 0.058 (-0.358 to 0.475)
+    2                                            sex=Female                     Ref
+    3                                              sex=Male 0.279 (-0.032 to 0.590)
+    4                                               random1 0.067 (-0.089 to 0.223)
+    5                                             "random2" 0.011 (-0.144 to 0.166)
+    6       RCSoverallP: age  (Factor+Higher Order Factors)                  F test
+    7 RCSoverallP: age * bmi  (Factor+Higher Order Factors)                  F test
+      Pvalue
+    1  0.783
+    2      -
+    3  0.079
+    4  0.401
+    5  0.892
+    6 <0.001
+    7  0.464
+    
+    $hidden
+                                                   variable               coef_95CI
+    1                                                   bmi 0.058 (-0.358 to 0.475)
+    2                                            sex=Female                     Ref
+    3                                              sex=Male 0.279 (-0.032 to 0.590)
+    4                                               random1 0.067 (-0.089 to 0.223)
+    5                                             "random2" 0.011 (-0.144 to 0.166)
+    6       RCSoverallP: age  (Factor+Higher Order Factors)                  F test
+    7 RCSoverallP: age * bmi  (Factor+Higher Order Factors)                  F test
+      Pvalue
+    1  0.783
+    2      -
+    3  0.079
+    4  0.401
+    5  0.892
+    6 <0.001
+    7  0.464
+    
+
 # Snapshot: Variables with reserved/special names
+
+    $structure
+     [1] "'data.frame':\t5000 obs. of  13 variables:"                                               
+     [2] " $ age              : num  33.4 50.5 40.8 52.5 67.1 58.9 58.4 47.2 52.4 64.5 ..."         
+     [3] " $ bmi              : num  26.1 21.5 22.4 25 31.4 27.5 21.5 25.7 29.6 23.3 ..."           
+     [4] " $ sex              : Factor w/ 2 levels \"Female\",\"Male\": 2 2 1 1 1 1 1 2 2 1 ..."    
+     [5] " $ smoking          : Factor w/ 3 levels \"Never\",\"Former\",..: 2 2 2 1 2 2 3 2 1 2 ..."
+     [6] " $ majorcomplication: int  0 0 0 0 0 0 0 0 1 0 ..."                                       
+     [7] " $ lengthstay       : num  17.9 29.2 39 25.7 30.1 ..."                                    
+     [8] " $ time             : num  102.1 223.5 27.3 226.3 19.3 ..."                               
+     [9] " $ event            : int  1 1 1 1 1 1 1 0 1 0 ..."                                       
+    [10] " $ if               : num  2.371 -0.167 0.927 -0.568 0.225 ..."                           
+    [11] "  ..- attr(*, \"label\")= chr \"Random variable with name 'if'\""                         
+    [12] " $ for              : num  -1.354 -0.579 -0.861 0.973 0.619 ..."                          
+    [13] "  ..- attr(*, \"label\")= chr \"Random variable with name 'for'\""                        
+    [14] " $ while            : num  -0.836 -0.221 -2.104 -1.668 -1.098 ..."                        
+    [15] "  ..- attr(*, \"label\")= chr \"Random variable with name 'while'\""                      
+    [16] " $ TRUE             : num  -0.795 -1.135 0.58 0.518 0.208 ..."                            
+    [17] "  ..- attr(*, \"label\")= chr \"Random variable with name 'TRUE'\""                       
+    [18] " $ NULL             : num  -0.194 0.258 -0.538 -1.179 0.901 ..."                          
+    [19] "  ..- attr(*, \"label\")= chr \"Random variable with name 'NULL'\""                       
+    
+    $summary
+                                                    variable
+    1                                                    bmi
+    2                                             sex=Female
+    3                                               sex=Male
+    4                                                     if
+    5                                                    for
+    6                                                  while
+    7                                                   TRUE
+    8                                                   NULL
+    9        RCSoverallP: age  (Factor+Higher Order Factors)
+    10 RCSoverallP: age * bmi  (Factor+Higher Order Factors)
+                      coef_95CI Pvalue
+    1   0.058 (-0.359 to 0.475)  0.784
+    2                       Ref      -
+    3   0.277 (-0.034 to 0.588)  0.081
+    4  -0.041 (-0.197 to 0.114)  0.603
+    5   0.011 (-0.145 to 0.166)  0.894
+    6   0.016 (-0.138 to 0.171)  0.834
+    7  -0.090 (-0.247 to 0.067)  0.259
+    8   0.035 (-0.121 to 0.191)  0.660
+    9                    F test <0.001
+    10                   F test  0.484
+    
+    $hidden
+                                                    variable
+    1                                                    bmi
+    2                                             sex=Female
+    3                                               sex=Male
+    4                                                     if
+    5                                                    for
+    6                                                  while
+    7                                                   TRUE
+    8                                                   NULL
+    9        RCSoverallP: age  (Factor+Higher Order Factors)
+    10 RCSoverallP: age * bmi  (Factor+Higher Order Factors)
+                      coef_95CI Pvalue
+    1   0.058 (-0.359 to 0.475)  0.784
+    2                       Ref      -
+    3   0.277 (-0.034 to 0.588)  0.081
+    4  -0.041 (-0.197 to 0.114)  0.603
+    5   0.011 (-0.145 to 0.166)  0.894
+    6   0.016 (-0.138 to 0.171)  0.834
+    7  -0.090 (-0.247 to 0.067)  0.259
+    8   0.035 (-0.121 to 0.191)  0.660
+    9                    F test <0.001
+    10                   F test  0.484
+    
+
+---
 
     $structure
      [1] "'data.frame':\t5000 obs. of  13 variables:"                                               
