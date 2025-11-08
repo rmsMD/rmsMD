@@ -130,7 +130,7 @@ for post-operative complications above:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># most basic output</span></span>
 <span><span class="fu"><a href="../reference/ggrmsMD.html">ggrmsMD</a></span><span class="op">(</span><span class="va">fit_lrm</span>, <span class="va">data</span><span class="op">)</span></span></code></pre></div>
-<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-4-1.png" width="672"></p>
+<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-4-1.png" class="r-plt" width="672"></p>
 <p><code>ggrmsMD</code> has several additional options to improve these
 plot outputs for publications. Some of these options are shown below.
 For the examples below, this is done iteratively for demonstration
@@ -145,7 +145,7 @@ model:</p>
 <span>        <span class="co"># set y axis limits so variables can be compared more easily</span></span>
 <span>        ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">3</span><span class="op">)</span> </span>
 <span>        <span class="op">)</span></span></code></pre></div>
-<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-5-1.png" width="672"></p>
+<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-5-1.png" class="r-plt" width="672"></p>
 <p>Shading can be applied to these plots to make it clear which side of
 the no-effect line represents inferior/superior clinical outcome. This
 is achieved by setting <code>shade_inferior</code> to “higher” or
@@ -158,7 +158,7 @@ is achieved by setting <code>shade_inferior</code> to “higher” or
 <span>        <span class="co"># (e.g. higher OR complications) these will be highlighted in red</span></span>
 <span>        shade_inferior <span class="op">=</span> <span class="st">"higher"</span> </span>
 <span>        <span class="op">)</span></span></code></pre></div>
-<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-6-1.png" width="672"></p>
+<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-6-1.png" class="r-plt" width="672"></p>
 <p>It may be preferable to have the y-axis on a log-scale rather than a
 linear scale.</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
@@ -170,7 +170,7 @@ linear scale.</p>
 <span>        log_y <span class="op">=</span> <span class="cn">TRUE</span>, <span class="co"># have the y-axis on a log scale</span></span>
 <span>        log_y_breaks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.5</span> , <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span> <span class="co"># optionally set the y-axis breaks</span></span>
 <span>        <span class="op">)</span></span></code></pre></div>
-<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-7-1.png" width="672"></p>
+<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-7-1.png" class="r-plt" width="672"></p>
 <p>For logistic regression models like this one, predicted probability
 can be plotted instead of adjusted OR. For example:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
@@ -180,7 +180,7 @@ can be plotted instead of adjusted OR. For example:</p>
 <span>        ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>,<span class="fl">0.4</span><span class="op">)</span>, </span>
 <span>        lrm_prob <span class="op">=</span> <span class="cn">TRUE</span> <span class="co"># set this to plot predicted probability</span></span>
 <span>        <span class="op">)</span></span></code></pre></div>
-<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-8-1.png" width="672"></p>
+<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-8-1.png" class="r-plt" width="672"></p>
 <p>Changes to x-axis settings and titles are applied individually to
 each plot, unlike y-axis settings which apply globally across all plots.
 To customise individual x-axes, pass a named list. For example, to
@@ -199,7 +199,7 @@ for age:</p>
 <span>        xlabs <span class="op">=</span> <span class="va">xlabels</span>,</span>
 <span>        xlims <span class="op">=</span> <span class="va">xlimits</span></span>
 <span>        <span class="op">)</span></span></code></pre></div>
-<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-9-1.png" width="672"></p>
+<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-9-1.png" class="r-plt" width="672"></p>
 <p>The same approach is used if titles are required:</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">xlabels</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span> <span class="op">(</span><span class="st">"age"</span> <span class="op">=</span> <span class="st">"Age (years)"</span>,</span>
@@ -215,7 +215,7 @@ for age:</p>
 <span>        xlabs <span class="op">=</span> <span class="va">xlabels</span>,</span>
 <span>        titles <span class="op">=</span> <span class="va">titles</span></span>
 <span>        <span class="op">)</span></span></code></pre></div>
-<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-10-1.png" width="672"></p>
+<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-10-1.png" class="r-plt" width="672"></p>
 <p>The x-axis can also be displayed on a log-scale, rather than a linear
 scale. This is done using <code>log_x_vars</code> to specify which
 variables to have log-scaled x-axes:</p>
@@ -228,7 +228,7 @@ variables to have log-scaled x-axes:</p>
 <span>        titles <span class="op">=</span> <span class="va">titles</span>,</span>
 <span>        log_x_vars <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"age"</span>, <span class="st">"bmi"</span><span class="op">)</span></span>
 <span>        <span class="op">)</span></span></code></pre></div>
-<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-11-1.png" width="672"></p>
+<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-11-1.png" class="r-plt" width="672"></p>
 <p><code>combined</code> is set to <code>TRUE</code> by default to
 output a single combined plot, as shown above.
 <code>combined = FALSE</code> can be used to output a list of plots. If
@@ -241,7 +241,7 @@ a single plot is required, this can be achieved with the
 <span>        shade_inferior <span class="op">=</span> <span class="st">"higher"</span>,</span>
 <span>        var <span class="op">=</span> <span class="st">"age"</span></span>
 <span>        <span class="op">)</span></span></code></pre></div>
-<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-12-1.png" width="672"></p>
+<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-12-1.png" class="r-plt" width="672"></p>
 <p>For linear regression models the output is the predicted outcome. For
 example, here are the plots for length of stay linear model:</p>
 <div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
@@ -258,7 +258,7 @@ example, here are the plots for length of stay linear model:</p>
 <span>        ylim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">20</span>,<span class="fl">50</span><span class="op">)</span>,</span>
 <span>        ylab <span class="op">=</span> <span class="st">"Predicted length of stay"</span></span>
 <span>        <span class="op">)</span></span></code></pre></div>
-<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-13-1.png" width="672"></p>
+<p><img src="Further_details_ggrmsMD_files/figure-html/unnamed-chunk-13-1.png" class="r-plt" width="672"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
@@ -272,7 +272,7 @@ example, here are the plots for length of stay linear model:</p>
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.3.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
 </div>
 
     </footer>
