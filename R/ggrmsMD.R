@@ -67,6 +67,11 @@ ggrmsMD <- function(modelfit, data,
     options(datadist = "dd")
   }
 
+  # stopping bug where new variables are created after datadist is set
+  vars_in_dd <- names(get(options("datadist")$datadist)$limits)
+  vars_in_fit <- modelfit$Design$name
+  if (any(!vars_in_fit %in% vars_in_dd)) stop("datadist does not contain all model fit variables, ensure datadist is set after all new variables created.")
+
   # list of rcs vars from model
   rcs_vars <- names(which(sapply(modelfit$Design$nonlinear, any)))
 
