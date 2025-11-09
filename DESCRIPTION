@@ -1,8 +1,8 @@
 Package: rmsMD
 Type: Package
 Title: Output Results from 'rms' Models for Medical Journals
-Version: 1.0.0
-Date: 2025-06-16
+Version: 1.0.1
+Date: 2025-11-09
 Description: Provides streamlined functions for summarising and visualising 
   regression models fitted with the 'rms' package, in the preferred format for medical journals. 
   The 'modelsummary_rms()' function produces concise summaries for linear, logistic, and 
@@ -16,7 +16,7 @@ LazyData: true
 URL: https://rmsmd.github.io/rmsMD/
 BugReports: https://github.com/rmsMD/rmsMD/issues/
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Authors@R: c(
     person(given = "Samuel", family = "Tingle", , email = "samjamestingle@gmail.com", role = c("aut", "cre"),
       comment = c(ORCID = "0000-0001-5529-7815")
@@ -38,6 +38,7 @@ Suggests:
     flextable,
     dplyr,
     testthat (>= 3.0.0),
-    vdiffr
+    vdiffr,
+    Hmisc
 VignetteBuilder: knitr
 Config/testthat/edition: 3
