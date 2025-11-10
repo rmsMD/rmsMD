@@ -38,7 +38,7 @@ navbar:
         href: articles/Further_details_ggrmsMD.html
     citation:
       text: 'Citation'
-      href: articles/citation.html
+      href: authors.html#citation
 
 authors:
   Samuel Tingle:
