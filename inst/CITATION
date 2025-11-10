@@ -1,14 +1,26 @@
-bibentry(
-  bibtype = "Article",
-  title = "Non-linear regression modelling for medical professionals; making curved paths straightforward",
-  author = c(
-    person("Samuel J", "Tingle", role = "aut"),
-    person("Georgios", "Kourounis", role = "aut"),
-    person("Sarah", "Elliot", role = "aut"),
-    person("Ewen M", "Harrison", role = "aut")
-  ),
-  journal = "Postgraduate Medical Journal",
-  year = "2025",
-  doi = "10.1093/postmj/qgaf183",
-  textVersion = "Tingle SJ, Kourounis G, Elliot S, Harrison EM (2025). Non-linear regression modelling for medical professionals; making curved paths straightforward. Postgraduate Medical Journal. doi:10.1093/postmj/qgaf183."
+citHeader("To cite rmsMD in publications, please use:")
+
+citEntry(
+    entry        = "article",
+    title        = "Non-linear regression modelling for medical professionals: making curved paths straightforward",
+    author       = personList(
+        person("Samuel J", "Tingle"),
+        person("Georgios", "Kourounis"),
+        person("Sarah", "Elliot"),
+        person("Ewen M", "Harrison")
+    ),
+    journal      = "Postgraduate Medical Journal",
+    year         = "2025",
+    month        = "November",
+    pages        = "qgaf183",
+    issn         = "0032-5473",
+    doi          = "10.1093/postmj/qgaf183",
+    url          = "https://doi.org/10.1093/postmj/qgaf183",
+    textVersion  = paste(
+        "Tingle SJ, Kourounis G, Elliot S, Harrison EM.",
+        "Non-linear regression modelling for medical professionals:",
+        "making curved paths straightforward.",
+        "Postgrad Med J. 2025 Nov; qgaf183.",
+        "doi:10.1093/postmj/qgaf183"
+    )
 )

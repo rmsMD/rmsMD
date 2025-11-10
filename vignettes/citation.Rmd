@@ -1,0 +1,31 @@
+---
+title: "Citation"
+output: rmarkdown::html_vignette
+---
+
+If you use **rmsMD** in your work, please cite the following article:
+
+> Tingle SJ, Kourounis G, Elliot S, Harrison EM. Non-linear regression modelling for medical professionals: making curved paths straightforward. *Postgrad Med J.* 2025 Nov; qgaf183. doi: [10.1093/postmj/qgaf183](https://doi.org/10.1093/postmj/qgaf183)
+
+You can also obtain the full citation from R with:
+
+```r
+citation("rmsMD")
+```
+
+This will provide the bibtex citation for you to copy into any citation manager software.
+
+```bibtex
+@article{10.1093/postmj/qgaf183,
+    author = {Tingle, Samuel J and Kourounis, Georgios and Elliot, Sarah and Harrison, Ewen M},
+    title = {Non-linear regression modelling for medical professionals; making curved paths straightforward},
+    journal = {Postgraduate Medical Journal},
+    pages = {qgaf183},
+    year = {2025},
+    month = {11},
+    issn = {0032-5473},
+    doi = {10.1093/postmj/qgaf183},
+    url = {https://doi.org/10.1093/postmj/qgaf183},
+    eprint = {https://academic.oup.com/pmj/advance-article-pdf/doi/10.1093/postmj/qgaf183/65131196/qgaf183.pdf},
+}
+```
