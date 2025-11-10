@@ -24,7 +24,7 @@ You can install `rmsMD` from CRAN:
 install.packages("rmsMD")
 ```
 
-It is recommended that this package is used alognside `rms`, which can
+It is recommended that this package is used alongside `rms`, which can
 be installed via:
 
 ``` r

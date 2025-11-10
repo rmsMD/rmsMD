@@ -228,10 +228,10 @@ that variable. We recommend that these are then plotted using the
   these lack straightforward clinical interpretation. Instead, the focus
   is on the overall association captured by all RCS terms for that
   specific variable. This helps simplify the output. If the variable has
-  a signficant association with outcome, we recommend plotting this
+  a significant association with outcome, we recommend plotting this
   relationship.
 
-Here is an example model predicting occurence of complications after
+Here is an example model predicting occurrence of complications after
 surgery (binary), with the continuous variables age and BMI modelled
 using restricted cubic splines with 4 knots:
 
