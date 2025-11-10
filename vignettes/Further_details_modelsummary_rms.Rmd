@@ -136,9 +136,9 @@ The **rmsMD** package is designed to report and summarise models that include RC
   When this option is set to `TRUE` (which is the default), the function computes a single p-value that tests the overall significance of the spline terms for each variable. This overall p-value provides insight into whether the relationship between the predictor and the dependent variable is significant.
 
 - **Hide the individual spline coefficients using the `hide_rcs_coef` option.**  
-  Hiding the individual spline coefficients can be advantageous because these lack straightforward clinical interpretation. Instead, the focus is on the overall association captured by all RCS terms for that specific variable. This helps simplify the output. If the variable has a signficant association with outcome, we recommend plotting this relationship.
+  Hiding the individual spline coefficients can be advantageous because these lack straightforward clinical interpretation. Instead, the focus is on the overall association captured by all RCS terms for that specific variable. This helps simplify the output. If the variable has a significant association with outcome, we recommend plotting this relationship.
 
-Here is an example model predicting occurence of complications after surgery (binary), with the continuous variables age and BMI modelled using restricted cubic splines with 4 knots:
+Here is an example model predicting occurrence of complications after surgery (binary), with the continuous variables age and BMI modelled using restricted cubic splines with 4 knots:
 
 ```{r}
 # Fit a logistic regression model including a RCS for Age & BMI (with 4 knots)
