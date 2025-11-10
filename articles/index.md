@@ -2,6 +2,7 @@
 
 ### All vignettes
 
+- [Citation](https://rmsmd.github.io/rmsMD/articles/citation.md):
 - [Further details
   ggrmsMD](https://rmsmd.github.io/rmsMD/articles/Further_details_ggrmsMD.md):
 - [Further details

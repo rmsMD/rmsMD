@@ -15,15 +15,19 @@
 Source:
 [`inst/CITATION`](https://github.com/rmsMD/rmsMD/blob/master/inst/CITATION)
 
-Tingle SJ, Kourounis G, Elliot S, Harrison EM (2025). Non-linear
-regression modelling for medical professionals; making curved paths
-straightforward. Postgraduate Medical Journal.
-doi:10.1093/postmj/qgaf183.
+Tingle SJ, Kourounis G, Elliot S, Harrison EM. Non-linear regression
+modelling for medical professionals: making curved paths
+straightforward. Postgrad Med J. 2025 Nov; qgaf183.
+doi:10.1093/postmj/qgaf183
 
     @Article{,
-      title = {Non-linear regression modelling for medical professionals; making curved paths straightforward},
+      title = {Non-linear regression modelling for medical professionals: making curved paths straightforward},
       author = {Samuel J Tingle and Georgios Kourounis and Sarah Elliot and Ewen M Harrison},
       journal = {Postgraduate Medical Journal},
       year = {2025},
+      month = {November},
+      pages = {qgaf183},
+      issn = {0032-5473},
       doi = {10.1093/postmj/qgaf183},
+      url = {https://doi.org/10.1093/postmj/qgaf183},
     }

@@ -9,6 +9,11 @@ It includes support for linear, logistic, and Cox models, handles
 restricted cubic splines (RCS) automatically, and produces
 publication-ready tables and plots.
 
+To learn more about the concepts underlying non-linear regression
+modelling and restricted cubic splines, see our related publication,
+[Non-linear regression modelling for medical professionals: making
+curved paths straightforward](https://doi.org/10.1093/postmj/qgaf183).
+
 ------------------------------------------------------------------------
 
 ## Installation
@@ -102,6 +107,34 @@ ggrmsMD(fit_lrm, data,
 
 ------------------------------------------------------------------------
 
+## Citation
+
+If you use **rmsMD** in your work, please cite the following article:
+
+> Tingle SJ, Kourounis G, Elliot S, Harrison EM. Non-linear regression
+> modelling for medical professionals: making curved paths
+> straightforward. *Postgrad Med J.* 2025 Nov; qgaf183. DOI:
+> [10.1093/postmj/qgaf183](https://doi.org/10.1093/postmj/qgaf183)
+
+BibTeX entry for reference managers:
+
+``` bibtex
+@article{10.1093/postmj/qgaf183,
+    author = {Tingle, Samuel J and Kourounis, Georgios and Elliot, Sarah and Harrison, Ewen M},
+    title = {Non-linear regression modelling for medical professionals; making curved paths straightforward},
+    journal = {Postgraduate Medical Journal},
+    pages = {qgaf183},
+    year = {2025},
+    month = {11},
+    issn = {0032-5473},
+    doi = {10.1093/postmj/qgaf183},
+    url = {https://doi.org/10.1093/postmj/qgaf183},
+    eprint = {https://academic.oup.com/pmj/advance-article-pdf/doi/10.1093/postmj/qgaf183/65131196/qgaf183.pdf},
+}
+```
+
+------------------------------------------------------------------------
+
 ## Learn more
 
 See the [Standard workflow with restricted cubic splines
@@ -126,6 +159,7 @@ for a full worked example.
 
 ### All vignettes
 
+- [Citation](https://rmsmd.github.io/rmsMD/articles/citation.md):
 - [Further details
   ggrmsMD](https://rmsmd.github.io/rmsMD/articles/Further_details_ggrmsMD.md):
 - [Further details
